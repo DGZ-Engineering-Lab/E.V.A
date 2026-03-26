@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E.V.A. | Experto en Valoración de Activos</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-base: #060b13;
+            --bg-surface: #0f172a;
+            --primary: #00F2FE;
+            --primary-light: #4FACFE;
+            --success: #059669;
+            --warning: #F59E0B;
+            --text-main: #F8FAFC;
+            --text-dim: #94A3B8;
+            --border: rgba(0, 242, 254, 0.15);
+            --glow: 0 0 25px rgba(0, 242, 254, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(5, 150, 105, 0.05) 0%, transparent 40%),
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            color: var(--text-main);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: rgba(6, 11, 19, 0.85);
+            backdrop-filter: blur(20px);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+        }
+
+        .brand { display: flex; align-items: center; gap: 1rem; }
+        .logo { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--glow); }
+        .brand-name { font-weight: 900; font-size: 1.5rem; letter-spacing: 0.05em; font-family: 'Space Mono', monospace; }
+        .brand-name span { font-weight: 400; color: var(--primary); }
+
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12rem 2rem 6rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out backwards;
+            position: relative;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .badge {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            font-family: 'Space Mono', monospace;
+            border: 1px solid var(--primary-dim);
+            margin-bottom: 2rem;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+
+        h1 { font-size: 4.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
+        h1 span { background: linear-gradient(135deg, var(--primary), var(--success)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        p.subtitle { font-size: 1.25rem; color: var(--text-dim); margin-bottom: 3rem; line-height: 1.6; max-width: 800px; }
+
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #020408;
+            padding: 1.25rem 3rem;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex; align-items: center; gap: 1rem;
+            transition: all 0.3s;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 0.1em;
+            box-shadow: var(--glow);
+        }
+        .cta:hover { transform: translateY(-3px); filter: brightness(1.2); }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 4rem 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.4) 100%);
+            border: 1px solid var(--border);
+            padding: 3rem 2.5rem;
+            border-radius: 16px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before { content: ''; position: absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0; transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); border-color: var(--primary-light); }
+        .card:hover::before { opacity: 1; }
+
+        .icon-wrapper { width: 60px; height: 60px; background: rgba(0, 242, 254, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; border: 1px solid var(--border); }
+        .card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; font-family: 'Space Mono', monospace; }
+        .card p { color: var(--text-dim); line-height: 1.7; font-size: 0.95rem; }
+
+        .geo-grid {
+            position: absolute; top:0; right: 0; opacity: 0.3; pointer-events: none;
+            width: 250px; height: 250px;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 30px 30px;
+            mask-image: radial-gradient(circle at 100% 0%, black, transparent 70%);
+            -webkit-mask-image: radial-gradient(circle at 100% 0%, black, transparent 70%);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">
+            <div class="logo"><i data-lucide="compass" style="color: white; width: 28px; height: 28px;"></i></div>
+            <div class="brand-name">E.V.A. <span>ENGINE</span></div>
+        </div>
+        <div>
+            <a href="app.html" class="cta" style="padding: 0.75rem 1.75rem; font-size: 0.9rem; box-shadow: none;">INICIAR MÓDULO</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="geo-grid"></div>
+        <div class="badge"><i data-lucide="globe" style="width: 16px;"></i> DGZ Engineering Lab</div>
+        <h1>Inteligencia <span>Geoespacial</span> para Valoración de Activos</h1>
+        <p class="subtitle">E.V.A. (Experto en Valoración de Activos) es una plataforma de cálculo integral diseñada para automatizar la liquidación de compensaciones forestales y la indexación matricial de inflación en modelos volumétricos a gran escala.</p>
+        <a href="app.html" class="cta">
+            <i data-lucide="layers"></i> INICIAR COMPILACIÓN GLOBAL
+        </a>
+    </section>
+
+    <section class="features">
+        <div class="card">
+            <div class="icon-wrapper"><i data-lucide="calculator" style="color: var(--primary); width: 32px; height: 32px;"></i></div>
+            <h3>I. Proyección IPC Masiva</h3>
+            <p>Automatice el factor DANE histórico sobre matrices gigantes de compensación. Arrastre, pegue y actualice cientos de montos brutos contra la inflación capitalizada del período con verificación integrada de precisión legal.</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--warning);">
+            <div class="icon-wrapper" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2);"><i data-lucide="trees" style="color: var(--warning); width: 32px; height: 32px;"></i></div>
+            <h3>II. Avalúo Forestal Dinámico</h3>
+            <p>Integre bases de datos científicas con cruce volumétrico automático. E.V.A extrae la abarcadura biológica(cm) y altura maderable(m) para ubicar el precio base comercial en milésimas de segundo, eliminando búsquedas manuales.</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--success);">
+            <div class="icon-wrapper" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2);"><i data-lucide="file-check-2" style="color: var(--success); width: 32px; height: 32px;"></i></div>
+            <h3>III. Reporte Pericial Auditado</h3>
+            <p>No más tablas rotas. La salida matrizística genera dos tablas complementarias (Base Acumulada e Impacto Inflacionario) depuradas bajo estándares, permitiendo un copiado seguro y sin redundancias de HTML hacía suites de reporte final.</p>
+        </div>
+    </section>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
