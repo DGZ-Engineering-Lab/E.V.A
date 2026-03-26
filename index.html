@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E.V.A. | Experto en Valoración de Activos</title>
+    <title>E.V.A. | DGZ Engineering Lab</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --bg-base: #060b13;
-            --bg-surface: #0f172a;
+            --bg-base: #020408;
+            --bg-surface: #0a0f18;
             --primary: #00F2FE;
             --primary-light: #4FACFE;
             --success: #059669;
@@ -19,19 +19,14 @@
             --text-main: #F8FAFC;
             --text-dim: #94A3B8;
             --border: rgba(0, 242, 254, 0.15);
-            --glow: 0 0 25px rgba(0, 242, 254, 0.3);
+            --glow: 0 0 35px rgba(0, 242, 254, 0.4);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; cursor: default; }
+        ::selection { background: var(--primary); color: #000; }
 
         body {
             background-color: var(--bg-base);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(5, 150, 105, 0.05) 0%, transparent 40%),
-                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
             color: var(--text-main);
             overflow-x: hidden;
             display: flex;
@@ -39,150 +34,216 @@
             min-height: 100vh;
         }
 
+        /* Particle Cyber-Grid Background */
+        .cyber-grid {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(5, 150, 105, 0.08) 0%, transparent 50%),
+                linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 0 0, 0 0, 50px 50px, 50px 50px; }
+        }
+
         .navbar {
-            padding: 1.5rem 4rem;
+            padding: 1.5rem 5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
-            background: rgba(6, 11, 19, 0.85);
-            backdrop-filter: blur(20px);
+            background: rgba(2, 4, 8, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             position: fixed; top: 0; width: 100%; z-index: 1000;
         }
 
         .brand { display: flex; align-items: center; gap: 1rem; }
-        .logo { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--glow); }
-        .brand-name { font-weight: 900; font-size: 1.5rem; letter-spacing: 0.05em; font-family: 'Space Mono', monospace; }
-        .brand-name span { font-weight: 400; color: var(--primary); }
-
-        .hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 12rem 2rem 6rem;
-            max-width: 1000px;
-            margin: 0 auto;
-            animation: fadeIn 1s ease-out backwards;
-            position: relative;
+        .logo { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--glow); position: relative; overflow: hidden; }
+        .logo::after { content:''; position: absolute; top:-50%; left:-50%; width:200%; height:200%; background: linear-gradient(rgba(255,255,255,0.2), transparent); transform: rotate(45deg); animation: flare 3s infinite; }
+        
+        @keyframes flare {
+            0% { transform: translateY(-100%) rotate(45deg); }
+            100% { transform: translateY(100%) rotate(45deg); }
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .brand-name { font-weight: 900; font-size: 1.6rem; letter-spacing: 0.05em; font-family: 'Space Mono', monospace; }
+        .brand-name span { font-weight: 400; color: var(--primary); }
+        
+        /* Interactive Tech Stack Pills */
+        .tech-stack { display: flex; gap: 1rem; }
+        .tech-pill { border: 1px solid var(--border); background: rgba(0, 242, 254, 0.05); color: var(--text-dim); padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.75rem; font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; }
+        .tech-pill:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,242,254,0.1); transform: translateY(-2px); }
+
+        .hero {
+            flex: 1; padding: 14rem 2rem 8rem; max-width: 1200px; margin: 0 auto; text-align: center;
+            animation: fadeIn 1s ease-out backwards; position: relative;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         .badge {
             background: rgba(0, 242, 254, 0.1);
-            color: var(--primary);
-            padding: 0.5rem 1rem;
-            border-radius: 99px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            font-family: 'Space Mono', monospace;
-            border: 1px solid var(--primary-dim);
-            margin-bottom: 2rem;
+            color: var(--primary); padding: 0.6rem 1.5rem; border-radius: 99px;
+            font-size: 0.9rem; font-weight: 800; font-family: 'Space Mono', monospace;
+            border: 1px solid var(--primary-dim); margin-bottom: 2.5rem;
             display: inline-flex; align-items: center; gap: 0.5rem;
+            box-shadow: 0 0 20px rgba(0,242,254,0.2);
+            text-transform: uppercase; letter-spacing: 0.1em;
         }
 
-        h1 { font-size: 4.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
-        h1 span { background: linear-gradient(135deg, var(--primary), var(--success)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1 { font-size: 5rem; font-weight: 900; line-height: 1.1; margin-bottom: 2rem; letter-spacing: -0.03em; }
+        h1 span { background: linear-gradient(135deg, var(--primary), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        p.subtitle { font-size: 1.25rem; color: var(--text-dim); margin-bottom: 3rem; line-height: 1.6; max-width: 800px; }
+        /* Typing Effect Container */
+        .typing-container { color: var(--success); font-family: 'Space Mono', monospace; font-size: 2.5rem; font-weight: 700; display: block; margin-top: 1rem; min-height: 3.5rem; }
+        .typing-container::after { content: '|'; animation: blink 1s infinite; color: var(--primary); }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        p.subtitle { font-size: 1.35rem; color: var(--text-dim); margin: 0 auto 3.5rem; line-height: 1.7; max-width: 850px; font-weight: 300; }
 
         .cta {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: #020408;
-            padding: 1.25rem 3rem;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            text-decoration: none;
+            color: #020408; padding: 1.4rem 4rem; border-radius: 16px;
+            font-weight: 900; font-size: 1.2rem; text-decoration: none;
             display: inline-flex; align-items: center; gap: 1rem;
-            transition: all 0.3s;
-            font-family: 'Space Mono', monospace;
-            letter-spacing: 0.1em;
-            box-shadow: var(--glow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Space Mono', monospace; letter-spacing: 0.1em;
+            box-shadow: var(--glow); position: relative; overflow: hidden;
+            cursor: pointer;
         }
-        .cta:hover { transform: translateY(-3px); filter: brightness(1.2); }
+        .cta::before { content: ''; position: absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: 0.5s; }
+        .cta:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(0, 242, 254, 0.4); }
+        .cta:hover::before { left: 100%; }
 
         .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 0 4rem 6rem;
-            max-width: 1400px;
-            margin: 0 auto;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
+            padding: 0 5rem 6rem; max-width: 1600px; margin: 0 auto;
         }
 
         .card {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.4) 100%);
-            border: 1px solid var(--border);
-            padding: 3rem 2.5rem;
-            border-radius: 16px;
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid var(--border);
+            padding: 3.5rem 3rem; border-radius: 20px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
         }
-        .card::before { content: ''; position: absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0; transition: 0.4s; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); border-color: var(--primary-light); }
-        .card:hover::before { opacity: 1; }
+        .card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0,242,254,0.06), transparent 40%); opacity: 0; transition: opacity 0.5s; z-index: -1; }
+        .card:hover::after { opacity: 1; }
+        .card:hover { transform: translateY(-15px); border-color: var(--primary-light); box-shadow: 0 30px 60px -12px rgba(0,242,254,0.15); }
 
-        .icon-wrapper { width: 60px; height: 60px; background: rgba(0, 242, 254, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; border: 1px solid var(--border); }
-        .card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; font-family: 'Space Mono', monospace; }
-        .card p { color: var(--text-dim); line-height: 1.7; font-size: 0.95rem; }
+        .icon-wrapper { width: 70px; height: 70px; background: rgba(0, 242, 254, 0.05); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; border: 1px solid var(--border); transition: 0.4s; }
+        .card:hover .icon-wrapper { background: rgba(0, 242, 254, 0.15); transform: scale(1.1); }
+        .card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.25rem; font-family: 'Space Mono', monospace; color: #fff; }
+        .card p { color: var(--text-dim); line-height: 1.8; font-size: 1.05rem; }
 
-        .geo-grid {
-            position: absolute; top:0; right: 0; opacity: 0.3; pointer-events: none;
-            width: 250px; height: 250px;
-            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 30px 30px;
-            mask-image: radial-gradient(circle at 100% 0%, black, transparent 70%);
-            -webkit-mask-image: radial-gradient(circle at 100% 0%, black, transparent 70%);
+        /* Terminal Footer Status Bar */
+        .terminal-bar {
+            background: #020408; border-top: 1px solid var(--border); padding: 1rem 5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--text-dim);
+            margin-top: auto;
         }
+        .t-status { display: flex; gap: 2rem; align-items: center; }
+        .ping { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: blink 1s infinite; margin-right: 0.5rem; display: inline-block; }
+
+        @media (max-width: 1200px) { .features { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 4rem; } }
+        @media (max-width: 800px) { .features { grid-template-columns: 1fr; } .navbar { padding: 1.5rem 2rem; } h1 { font-size: 3rem; } .tech-stack { display: none; } }
     </style>
 </head>
 <body>
 
+    <div class="cyber-grid"></div>
+
     <nav class="navbar">
         <div class="brand">
-            <div class="logo"><i data-lucide="compass" style="color: white; width: 28px; height: 28px;"></i></div>
+            <div class="logo"><i data-lucide="compass" style="color: white; width: 28px;"></i></div>
             <div class="brand-name">E.V.A. <span>ENGINE</span></div>
         </div>
-        <div>
-            <a href="app.html" class="cta" style="padding: 0.75rem 1.75rem; font-size: 0.9rem; box-shadow: none;">INICIAR MÓDULO</a>
+        <div class="tech-stack">
+            <div class="tech-pill"><i data-lucide="zap" style="width:14px;"></i> Serverless</div>
+            <div class="tech-pill"><i data-lucide="database" style="width:14px;"></i> No-DB required</div>
+            <div class="tech-pill"><i data-lucide="code-2" style="width:14px;"></i> Vanilla ES6</div>
+            <div class="tech-pill" style="border-color:var(--success); color:var(--success)"><i data-lucide="shield-check" style="width:14px;"></i> MIT Licensed</div>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="geo-grid"></div>
-        <div class="badge"><i data-lucide="globe" style="width: 16px;"></i> DGZ Engineering Lab</div>
-        <h1>Inteligencia <span>Geoespacial</span> para Valoración de Activos</h1>
-        <p class="subtitle">E.V.A. (Experto en Valoración de Activos) es una plataforma de cálculo integral diseñada para automatizar la liquidación de compensaciones forestales y la indexación matricial de inflación en modelos volumétricos a gran escala.</p>
+        <div class="badge"><i data-lucide="globe"></i> DGZ Engineering Lab Project</div>
+        <h1>Inteligencia Geoespacial para<br><span class="typing-container" id="typewriter"></span></h1>
+        <p class="subtitle">La plataforma experta para firmas forestales y catastrales. Automatice el cálculo bidimensional de compensación biológica, proyecte la indexación matricial (Factor Zenith DANE) y audite exportaciones sin errores estructurales.</p>
         <a href="app.html" class="cta">
-            <i data-lucide="layers"></i> INICIAR COMPILACIÓN GLOBAL
+            <i data-lucide="cpu" style="width: 24px; height: 24px;"></i>
+            INICIALIZAR COMPILACIÓN GLOBAL
         </a>
     </section>
 
     <section class="features">
-        <div class="card">
+        <div class="card" id="c1">
             <div class="icon-wrapper"><i data-lucide="calculator" style="color: var(--primary); width: 32px; height: 32px;"></i></div>
             <h3>I. Proyección IPC Masiva</h3>
-            <p>Automatice el factor DANE histórico sobre matrices gigantes de compensación. Arrastre, pegue y actualice cientos de montos brutos contra la inflación capitalizada del período con verificación integrada de precisión legal.</p>
+            <p>Automatice el factor DANE histórico sobre matrices gigantes de compensación. Ingrese y actualice montos brutos (Base 2018) contra la inflación acumulada actual (1.5226) logrando precisiones legales absolutas en milisegundos.</p>
         </div>
-        <div class="card" style="border-top: 3px solid var(--warning);">
-            <div class="icon-wrapper" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2);"><i data-lucide="trees" style="color: var(--warning); width: 32px; height: 32px;"></i></div>
+        <div class="card" id="c2" style="border-top: 3px solid var(--warning);">
+            <div class="icon-wrapper" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2);"><i data-lucide="trees" style="color: var(--warning); width: 32px; height: 32px;"></i></div>
             <h3>II. Avalúo Forestal Dinámico</h3>
-            <p>Integre bases de datos científicas con cruce volumétrico automático. E.V.A extrae la abarcadura biológica(cm) y altura maderable(m) para ubicar el precio base comercial en milésimas de segundo, eliminando búsquedas manuales.</p>
+            <p>Integre la botánica científica con el cruce volumétrico automático empresarial. E.V.A disecciona "Abarcadura" y "Altura" infiriendo la clase maderable para ubicar el precio tasado exacto, eliminando búsquedas tabulares manuales de Excel de por vida.</p>
         </div>
-        <div class="card" style="border-top: 3px solid var(--success);">
-            <div class="icon-wrapper" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2);"><i data-lucide="file-check-2" style="color: var(--success); width: 32px; height: 32px;"></i></div>
-            <h3>III. Reporte Pericial Auditado</h3>
-            <p>No más tablas rotas. La salida matrizística genera dos tablas complementarias (Base Acumulada e Impacto Inflacionario) depuradas bajo estándares, permitiendo un copiado seguro y sin redundancias de HTML hacía suites de reporte final.</p>
+        <div class="card" id="c3" style="border-top: 3px solid var(--success);">
+            <div class="icon-wrapper" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.2);"><i data-lucide="file-check-2" style="color: var(--success); width: 32px; height: 32px;"></i></div>
+            <h3>III. Reporte ISO Auditado</h3>
+            <p>No más tablas rotas. La generación algorítmica expulsa matrices divididas (Depuración Base vs Impacto Inflacionario General) formateadas en un estándar blindado; permitiendo el copiado y pegado transparente directo a suites Office / ERP corporativo.</p>
         </div>
     </section>
 
+    <div class="terminal-bar">
+        <div class="t-status">
+            <span><div class="ping"></div> SYSTEM CORE: ONLINE</span>
+            <span style="color:var(--primary)">ZENITH FACTOR: v1.5226.1 (DANE-Certified)</span>
+            <span>REPO: DGZ-Engineering-Lab/E.V.A</span>
+        </div>
+        <div>
+            Copyright © 2026 DGZ Engineering Limitada. Reconocimiento MIT.
+        </div>
+    </div>
+
     <script>
         lucide.createIcons();
+
+        // 1. Efecto Typewriter Pericial
+        const words = ["Valoración Activos.", "Topología Categórica.", "Tasación de Avalúos.", "Resolución Forestal."];
+        let wIdx = 0; let cIdx = 0; let isDeleting = false;
+        const speed = 100; const el = document.getElementById('typewriter');
+        
+        function type() {
+            const current = words[wIdx];
+            if(isDeleting) {
+                el.innerText = current.substring(0, cIdx - 1);
+                cIdx--;
+            } else {
+                el.innerText = current.substring(0, cIdx + 1);
+                cIdx++;
+            }
+            let typeSpeed = isDeleting ? speed / 2 : speed;
+            if(!isDeleting && cIdx === current.length) { typeSpeed = 2000; isDeleting = true; }
+            else if(isDeleting && cIdx === 0) { isDeleting = false; wIdx = (wIdx + 1) % words.length; typeSpeed = 500; }
+            setTimeout(type, typeSpeed);
+        }
+        setTimeout(type, 1000);
+
+        // 2. Interacción Efecto Luces Radial (Cards)
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
     </script>
 </body>
 </html>
