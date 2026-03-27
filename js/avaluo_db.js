@@ -1,8 +1,8 @@
-Ôªøconst AVALUO_DB = {
+const AVALUO_DB = {
     "Species":  [
                     {
                         "Name":  "Abarco",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Acacia",
@@ -17,12 +17,12 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Aceite mar√≠a ",
+                        "Name":  "Aceite marÌa ",
                         "Type":  "Primera"
                     },
                     {
                         "Name":  "Aceite yumbe",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Aceituno",
@@ -49,15 +49,15 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Aguarr√°s",
+                        "Name":  "Aguarr·s",
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Aj√≠ de monte",
+                        "Name":  "AjÌ de monte",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Aj√≠ sabana",
+                        "Name":  "AjÌ sabana",
                         "Type":  "Tercera"
                     },
                     {
@@ -97,7 +97,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Aray√°",
+                        "Name":  "Aray·",
                         "Type":  "Tercera"
                     },
                     {
@@ -105,7 +105,7 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Array√°n",
+                        "Name":  "Array·n",
                         "Type":  "Segunda"
                     },
                     {
@@ -145,11 +145,11 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "B√∫car√≥",
+                        "Name":  "B˙carÛ",
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Caf√©",
+                        "Name":  "CafÈ",
                         "Type":  "Segunda"
                     },
                     {
@@ -181,15 +181,15 @@
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Ca√±afistulo",
+                        "Name":  "CaÒafistulo",
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Ca√±aguate",
+                        "Name":  "CaÒaguate",
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Ca√±a√±ola",
+                        "Name":  "CaÒaÒola",
                         "Type":  "Segunda"
                     },
                     {
@@ -238,7 +238,7 @@
                     },
                     {
                         "Name":  "Cedro amargo",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Cedro amarillo",
@@ -246,7 +246,7 @@
                     },
                     {
                         "Name":  "Cedro andino",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Cedro blanco",
@@ -254,7 +254,7 @@
                     },
                     {
                         "Name":  "Cedro caoba",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Cedro cebolla",
@@ -262,7 +262,7 @@
                     },
                     {
                         "Name":  "Cedro clavel",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Cedro dulce",
@@ -278,14 +278,14 @@
                     },
                     {
                         "Name":  "Cedro negro",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Cedro oloroso",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
-                        "Name":  "Cedr√≥n",
+                        "Name":  "CedrÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -321,7 +321,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Ceiba tol√∫a",
+                        "Name":  "Ceiba tol˙a",
                         "Type":  "Primera"
                     },
                     {
@@ -329,7 +329,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Ce√≠babuya",
+                        "Name":  "CeÌbabuya",
                         "Type":  "Tercera"
                     },
                     {
@@ -338,7 +338,7 @@
                     },
                     {
                         "Name":  "Chachajo",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Chacho",
@@ -357,7 +357,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Chanc√°n",
+                        "Name":  "Chanc·n",
                         "Type":  "Tercera"
                     },
                     {
@@ -370,10 +370,10 @@
                     },
                     {
                         "Name":  "Chaquiro",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
-                        "Name":  "Chical√°",
+                        "Name":  "Chical·",
                         "Type":  "Primera"
                     },
                     {
@@ -393,7 +393,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Chingal√©",
+                        "Name":  "ChingalÈ",
                         "Type":  "Segunda"
                     },
                     {
@@ -449,7 +449,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Cipr√©s",
+                        "Name":  "CiprÈs",
                         "Type":  "Segunda"
                     },
                     {
@@ -461,12 +461,12 @@
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Cocar√≠llo",
+                        "Name":  "CocarÌllo",
                         "Type":  "Segunda"
                     },
                     {
                         "Name":  "Coco abarco",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Coco blanco",
@@ -489,7 +489,7 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Coc√∫",
+                        "Name":  "Coc˙",
                         "Type":  "Tercera"
                     },
                     {
@@ -514,7 +514,7 @@
                     },
                     {
                         "Name":  "Comino",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Congo",
@@ -569,7 +569,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Cu√°ngare",
+                        "Name":  "Cu·ngare",
                         "Type":  "Primera"
                     },
                     {
@@ -593,7 +593,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Curap√°n",
+                        "Name":  "Curap·n",
                         "Type":  "Tercera"
                     },
                     {
@@ -621,7 +621,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Dormil√≥n",
+                        "Name":  "DormilÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -629,8 +629,8 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "√âbano",
-                        "Type":  "Selecci√≥n"
+                        "Name":  "…bano",
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Encenillo",
@@ -721,7 +721,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Gen√≠zaro",
+                        "Name":  "GenÌzaro",
                         "Type":  "Segunda"
                     },
                     {
@@ -741,11 +741,11 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Gu√°cimo",
+                        "Name":  "Gu·cimo",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Gu√°cimo",
+                        "Name":  "Gu·cimo",
                         "Type":  "Tercera"
                     },
                     {
@@ -753,11 +753,11 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Gu√°imaro",
+                        "Name":  "Gu·imaro",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Gu√°jaro",
+                        "Name":  "Gu·jaro",
                         "Type":  "Segunda"
                     },
                     {
@@ -785,7 +785,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Guan√°b.monte",
+                        "Name":  "Guan·b.monte",
                         "Type":  "Tercera"
                     },
                     {
@@ -809,7 +809,7 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Guarim√°n",
+                        "Name":  "Guarim·n",
                         "Type":  "Tercera"
                     },
                     {
@@ -845,12 +845,12 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Guayac√°n ",
+                        "Name":  "Guayac·n ",
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Guayac√°n.amil",
-                        "Type":  "Selecci√≥n"
+                        "Name":  "Guayac·n.amil",
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Guayacozanca",
@@ -889,7 +889,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Higuer√≥n",
+                        "Name":  "HiguerÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -901,7 +901,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Hogu√≠n ",
+                        "Name":  "HoguÌn ",
                         "Type":  "Tercera"
                     },
                     {
@@ -985,11 +985,11 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Lar√∫",
+                        "Name":  "Lar˙",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "L√°tigo",
+                        "Name":  "L·tigo",
                         "Type":  "Tercera"
                     },
                     {
@@ -1033,11 +1033,11 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "lgu√°",
+                        "Name":  "lgu·",
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Lim√≥n mandarino ",
+                        "Name":  "LimÛn mandarino ",
                         "Type":  "Tercera"
                     },
                     {
@@ -1045,7 +1045,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Lomoe caim√°n",
+                        "Name":  "Lomoe caim·n",
                         "Type":  "Segunda"
                     },
                     {
@@ -1077,7 +1077,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Majagua color√°",
+                        "Name":  "Majagua color·",
                         "Type":  "Tercera"
                     },
                     {
@@ -1121,7 +1121,7 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Mapur√≠to",
+                        "Name":  "MapurÌto",
                         "Type":  "Tercera"
                     },
                     {
@@ -1129,7 +1129,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Matarrat√≥n",
+                        "Name":  "MatarratÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1137,7 +1137,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Maz√°balo",
+                        "Name":  "Maz·balo",
                         "Type":  "Primera"
                     },
                     {
@@ -1189,7 +1189,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Monra√±a",
+                        "Name":  "MonraÒa",
                         "Type":  "Tercera"
                     },
                     {
@@ -1217,7 +1217,7 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Mu√±eco",
+                        "Name":  "MuÒeco",
                         "Type":  "Tercera"
                     },
                     {
@@ -1261,7 +1261,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "N√≠guito",
+                        "Name":  "NÌguito",
                         "Type":  "Tercera"
                     },
                     {
@@ -1274,30 +1274,30 @@
                     },
                     {
                         "Name":  "Nogal",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Nogal bogotano",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Nogal cafetero",
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Nuez del par√°",
-                        "Type":  "Selecci√≥n"
+                        "Name":  "Nuez del par·",
+                        "Type":  "SelecciÛn"
                     },
                     {
-                        "Name":  "√ëipi √ëipi",
+                        "Name":  "—ipi —ipi",
                         "Type":  "Tercera"
                     },
                     {
                         "Name":  "Ocobo",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
-                        "Name":  "Ogu√≠n",
+                        "Name":  "OguÌn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1378,7 +1378,7 @@
                     },
                     {
                         "Name":  "Palo brasil",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Palo cruz",
@@ -1389,7 +1389,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Palo de √°guila",
+                        "Name":  "Palo de ·guila",
                         "Type":  "Tercera"
                     },
                     {
@@ -1402,14 +1402,14 @@
                     },
                     {
                         "Name":  "Palo de rosa",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Palo de vaca",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Palo Mar√≠a",
+                        "Name":  "Palo MarÌa",
                         "Type":  "Segunda"
                     },
                     {
@@ -1418,7 +1418,7 @@
                     },
                     {
                         "Name":  "Palo santo",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Palo seca",
@@ -1453,7 +1453,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Payand√©",
+                        "Name":  "PayandÈ",
                         "Type":  "Tercera"
                     },
                     {
@@ -1465,7 +1465,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Pepa de s√°balo",
+                        "Name":  "Pepa de s·balo",
                         "Type":  "Segunda"
                     },
                     {
@@ -1485,7 +1485,7 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Per√≥n",
+                        "Name":  "PerÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1493,11 +1493,11 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Per√∫ bambuco",
+                        "Name":  "Per˙ bambuco",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Pietam√≥n",
+                        "Name":  "PietamÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1505,7 +1505,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Pil√≥n",
+                        "Name":  "PilÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1521,7 +1521,7 @@
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Pino p√°tula",
+                        "Name":  "Pino p·tula",
                         "Type":  "Primera"
                     },
                     {
@@ -1533,11 +1533,11 @@
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Pi√±√≥n de oreja",
+                        "Name":  "PiÒÛn de oreja",
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "Pisqu√≠n",
+                        "Name":  "PisquÌn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1557,7 +1557,7 @@
                         "Type":  "Primera"
                     },
                     {
-                        "Name":  "Pomarr√≥n",
+                        "Name":  "PomarrÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1593,7 +1593,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Quimul√°",
+                        "Name":  "Quimul·",
                         "Type":  "Segunda"
                     },
                     {
@@ -1605,7 +1605,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Raij√°n rajado",
+                        "Name":  "Raij·n rajado",
                         "Type":  "Tercera"
                     },
                     {
@@ -1617,7 +1617,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Ray√°n",
+                        "Name":  "Ray·n",
                         "Type":  "Tercera"
                     },
                     {
@@ -1629,7 +1629,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Ri√±√≥n",
+                        "Name":  "RiÒÛn",
                         "Type":  "Tercera"
                     },
                     {
@@ -1646,7 +1646,7 @@
                     },
                     {
                         "Name":  "Roble morado",
-                        "Type":  "Selecci√≥n"
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Roble rosado",
@@ -1673,7 +1673,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Sam√°n",
+                        "Name":  "Sam·n",
                         "Type":  "Segunda"
                     },
                     {
@@ -1709,7 +1709,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "S√°uco",
+                        "Name":  "S·uco",
                         "Type":  "Tercera"
                     },
                     {
@@ -1825,7 +1825,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Tiot√≠o",
+                        "Name":  "TiotÌo",
                         "Type":  "Tercera"
                     },
                     {
@@ -1849,16 +1849,16 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "ToI√∫",
-                        "Type":  "Selecci√≥n"
+                        "Name":  "ToI˙",
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Toloncayo",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Tol√∫a",
-                        "Type":  "Selecci√≥n"
+                        "Name":  "Tol˙a",
+                        "Type":  "SelecciÛn"
                     },
                     {
                         "Name":  "Tostao",
@@ -1877,7 +1877,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Tr√©bol negro",
+                        "Name":  "TrÈbol negro",
                         "Type":  "Primera"
                     },
                     {
@@ -1917,11 +1917,11 @@
                         "Type":  "Segunda"
                     },
                     {
-                        "Name":  "U√±a de Puerco",
+                        "Name":  "UÒa de Puerco",
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Urap√°n",
+                        "Name":  "Urap·n",
                         "Type":  "Segunda"
                     },
                     {
@@ -1941,7 +1941,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Vainep√°jaro",
+                        "Name":  "Vainep·jaro",
                         "Type":  "Tercera"
                     },
                     {
@@ -2041,7 +2041,7 @@
                         "Type":  "Tercera"
                     },
                     {
-                        "Name":  "Zap√°n",
+                        "Name":  "Zap·n",
                         "Type":  "Primera"
                     },
                     {

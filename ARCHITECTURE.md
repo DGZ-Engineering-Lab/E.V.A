@@ -1,21 +1,96 @@
-# Documento de Arquitectura GIS & Financiera (`ARCHITECTURE.md`)
+# Architecture — E.V.A. PRO v2.5.1
 
-## 🌍 Arquitectura de E.V.A. (Experto en Valoración de Activos)
+## System Overview
 
-Este documento esboza las directrices topológicas de cálculo establecidas por DGZ Engineering Lab.
+```mermaid
+graph TD
+    A[index.html<br/>Landing Page] --> B[app.html<br/>Processing Console]
+    B --> C[IPC Mode<br/>Zenith Indexation]
+    B --> D[Avalúo Mode<br/>Forest Biometry]
+    C --> E[cleanVal Parser]
+    D --> F[avaluo_db.js<br/>Species Matrix]
+    E --> G[Z-Factor × 1.5226]
+    F --> H[Volumetric Lookup]
+    G --> I[Result Matrix + Copy]
+    H --> I
+    B --> J[theme-switcher.js]
+    J --> K[dark.css]
+    J --> L[light.css]
+    J --> M[zenith.css]
+```
 
-### 1. Topología de Tasación (Avalúo Forestal)
-El motor opera como una *Lookup Table Bidimensional* estructurada. En Excel, esta lógica pertenece a operaciones hiper-complejas con `INDEX` y `MATCH`. 
+## 1. Calculation Topology
 
-Nuestra arquitectura lo simplificó migrando toda la **Matriz Matemática y Botánica** al archivo `avaluo_db.js`.
-- **Eje X (Abarcadura)**: Evaluado sobre rangos límite de Diámetro Altura Pecho expresados en porcentaje (`cm / 100`).
-- **Eje Y (Altura)**: Evaluado sobre alturas comerciales metros lineales de fuste aprovechable.
-- **Base Categórica**: Subdivisión dinámica donde especies convergen en "Primera, Segunda o Tercera" basándose en el rigor del manual histórico de tasación IGAC/Corporaciones Autónomas Regionales.
+### 1.1 Forest Appraisal Engine (Avalúo Biológico)
 
-### 2. Capa de Corrección Inflacionaria (IPC)
-La inflación en Colombia obliga a que una matriz originada (ej. en 2018) deba ser llevada al Presente (2025/2026).
-- **El Factor Zenith (`1.5226`)**: Es el algoritmo central producto directo de capitalización compuesta `1 + IPC`. En lugar de forzar llamadas a API en tiempo real que podrían no estar disponibles en el campus / terreno de la obra, el código pre-procesa el factor. 
-- **Flujo de Proyección**: El sistema lee `$ Valor Crudo -> Factoriza -> Extrae Diferencia (Delta) -> Representa HTML`.
+The engine operates as a **Bidimensional Lookup Table**:
 
-### 3. Infraestructura Glassmorphism de la UI
-La UI carece de *Frameworks Clunky*. Todo corre en una capa nativa CSS con variables maestras HLS. Rejillas cartográficas pseudo-generadas vía gradientes de bajo impacto algorítmico, previniendo bajadas de FPS al procesar matrices de +1,000 mil árboles.
+| Axis | Parameter | Source |
+|---|---|---|
+| **X (Girth)** | Trunk diameter at breast height (DAP) in cm | IGAC/CAR Manual |
+| **Y (Height)** | Commercial fuste height in meters | Field inventory |
+| **Category** | Species classification (1st, 2nd, 3rd) | Botanical taxonomy |
+
+**Algorithm:**
+```
+Species → Category → Price Matrix[girth_range][height] → Base Value
+Base Value × Z-Factor → Present Value (IPC-adjusted)
+```
+
+### 1.2 IPC Indexation Engine (Corrección Inflacionaria)
+
+The **Zenith Factor (`Z = 1.5226`)** is a compound accumulator:
+
+```
+Z = Π(1 + IPC_year)     for year ∈ [2018, 2025]
+  = 1.038 × 1.0357 × 1.053 × 1.0551 × 1.1318 × 1.0928 × 1.0545
+  = 1.5226
+```
+
+**Data Source:** [DANE IPC Series](https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc)
+
+**Input Parser** supports:
+- Single values per line
+- Tab-separated multi-column (40% / 60% / 70% / 100%)
+- Colombian currency format: `$ 1.234.567,89`
+
+## 2. Theme Architecture
+
+All visual tokens are defined via CSS Custom Properties:
+
+| Variable | Purpose |
+|---|---|
+| `--bg-obsidian` | Page background |
+| `--bg-panel` | Card/panel background |
+| `--primary` | Accent color (interactive elements) |
+| `--primary-glow` | Shadow/glow radiants |
+| `--text-main` | Primary text color |
+| `--text-dim` | Secondary/label text |
+| `--border-glass` | Glass-morphism borders |
+
+Theme switching replaces the CSS file via `theme-switcher.js` and persists selection in `localStorage`.
+
+## 3. Performance Architecture
+
+| Technique | Applied To |
+|---|---|
+| `requestAnimationFrame` | Particle engine, parallax, magnetic effects |
+| `will-change: transform` | Interactive cards, CTA button |
+| `translate3d()` | GPU-accelerated transforms |
+| Passive event listeners | Mouse tracking (`{ passive: true }`) |
+| `backdrop-filter` throttle | Limited to primary panels only |
+
+## 4. File Responsibility Matrix
+
+| File | Role | Dependencies |
+|---|---|---|
+| `index.html` | Landing page, module showcase, SEO | `dark.css`, `theme-switcher.js`, Lucide |
+| `app.html` | Dual-mode processing console | `avaluo_db.js`, Chart.js, Lucide |
+| `avaluo_db.js` | Species database + pricing matrix | None |
+| `theme-switcher.js` | Persistent theme engine | Chart.js (optional sync) |
+| `css/themes/*.css` | Visual token definitions | None |
+| `css/base.css` | Shared component styles (legacy) | Theme CSS |
+
+---
+
+**DGZ Engineering Lab** © 2026

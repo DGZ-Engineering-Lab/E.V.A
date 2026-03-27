@@ -1,16 +1,47 @@
-# Seguridad Corporativa (`SECURITY.md`)
+# Security Policy — E.V.A. PRO
 
-## Políticas de Seguridad - Proyecto E.V.A.
+## Supported Versions
 
-En DGZ Engineering Lab, tomamos muy en serio la seguridad financiera, algorítmica y la integridad de la base de datos de especies. Nuestro modelo de Avalúo Forestal indexa bases oficiales sin exposición server-side.
+| Version | Supported |
+|---|---|
+| 2.5.x | ✅ Current |
+| 2.0.x | ⚠️ Maintenance only |
+| < 2.0 | ❌ End of life |
 
-### 1. Plataforma Serverless y End-to-End Local
-E.V.A. ha sido diseñada para no requerir conexión a bases de datos en la nube. Todo cálculo masivo se efectúa mediante *Client-Side processing* en la RAM del navegador pericial, previniendo fuga de datos de avalúos confidenciales. No transmitimos datos geolocalizados de las tasaciones a ningún servidor.
+## Architecture Security Model
 
-### 2. Reporte de Vulnerabilidades
-Si como ingeniero o auditor descubres un fallo de lógica en el **Parser de Precios (Base Primera, Segunda o Tercera)** o en la indexación del **Factor IPC (1.5226)**, por favor no inicies un Issue público.
-- **Protocolo de Contacto**: Envía un correo directo a nuestro Chief Engineering Officer (CEO / CTO) de DGZ.
-- **Tiempo de Respuesta SLA**: 24-48 horas.
+E.V.A. operates under a **Zero-Server, Zero-Network** architecture:
 
-### 3. Entorno Aislado
-Recomendamos a todos los peritos no utilizar plugins web externos que puedan interceptar la lectura del Portapapeles (`Clipboard API`) al exportar tablas. La función de "Copiado Crítico" incorporada en la App aísla el DOM para prevenir inyección XSS.
+- **No backend** — all processing occurs client-side in the browser
+- **No API calls** — no external data transmission
+- **No database** — data lives only in the user's browser session
+- **No cookies** — only `localStorage` for theme preference
+
+### Data Handling
+
+| Data | Storage | Persistence |
+|---|---|---|
+| Monetary values (IPC input) | Browser memory only | Lost on page close |
+| Species data (Avalúo input) | Browser memory only | Lost on page close |
+| Result tables | DOM only | Lost on page close |
+| Theme preference | `localStorage` | Persistent (non-sensitive) |
+
+### Third-Party Dependencies
+
+| Dependency | Purpose | Risk |
+|---|---|---|
+| Google Fonts (Hanken Grotesk, Space Mono) | Typography | Low — CDN load only |
+| Lucide Icons (unpkg CDN) | SVG icons | Low — CDN load only |
+| Chart.js (jsDelivr CDN) | Data visualization | Low — CDN load only |
+
+## Reporting a Vulnerability
+
+If you discover a security issue, please report it via:
+- **Email**: security@dgz-engineering-lab.com
+- **GitHub Issues**: Use the `security` label
+
+We will respond within 48 hours.
+
+---
+
+**DGZ Engineering Lab** © 2026

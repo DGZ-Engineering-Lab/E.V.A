@@ -4,21 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E.V.A. | DGZ Engineering Lab</title>
+    <title>E.V.A. PRO — Motor de Valoración Forestal e Indexación IPC | DGZ Engineering Lab</title>
+    <meta name="description" content="E.V.A. es una suite forense de grado profesional para la valoración de activos biológicos y la indexación IPC masiva en Colombia. Automatice peritajes catastrales y forestales con precisión superior.">
+    <meta name="keywords" content="avalúo forestal, IPC Colombia, indexación catastral, peritaje ambiental, valoración de activos, DANE, IGAC, E.V.A.">
+    <meta name="author" content="DGZ Engineering Lab">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dgz-engineering-lab.github.io/E.V.A/">
+    <link rel="icon" type="image/png" href="assets/logo.png">
 
-    <!-- UI Core -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="E.V.A. PRO — Motor de Valoración Forestal e Indexación IPC">
+    <meta property="og:description" content="Suite forense profesional para valoración de activos biológicos e indexación IPC masiva en Colombia.">
+    <meta property="og:image" content="assets/logo.png">
+    <meta property="og:locale" content="es_CO">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "E.V.A. — Experto en Valoración de Activos",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Organization", "name": "DGZ Engineering Lab" },
+        "description": "Motor forense para valoración de activos biológicos e indexación IPC masiva en Colombia."
+    }
+    </script>
+
+    <!-- Preload Critical Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Theme System -->
     <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css">
     <script src="js/theme-switcher.js" defer></script>
 
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00F2FE">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; }
+        *, *::before, *::after { transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease; }
         :root { --ease: cubic-bezier(0.23, 1, 0.32, 1); }
+
+        /* Accessibility: Focus States */
+        :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 4px; }
+        .skip-link { position: absolute; top: -100%; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 0.8rem 2rem; border-radius: 0 0 8px 8px; font-weight: 900; font-family:'Space Mono'; z-index: 9999; font-size: 0.75rem; text-decoration: none; transition: top 0.3s; }
+        .skip-link:focus { top: 0; }
+
         
         body { 
             background-color: var(--bg-obsidian); color: var(--text-main); 
@@ -142,58 +182,66 @@
 
 <body>
 
-    <div class="cyber-grid"></div>
-    <div class="zenith-bloom"></div>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-    <nav class="navbar">
+    <div class="cyber-grid" aria-hidden="true"></div>
+    <div class="zenith-bloom" aria-hidden="true"></div>
+
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="brand">
-            <div class="logo"><img src="assets/logo.png" alt="Z-Logo"></div>
+            <div class="logo"><img src="assets/logo.png" alt="E.V.A. PRO Logo"></div>
             <div class="brand-name">E.V.A. <span> CAT-IPC</span></div>
         </div>
         <div class="tech-stack">
-            <div class="tech-pill"><i data-lucide="shield" style="width:14px;"></i> Forensic Grade</div>
-            <div class="tech-pill"><i data-lucide="database" style="width:14px;"></i> No-DB required</div>
-            <div class="tech-pill"><i data-lucide="zap" style="width:14px;"></i> Z-Factor v2.5</div>
+            <div class="tech-pill"><i data-lucide="shield" style="width:14px;" aria-hidden="true"></i> Forensic Grade</div>
+            <div class="tech-pill"><i data-lucide="database" style="width:14px;" aria-hidden="true"></i> No-DB required</div>
+            <div class="tech-pill"><i data-lucide="zap" style="width:14px;" aria-hidden="true"></i> Z-Factor v2.5</div>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="badge"><i data-lucide="globe"></i> DGZ Engineering Lab // Enterprise Edition</div>
-        <h1>Inteligencia Forense para<br><span class="typing-container" id="typewriter"></span></h1>
-        <p class="subtitle">La plataforma de vanguardia para firmas forestales y catastrales en Colombia. Automatice
-            cálculos biológicos, proyecte indexación oficial IPC y audite resultados de alta precisión.</p>
-        <a href="app.html" class="cta">
-            <span class="cta-icon">
-                <i data-lucide="cpu" style="width: 28px; height: 28px;"></i>
-            </span>
-            INICIALIZAR CONSOLA PRO
-        </a>
-    </section>
+    <main id="main-content">
+        <section class="hero" aria-label="Hero Section">
+            <div class="badge"><i data-lucide="globe" aria-hidden="true"></i> DGZ Engineering Lab // Enterprise Edition</div>
+            <h1>Inteligencia Forense para<br><span class="typing-container" id="typewriter"></span></h1>
+            <p class="subtitle">La plataforma de vanguardia para firmas forestales y catastrales en Colombia. Automatice
+                cálculos biológicos, proyecte indexación oficial IPC y audite resultados de alta precisión.</p>
+            <a href="app.html" class="cta" id="cta-main" aria-label="Inicializar la consola de procesamiento E.V.A. PRO">
+                <span class="cta-icon">
+                    <i data-lucide="cpu" style="width: 28px; height: 28px;" aria-hidden="true"></i>
+                </span>
+                INICIALIZAR CONSOLA PRO
+            </a>
+        </section>
 
-    <!-- Content Sections: Bento Modules -->
-    <section class="modules-grid">
-        <div class="module-card card-large">
-            <div class="card-bg-glow"></div>
-            <i data-lucide="calculator" class="m-icon"></i>
-            <h3>Indexación Dinámica IPC</h3>
-            <p>Automatice el cálculo masivo de avalúos según las variaciones oficiales del DANE y el Banco de la República. Algoritmos de precisión con trazabilidad forense.</p>
-            <div class="m-status">OPERATIONAL_v2.5</div>
-        </div>
+        <!-- Content Sections: Bento Modules -->
+        <section class="modules-grid" aria-label="Módulos del sistema">
+            <article class="module-card card-large">
+                <div class="card-bg-glow" aria-hidden="true"></div>
+                <i data-lucide="calculator" class="m-icon" aria-hidden="true"></i>
+                <h2>Indexación Dinámica IPC</h2>
+                <p>Automatice el cálculo masivo de avalúos según las variaciones oficiales del DANE y el Banco de la República. Algoritmos de precisión con trazabilidad forense.</p>
+                <div class="m-status">OPERATIONAL_v2.5</div>
+            </article>
 
-        <div class="module-card">
-            <div class="card-bg-glow" style="background: radial-gradient(circle, var(--success) 0%, transparent 70%); opacity: 0.1;"></div>
-            <i data-lucide="trees" class="m-icon" style="color: var(--success);"></i>
-            <h3>Biometría Forestal</h3>
-            <p>Modelado avanzado de crecimiento y valoración biológica para activos maderables y ornamentales bajo normativa nacional.</p>
-        </div>
+            <article class="module-card">
+                <div class="card-bg-glow" style="background: radial-gradient(circle, var(--success) 0%, transparent 70%); opacity: 0.1;" aria-hidden="true"></div>
+                <i data-lucide="trees" class="m-icon" style="color: var(--success);" aria-hidden="true"></i>
+                <h2>Biometría Forestal</h2>
+                <p>Modelado avanzado de crecimiento y valoración biológica para activos maderables y ornamentales bajo normativa nacional.</p>
+            </article>
 
-        <div class="module-card">
-            <div class="card-bg-glow" style="background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.1;"></div>
-            <i data-lucide="shield-check" class="m-icon" style="color: var(--accent);"></i>
-            <h3>Auditoría Jurídica</h3>
-            <p>Gestión de bitácoras de auditoría para peritajes judiciales. Cumplimiento total con el Código General del Proceso Colombiano.</p>
-        </div>
-    </section>
+            <article class="module-card">
+                <div class="card-bg-glow" style="background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.1;" aria-hidden="true"></div>
+                <i data-lucide="shield-check" class="m-icon" style="color: var(--accent);" aria-hidden="true"></i>
+                <h2>Auditoría Jurídica</h2>
+                <p>Gestión de bitácoras de auditoría para peritajes judiciales. Cumplimiento total con el Código General del Proceso Colombiano.</p>
+            </article>
+        </section>
+    </main>
+
+    <footer style="text-align:center; padding:2rem; font-family:'Space Mono'; font-size:0.65rem; color:var(--text-dim); letter-spacing:2px; opacity:0.6;">
+        DGZ ENGINEERING LAB © 2026 — MIT LICENSE — PRECISION FORENSICS ENGINE v2.5.1
+    </footer>
 
     <style>
         .modules-grid {
@@ -211,7 +259,7 @@
         .card-bg-glow { position: absolute; inset: 0; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity: 0.05; z-index: -1; pointer-events: none; }
         
         .m-icon { width: 44px; height: 44px; color: var(--primary); }
-        .module-card h3 { font-family: 'Space Mono'; font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; }
+        .module-card h2 { font-family: 'Space Mono'; font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; }
         .module-card p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; }
         .m-status { font-family: 'Space Mono'; font-size: 0.65rem; color: var(--primary); background: rgba(var(--primary-glow), 0.1); padding: 0.4rem 0.8rem; border-radius: 4px; align-self: flex-start; }
 
@@ -301,6 +349,13 @@
             else { setTimeout(type, isDel ? 50 : 100); }
         }
         type();
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('[E.V.A.] SW registered:', reg.scope))
+                .catch(err => console.warn('[E.V.A.] SW failed:', err));
+        }
     </script>
 </body>
 

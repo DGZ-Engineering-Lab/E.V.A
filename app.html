@@ -4,9 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E.V.A. PRO | DGZ Engineering Lab</title>
+    <title>E.V.A. PRO Console — Procesamiento IPC y Avalúo Forestal | DGZ Engineering Lab</title>
+    <meta name="description"
+        content="Consola profesional E.V.A. PRO para procesamiento masivo de indexación IPC y avalúo de activos forestales. Motor Z-Factor v1.5226 con precisión forense.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="assets/logo.png">
 
-    <!-- Fonts -->
+    <!-- Preload Critical Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
@@ -20,11 +26,24 @@
     <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css">
     <script src="js/theme-switcher.js" defer></script>
 
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00F2FE">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <style>
         :root {
             --sidebar-w: 80px;
             --topbar-h: 70px;
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Accessibility: Focus States */
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 3px;
+            border-radius: 4px;
         }
 
         * {
@@ -48,7 +67,19 @@
             animation: pageIn 1.2s var(--ease);
         }
 
-        @keyframes pageIn { from { opacity: 0; filter: blur(10px); transform: scale(1.01); } to { opacity: 1; filter: blur(0); transform: scale(1); } }
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                filter: blur(10px);
+                transform: scale(1.01);
+            }
+
+            to {
+                opacity: 1;
+                filter: blur(0);
+                transform: scale(1);
+            }
+        }
 
         /* --- Global Animations --- */
         @keyframes shimmer {
@@ -61,9 +92,41 @@
             }
         }
 
-        @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-        @keyframes reveal { from { transform: translateY(30px) scale(0.98); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
-        @keyframes bounce-in { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes slideIn {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes reveal {
+            from {
+                transform: translateY(30px) scale(0.98);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
 
         /* --- Sidebar Navigation (Desktop) --- */
         .sidebar-nav {
@@ -270,10 +333,33 @@
         }
 
         /* --- Footer Bar --- */
-        .header-meta { display: flex; align-items: center; gap: 3rem; }
-        .meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
-        .m-label { font-family: 'Space Mono'; font-size: 0.55rem; color: var(--text-dim); letter-spacing: 1px; }
-        .m-val { font-family: 'Space Mono'; font-size: 0.7rem; color: var(--primary); font-weight: 800; letter-spacing: 0.5px; }
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .m-label {
+            font-family: 'Space Mono';
+            font-size: 0.55rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+        }
+
+        .m-val {
+            font-family: 'Space Mono';
+            font-size: 0.7rem;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
         .sys-log {
             position: fixed;
             bottom: 0;
@@ -312,16 +398,25 @@
         }
 
         .dashboard-main {
-            display: grid; grid-template-columns: 1fr 380px; gap: 2rem;
-            padding: 3rem; max-width: 1700px; margin: 0 auto; width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 2rem;
+            padding: 3rem;
+            max-width: 1700px;
+            margin: 0 auto;
+            width: 100%;
             animation: bounce-in 1s var(--ease);
         }
 
         /* --- Bento System Refined --- */
         .glass-card {
-            background: var(--bg-panel); backdrop-filter: blur(25px);
-            border: 1px solid var(--border-glass); border-radius: 24px;
-            padding: 2.5rem; position: relative; overflow: hidden;
+            background: var(--bg-panel);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             animation: reveal 0.8s var(--ease) 0.6s backwards;
         }
@@ -361,15 +456,32 @@
         }
 
         .kpi-stack {
-            padding: 1.75rem; border-radius: 18px;
-            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass);
-            display: flex; flex-direction: column; gap: 0.5rem;
-            position: relative; animation: reveal 0.8s var(--ease) backwards;
+            padding: 1.75rem;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            animation: reveal 0.8s var(--ease) backwards;
         }
-        .kpi-stack:nth-child(1) { animation-delay: 0.2s; }
-        .kpi-stack:nth-child(2) { animation-delay: 0.3s; }
-        .kpi-stack:nth-child(3) { animation-delay: 0.4s; }
-        .kpi-stack:nth-child(4) { animation-delay: 0.5s; }
+
+        .kpi-stack:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .kpi-stack:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .kpi-stack:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .kpi-stack:nth-child(4) {
+            animation-delay: 0.5s;
+        }
 
         .kpi-stack:hover {
             border-color: var(--primary-glow);
@@ -812,8 +924,8 @@
                             <thead>
                                 <tr>
                                     <th>ESCENARIO</th>
-                                    <th>CRÍPTICO BASE</th>
-                                    <th>PROYECTADO FINAL</th>
+                                    <th>VALOR BASE IPC 2018</th>
+                                    <th>VALOR IPC 2025</th>
                                     <th>AUMENTO %</th>
                                 </tr>
                             </thead>
@@ -872,14 +984,27 @@
         });
 
         function cleanVal(str) {
-            // High-precision cleaning: strips currency symbols, spaces, and corrects dots/commas
-            const cleaned = str.replace(/[^\d,.-]/g, ''); 
+            const cleaned = str.replace(/[^\d,.-]/g, '');
+            if (!cleaned) return 0;
             if (cleaned.includes(',') && cleaned.includes('.')) {
-                // If both exist, assume dot is thousands and comma is decimal
-                return parseFloat(cleaned.replace(/\./g, '').replace(',', '.')) || 0;
+                const lastComma = cleaned.lastIndexOf(',');
+                const lastDot = cleaned.lastIndexOf('.');
+                if (lastComma > lastDot) {
+                    // Colombian: dots=thousands, comma=decimal
+                    return parseFloat(cleaned.replace(/\./g, '').replace(',', '.')) || 0;
+                } else {
+                    // US: commas=thousands, dot=decimal
+                    return parseFloat(cleaned.replace(/,/g, '')) || 0;
+                }
             }
-            // Fallback for simple formats
-            return parseFloat(cleaned.replace(',', '.')) || 0;
+            if (cleaned.includes(',') && !cleaned.includes('.')) {
+                const parts = cleaned.split(',');
+                if (parts.length === 2 && parts[1].length <= 2) {
+                    return parseFloat(cleaned.replace(',', '.')) || 0;
+                }
+                return parseFloat(cleaned.replace(/,/g, '')) || 0;
+            }
+            return parseFloat(cleaned) || 0;
         }
 
         let currentMode = 'ipc';
@@ -946,7 +1071,7 @@
             lines.forEach((line) => {
                 const parts = line.split(/\t|\s{2,}/).filter(p => p.trim().length > 0);
                 const tags = (parts.length === 4) ? [' (40%)', ' (60%)', ' (70%)', ' (100%)'] : ['', '', '', ''];
-                
+
                 parts.forEach((part, idx) => {
                     const val = cleanVal(part);
                     if (val > 0) {
@@ -985,6 +1110,7 @@
             if (typeof AVALUO_DB === 'undefined') { alert('ERR: DB Core Not Found.'); return; }
 
             let count = 0, s40 = 0, s60 = 0, s70 = 0, s100 = 0;
+            const unknownSpecies = [];
 
             lines.forEach((line) => {
                 if (!line.trim()) return;
@@ -993,24 +1119,51 @@
                     const esp = p[0], ab = parseFloat(p[1].replace(',', '.')), alt = parseFloat(p[2].replace(',', '.'));
                     if (isNaN(ab) || isNaN(alt)) return;
 
-                    let type = "Tercera";
-                    let spL = esp.toLowerCase();
-                    for (let s of AVALUO_DB.Species) { if (s.Name.toLowerCase() === spL) { type = s.Type; break; } }
+                    let type = null;
+                    let spL = esp.toLowerCase().trim();
 
-                    const t = type === "Primera" ? AVALUO_DB.Primera : (type === "Segunda" ? AVALUO_DB.Segunda : AVALUO_DB.Tercera);
+                    // Check for direct category input (user typed category name instead of species)
+                    const directCategories = ['selección', 'seleccion', 'primera', 'segunda', 'tercera'];
+                    if (directCategories.includes(spL)) {
+                        type = spL === 'seleccion' ? 'Selección' : esp.charAt(0).toUpperCase() + esp.slice(1).toLowerCase();
+                    } else {
+                        // Search in database (case-insensitive)
+                        for (let s of AVALUO_DB.Species) {
+                            if (s.Name.toLowerCase().trim() === spL) {
+                                type = s.Type;
+                                break;
+                            }
+                        }
+                    }
+
+                    // If species not found, mark as unknown
+                    if (!type) {
+                        unknownSpecies.push(esp);
+                        type = "Tercera"; // Default fallback
+                    }
+
+                    // Normalize type casing
+                    const typeNorm = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+                    const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
+
+                    const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
                     const abM = ab / 100;
                     let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
                     let rI = t.Rows.findIndex(r => r >= alt); if (rI === -1) rI = t.Rows.length - 1;
                     let base = t.Data[rI][cI] || 0;
 
+                    // Selección gets a 20% premium over Primera
+                    if (typeNorm === 'Selección') base = Math.round(base * 1.2);
+
                     const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
                     s40 += v40; s60 += v60; s70 += v70; s100 += v100;
 
                     count++;
+                    const isUnknown = unknownSpecies.includes(esp);
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td style="font-weight:900; color:var(--text-main);">${esp}</td>
-                        <td style="color:var(--text-dim);">${type}</td>
+                        <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">${esp} ${isUnknown ? '<span style="font-size:0.65rem; opacity:0.7;">⚠ SIN_REGISTRO</span>' : ''}</td>
+                        <td style="color:var(--text-dim);">${typeNorm}</td>
                         <td class="num">${ab}</td>
                         <td class="num">${alt}</td>
                         <td class="num">${fmtElite.format(v40)}</td>
@@ -1021,6 +1174,18 @@
                     tbody.appendChild(row);
                 }
             });
+
+            // Show alert for unknown species
+            if (unknownSpecies.length > 0) {
+                const uniqueUnknown = [...new Set(unknownSpecies)];
+                const msg = `⚠ ALERTA: ${uniqueUnknown.length} especie(s) no encontrada(s) en la base de datos:\n\n` +
+                    uniqueUnknown.map(s => `  • ${s}`).join('\n') +
+                    `\n\nSe asignó categoría "Tercera" por defecto.\n\n` +
+                    `💡 TIP: Para asignar otra categoría, reemplace el nombre de la especie por:\n` +
+                    `   "Selección", "Primera", "Segunda" o "Tercera"\n` +
+                    `   Ejemplo: Primera\t30\t8`;
+                alert(msg);
+            }
 
             if (count > 0) {
                 const sums = [{ l: "Avalúo Base (40%)", b: s40 }, { l: "Avalúo Comercial (60%)", b: s60 }, { l: "Avalúo Extra (70%)", b: s70 }, { l: "Avalúo Total (100%)", b: s100 }];
@@ -1043,17 +1208,17 @@
         }
 
         // --- Exceptional Interaction Engine app.v3.0 ---
-        
+
         document.addEventListener('mousemove', (e) => {
             const { clientX, clientY } = e;
-            
+
             // 1. Magnetic Sidebar Items
             document.querySelectorAll('.nav-item').forEach(item => {
                 const rect = item.getBoundingClientRect();
-                const dist = Math.hypot(clientX - (rect.left + rect.width/2), clientY - (rect.top + rect.height/2));
+                const dist = Math.hypot(clientX - (rect.left + rect.width / 2), clientY - (rect.top + rect.height / 2));
                 if (dist < 100) {
-                    const x = (clientX - (rect.left + rect.width/2)) * 0.4;
-                    const y = (clientY - (rect.top + rect.height/2)) * 0.4;
+                    const x = (clientX - (rect.left + rect.width / 2)) * 0.4;
+                    const y = (clientY - (rect.top + rect.height / 2)) * 0.4;
                     item.style.transform = `translate(${x}px, ${y}px) scale(1.15)`;
                 } else {
                     item.style.transform = `translate(0,0) scale(1)`;
@@ -1085,12 +1250,12 @@
 
         // 4. Enhanced Execution Feedback
         const execBtnOrig = document.getElementById('execBtn');
-        if(execBtnOrig) {
+        if (execBtnOrig) {
             const oldExecute = window.executeAction;
             window.executeAction = () => {
                 document.body.style.filter = 'brightness(1.1) contrast(1.1)';
                 setTimeout(() => document.body.style.filter = 'none', 150);
-                if(oldExecute) oldExecute();
+                if (oldExecute) oldExecute();
             };
         }
 
@@ -1116,6 +1281,13 @@
                 }
             }
         });
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('[E.V.A. APP] SW registered:', reg.scope))
+                .catch(err => console.warn('[E.V.A. APP] SW failed:', err));
+        }
     </script>
 </body>
 
