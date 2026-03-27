@@ -623,14 +623,33 @@
             transition: 0.2s;
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        /* --- Laser Focus Row Highlights --- */
+        tbody {
+            transition: 0.3s;
+        }
+
+        tbody:hover tr {
+            opacity: 0.25;
+            filter: grayscale(0.6);
+        }
+
+        tbody tr {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        tbody tr:hover {
+            opacity: 1;
+            filter: grayscale(0);
+            transform: scale(1.002);
+            box-shadow: inset 4px 0 0 var(--primary), 0 10px 30px rgba(0,0,0,0.4);
         }
 
         tr:hover td {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 242, 254, 0.03); /* Lighter cyan glow inside the cells */
             color: var(--primary);
+            border-bottom-color: transparent;
         }
+
 
         .num {
             font-family: 'Space Mono';
@@ -1048,6 +1067,15 @@
     <script>
         lucide.createIcons();
 
+        // --- Immortal Persistence (Auto-Save) ---
+        const sysInputArea = document.getElementById('mainInput');
+        if (localStorage.getItem('evaInputData')) {
+            sysInputArea.value = localStorage.getItem('evaInputData');
+        }
+        sysInputArea.addEventListener('input', (e) => {
+            localStorage.setItem('evaInputData', e.target.value);
+        });
+
         const ZENITH_FACTOR = 1.5226;
         const fmtElite = new Intl.NumberFormat('es-CO', {
             style: 'currency', currency: 'COP', maximumFractionDigits: 0
@@ -1152,6 +1180,7 @@
             document.getElementById('resultsUI').style.display = 'none';
             document.getElementById('resultsAvaluo').style.display = 'none';
             document.getElementById('kpiCount').textContent = '0';
+            localStorage.removeItem('evaInputData'); // Limpia también la memoria persistente
         }
 
         function copyTable(id) {
