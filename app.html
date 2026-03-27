@@ -977,10 +977,14 @@
                             <i data-lucide="trending-up" style="color: var(--primary);"></i>
                             <h2>RESUMEN DE TASACIÓN GLOBAL</h2>
                         </div>
-                        <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
-                            onclick="copyTable('tSummaryAvaluo')">
-                            COPIAR RESUMEN
-                        </button>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;" onclick="exportTableToExcel('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> EXCEL
+                            </button>
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;" onclick="copyTable('tSummaryAvaluo')">
+                                COPIAR
+                            </button>
+                        </div>
                     </div>
                     <div class="table-canvas">
                         <table id="tSummaryAvaluo">
@@ -1003,11 +1007,14 @@
                             <i data-lucide="trees" style="color: var(--warning);"></i>
                             <h2>DETALLE VOLUMÉTRICO DE ESPECIES</h2>
                         </div>
-                        <button class="btn-zenith"
-                            style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
-                            onclick="copyTable('tDetailAvaluo')">
-                            COPIAR DETALLE
-                        </button>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);" onclick="exportTableToExcel('tDetailAvaluo', 'Detalle_Volumetrico')">
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> EXCEL
+                            </button>
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);" onclick="copyTable('tDetailAvaluo')">
+                                COPIAR
+                            </button>
+                        </div>
                     </div>
                     <div class="table-canvas">
                         <table id="tDetailAvaluo">
@@ -1045,6 +1052,40 @@
         const fmtElite = new Intl.NumberFormat('es-CO', {
             style: 'currency', currency: 'COP', maximumFractionDigits: 0
         });
+
+        function sanitizeText(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function exportTableToExcel(tableId, filename) {
+            const table = document.getElementById(tableId);
+            const cloneTable = table.cloneNode(true);
+            
+            // Reemplazar <select> en el clon por el valor real de texto
+            const originalSelects = table.querySelectorAll('select');
+            const clonedSelects = cloneTable.querySelectorAll('select');
+            for(let i = 0; i < originalSelects.length; i++) {
+                clonedSelects[i].parentNode.innerText = originalSelects[i].value;
+            }
+
+            const html = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="UTF-8">
+                <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${filename}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+                </head>
+                <body><table border="1">${cloneTable.innerHTML}</table></body>
+                </html>
+            `;
+
+            const blob = new Blob([html], { type: "application/vnd.ms-excel" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", filename + ".xls");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
         function cleanVal(str) {
             const cleaned = str.replace(/[^\d,.-]/g, '');
@@ -1303,8 +1344,10 @@
                 if (!line.trim()) return;
                 const p = line.split(/\t|\||;/).map(x => x.trim()).filter(x => x !== '');
                 if (p.length >= 3) {
-                    const esp = p[0], ab = parseFloat(p[1].replace(',', '.')), alt = parseFloat(p[2].replace(',', '.'));
+                    const espRaw = p[0], ab = parseFloat(p[1].replace(',', '.')), alt = parseFloat(p[2].replace(',', '.'));
                     if (isNaN(ab) || isNaN(alt)) return;
+
+                    const esp = sanitizeText(espRaw);
 
                     let type = null;
                     let spL = esp.toLowerCase().trim();
@@ -1344,26 +1387,33 @@
         }
 
         // --- Exceptional Interaction Engine app.v3.0 ---
+        let ticking = false;
 
         document.addEventListener('mousemove', (e) => {
-            const { clientX, clientY } = e;
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const { clientX, clientY } = e;
 
-            // 1. Magnetic Sidebar Items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                const rect = item.getBoundingClientRect();
-                const dist = Math.hypot(clientX - (rect.left + rect.width / 2), clientY - (rect.top + rect.height / 2));
-                if (dist < 100) {
-                    const x = (clientX - (rect.left + rect.width / 2)) * 0.4;
-                    const y = (clientY - (rect.top + rect.height / 2)) * 0.4;
-                    item.style.transform = `translate(${x}px, ${y}px) scale(1.15)`;
-                } else {
-                    item.style.transform = `translate(0,0) scale(1)`;
-                }
-            });
+                    // 1. Magnetic Sidebar Items
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        const rect = item.getBoundingClientRect();
+                        const dist = Math.hypot(clientX - (rect.left + rect.width / 2), clientY - (rect.top + rect.height / 2));
+                        if (dist < 100) {
+                            const x = (clientX - (rect.left + rect.width / 2)) * 0.4;
+                            const y = (clientY - (rect.top + rect.height / 2)) * 0.4;
+                            item.style.transform = `translate(${x}px, ${y}px) scale(1.15)`;
+                        } else {
+                            item.style.transform = `translate(0,0) scale(1)`;
+                        }
+                    });
 
-            // 2. Parallax Bloom Background
-            const body = document.body;
-            body.style.backgroundPosition = `${clientX * 0.01}% ${clientY * 0.01}%`;
+                    // 2. Parallax Bloom Background
+                    document.body.style.backgroundPosition = `${clientX * 0.01}% ${clientY * 0.01}%`;
+                    
+                    ticking = false;
+                });
+                ticking = true;
+            }
         });
 
         // 3. 3D Tilt for Glass Cards & KPI (Excluding Results Tables)

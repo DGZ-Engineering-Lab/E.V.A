@@ -1,16 +1,23 @@
 {
     "name": "E.V.A. PRO",
-    "short_name": "E.V.A.",
+    "short_name": "E.V.A. PRO",
     "description": "Motor forense de valoración de activos biológicos e indexación IPC para Colombia",
     "start_url": "./index.html",
     "scope": "./",
     "display": "standalone",
+    "display_override": ["window-controls-overlay", "standalone"],
     "background_color": "#05070a",
     "theme_color": "#00F2FE",
     "orientation": "any",
     "lang": "es-CO",
     "categories": ["finance", "productivity", "utilities"],
     "icons": [
+        {
+            "src": "assets/logo.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
         {
             "src": "assets/logo.png",
             "sizes": "512x512",
