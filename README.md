@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <em>Built by <a href="https://github.com/DGZ-Engineering-Lab">DGZ Engineering Lab</a> · Bogotá, Colombia</em>
+  <em>Built by <a href="https://github.com/DGZ-Engineering-Lab">DGZ Engineering Lab</a> · Medellin, Colombia</em>
 </p>
 
 ---
