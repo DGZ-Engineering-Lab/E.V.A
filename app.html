@@ -771,6 +771,69 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary);
         }
+
+        /* --- Custom Modal Alert --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000; opacity: 0; pointer-events: none; transition: 0.4s;
+        }
+        .modal-overlay.active {
+            opacity: 1; pointer-events: all;
+        }
+        .modal-box {
+            background: rgba(10, 15, 26, 0.95); border: 1px solid var(--warning);
+            border-radius: 16px; padding: 2rem; width: 90%; max-width: 500px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5), 0 0 30px rgba(245, 158, 11, 0.1);
+            transform: scale(0.95) translateY(20px); transition: 0.4s var(--ease);
+            text-align: left;
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1) translateY(0);
+        }
+        .modal-title {
+            color: var(--warning); font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .modal-body {
+            color: var(--text-dim); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;
+        }
+        .modal-list {
+            background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; margin: 1rem 0;
+            max-height: 150px; overflow-y: auto; font-family: 'Space Mono', monospace; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .modal-list li {
+            margin-left: 1rem; color: var(--text-main); margin-bottom: 0.3rem;
+        }
+        .modal-btn {
+            background: linear-gradient(135deg, var(--warning), #D97706);
+            color: #000; border: none; padding: 0.8rem 2rem;
+            border-radius: 8px; font-weight: 800; cursor: pointer;
+            width: 100%; font-family: 'Space Mono'; transition: 0.3s;
+        }
+        .modal-btn:hover {
+            filter: brightness(1.2); box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        /* --- Custom Select UI --- */
+        .cat-select {
+            appearance: none; -webkit-appearance: none;
+            background: rgba(245, 158, 11, 0.05); color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px;
+            padding: 4px 28px 4px 10px; font-family: 'Space Mono', monospace; font-size: 0.75rem;
+            cursor: pointer; outline: none; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.5px; transition: 0.3s;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 6px center; background-size: 14px;
+        }
+        .cat-select:hover, .cat-select:focus {
+            background-color: rgba(245, 158, 11, 0.15); border-color: var(--warning);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+        .cat-select option {
+            background-color: var(--bg-obsidian); color: var(--text-main); font-weight: 400; font-family: 'Hanken Grotesk', sans-serif;
+        }
     </style>
 </head>
 
@@ -954,10 +1017,10 @@
                                     <th>CAT</th>
                                     <th>ABAR(cm)</th>
                                     <th>ALT(m)</th>
-                                    <th>BASE 40%</th>
-                                    <th>BASE 60%</th>
-                                    <th>BASE 70%</th>
-                                    <th>BASE 100%</th>
+                                    <th>VALOR 40%</th>
+                                    <th>VALOR 60%</th>
+                                    <th>VALOR 70%</th>
+                                    <th>VALOR 100%</th>
                                 </tr>
                             </thead>
                             <tbody id="avaluoBody"></tbody>
@@ -1099,96 +1162,111 @@
             }
         }
 
-        function executeAvaluo() {
-            const txt = document.getElementById('mainInput').value;
-            if (!txt.trim()) return;
-            const lines = txt.split('\n');
+        let actParsedAvaluo = [];
+
+        function showCustomAlert(speciesArray) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            
+            const html = `
+                <div class="modal-box">
+                    <div class="modal-title">
+                        <i data-lucide="triangle-alert"></i> SIN REGISTRO EN BASE DE DATOS
+                    </div>
+                    <div class="modal-body">
+                        Se detectaron <strong>${speciesArray.length}</strong> especie(s) ajena(s) a la matriz central. Se les ha asignado la categoría "Tercera" por defecto para no frenar la liquidación.
+                        <ul class="modal-list">
+                            ${speciesArray.map(s => `<li>${s}</li>`).join('')}
+                        </ul>
+                        💡 TIP: Puedes actualizar la categoría exacta de estas especies usando el selector desplegable <span style="color:var(--warning);">amarillo</span> directamente en la tabla de detalles. La inteligencia financiera se recalculará automáticamente.
+                    </div>
+                    <button class="modal-btn" onclick="this.closest('.modal-overlay').remove()">ENTENDIDO · CONTINUAR</button>
+                </div>
+            `;
+            
+            overlay.innerHTML = html;
+            document.body.appendChild(overlay);
+            lucide.createIcons(); // render the triangle alert icon
+            
+            // Trigger animation
+            setTimeout(() => overlay.classList.add('active'), 10);
+        }
+
+        function updateRowCat(id, newCat) {
+            const rowIdx = actParsedAvaluo.findIndex(r => r.id === id);
+            if (rowIdx > -1) {
+                actParsedAvaluo[rowIdx].typeNorm = newCat;
+                // Re-render board with updated state
+                renderAvaluoBoard(false); // false means don't show the initial alert again
+            }
+        }
+
+        function renderAvaluoBoard(showAlerts = false) {
             const tbody = document.getElementById('avaluoBody');
             const tbodySum = document.getElementById('avaluoSummaryBody');
             tbody.innerHTML = ''; tbodySum.innerHTML = '';
 
-            if (typeof AVALUO_DB === 'undefined') { alert('ERR: DB Core Not Found.'); return; }
-
             let count = 0, s40 = 0, s60 = 0, s70 = 0, s100 = 0;
             const unknownSpecies = [];
 
-            lines.forEach((line) => {
-                if (!line.trim()) return;
-                const p = line.split(/\t|\||;/).map(x => x.trim()).filter(x => x !== '');
-                if (p.length >= 3) {
-                    const esp = p[0], ab = parseFloat(p[1].replace(',', '.')), alt = parseFloat(p[2].replace(',', '.'));
-                    if (isNaN(ab) || isNaN(alt)) return;
+            actParsedAvaluo.forEach(item => {
+                const { id, esp, ab, alt, isUnknown, typeNorm } = item;
+                const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
 
-                    let type = null;
-                    let spL = esp.toLowerCase().trim();
+                const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
+                const abM = ab / 100;
+                let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
+                let rI = t.Rows.findIndex(r => r >= alt); if (rI === -1) rI = t.Rows.length - 1;
+                let base = t.Data[rI][cI] || 0;
 
-                    // Check for direct category input (user typed category name instead of species)
-                    const directCategories = ['selección', 'seleccion', 'primera', 'segunda', 'tercera'];
-                    if (directCategories.includes(spL)) {
-                        type = spL === 'seleccion' ? 'Selección' : esp.charAt(0).toUpperCase() + esp.slice(1).toLowerCase();
-                    } else {
-                        // Search in database (case-insensitive)
-                        for (let s of AVALUO_DB.Species) {
-                            if (s.Name.toLowerCase().trim() === spL) {
-                                type = s.Type;
-                                break;
-                            }
-                        }
-                    }
+                // Selección gets a 20% premium over Primera
+                if (typeNorm === 'Selección') base = Math.round(base * 1.2);
 
-                    // If species not found, mark as unknown
-                    if (!type) {
-                        unknownSpecies.push(esp);
-                        type = "Tercera"; // Default fallback
-                    }
+                const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
+                s40 += v40; s60 += v60; s70 += v70; s100 += v100;
+                count++;
 
-                    // Normalize type casing
-                    const typeNorm = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
-                    const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
+                if (isUnknown && showAlerts) unknownSpecies.push(esp);
 
-                    const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
-                    const abM = ab / 100;
-                    let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
-                    let rI = t.Rows.findIndex(r => r >= alt); if (rI === -1) rI = t.Rows.length - 1;
-                    let base = t.Data[rI][cI] || 0;
+                // Build category cell (plain text or interactive select)
+                let catHTML = `<td style="color:var(--text-dim);">${typeNorm}</td>`;
+                if (isUnknown) {
+                    const sel1 = typeNorm === 'Primera' ? 'selected' : '';
+                    const sel2 = typeNorm === 'Segunda' ? 'selected' : '';
+                    const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
+                    const selS = typeNorm === 'Selección' ? 'selected' : '';
 
-                    // Selección gets a 20% premium over Primera
-                    if (typeNorm === 'Selección') base = Math.round(base * 1.2);
-
-                    const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
-                    s40 += v40; s60 += v60; s70 += v70; s100 += v100;
-
-                    count++;
-                    const isUnknown = unknownSpecies.includes(esp);
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">${esp} ${isUnknown ? '<span style="font-size:0.65rem; opacity:0.7;">⚠ SIN_REGISTRO</span>' : ''}</td>
-                        <td style="color:var(--text-dim);">${typeNorm}</td>
-                        <td class="num">${ab}</td>
-                        <td class="num">${alt}</td>
-                        <td class="num">${fmtElite.format(v40)}</td>
-                        <td class="num">${fmtElite.format(v60)}</td>
-                        <td class="num">${fmtElite.format(v70)}</td>
-                        <td class="num">${fmtElite.format(v100)}</td>
-                    `;
-                    tbody.appendChild(row);
+                    catHTML = `<td>
+                        <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría">
+                            <option value="Primera" ${sel1}>Primera</option>
+                            <option value="Segunda" ${sel2}>Segunda</option>
+                            <option value="Tercera" ${sel3}>Tercera</option>
+                            <option value="Selección" ${selS}>Selección</option>
+                        </select>
+                    </td>`;
                 }
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ SIN_REGISTRO</span>' : ''}</td>
+                    ${catHTML}
+                    <td class="num">${ab}</td>
+                    <td class="num">${alt}</td>
+                    <td class="num">${fmtElite.format(v40)}</td>
+                    <td class="num">${fmtElite.format(v60)}</td>
+                    <td class="num">${fmtElite.format(v70)}</td>
+                    <td class="num">${fmtElite.format(v100)}</td>
+                `;
+                tbody.appendChild(row);
             });
 
-            // Show alert for unknown species
-            if (unknownSpecies.length > 0) {
-                const uniqueUnknown = [...new Set(unknownSpecies)];
-                const msg = `⚠ ALERTA: ${uniqueUnknown.length} especie(s) no encontrada(s) en la base de datos:\n\n` +
-                    uniqueUnknown.map(s => `  • ${s}`).join('\n') +
-                    `\n\nSe asignó categoría "Tercera" por defecto.\n\n` +
-                    `💡 TIP: Para asignar otra categoría, reemplace el nombre de la especie por:\n` +
-                    `   "Selección", "Primera", "Segunda" o "Tercera"\n` +
-                    `   Ejemplo: Primera\t30\t8`;
-                alert(msg);
+            // Show sleek modal alert for unknown species
+            if (unknownSpecies.length > 0 && showAlerts) {
+                showCustomAlert([...new Set(unknownSpecies)]);
             }
 
             if (count > 0) {
-                const sums = [{ l: "Avalúo Base (40%)", b: s40 }, { l: "Avalúo Comercial (60%)", b: s60 }, { l: "Avalúo Extra (70%)", b: s70 }, { l: "Avalúo Total (100%)", b: s100 }];
+                const sums = [{ l: "Valor Base (40%)", b: s40 }, { l: "Valor al 60%", b: s60 }, { l: "Valor al 70%", b: s70 }, { l: "Valor al 100%", b: s100 }];
                 sums.forEach(s => {
                     const proyectado = Math.round(s.b * ZENITH_FACTOR);
                     const row = document.createElement('tr');
@@ -1203,8 +1281,66 @@
                 document.getElementById('resultsAvaluo').style.display = 'block';
                 document.getElementById('kpiCount').textContent = count;
                 lucide.createIcons();
-                window.scrollTo({ top: document.getElementById('resultsAvaluo').offsetTop - 100, behavior: 'smooth' });
+
+                // Only scroll smoothly on initial execution
+                if (showAlerts) {
+                    window.scrollTo({ top: document.getElementById('resultsAvaluo').offsetTop - 100, behavior: 'smooth' });
+                }
             }
+        }
+
+        function executeAvaluo() {
+            const txt = document.getElementById('mainInput').value;
+            if (!txt.trim()) return;
+            const lines = txt.split('\n');
+
+            if (typeof AVALUO_DB === 'undefined') { alert('ERR: DB Core Not Found.'); return; }
+
+            actParsedAvaluo = []; // reset state
+            let rowIdCounter = 0;
+
+            lines.forEach((line) => {
+                if (!line.trim()) return;
+                const p = line.split(/\t|\||;/).map(x => x.trim()).filter(x => x !== '');
+                if (p.length >= 3) {
+                    const esp = p[0], ab = parseFloat(p[1].replace(',', '.')), alt = parseFloat(p[2].replace(',', '.'));
+                    if (isNaN(ab) || isNaN(alt)) return;
+
+                    let type = null;
+                    let spL = esp.toLowerCase().trim();
+                    let isUnknown = false;
+
+                    const directCategories = ['selección', 'seleccion', 'primera', 'segunda', 'tercera'];
+                    if (directCategories.includes(spL)) {
+                        type = spL === 'seleccion' ? 'Selección' : esp.charAt(0).toUpperCase() + esp.slice(1).toLowerCase();
+                    } else {
+                        for (let s of AVALUO_DB.Species) {
+                            if (s.Name.toLowerCase().trim() === spL) {
+                                type = s.Type;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!type) {
+                        isUnknown = true;
+                        type = "Tercera"; // Default fallback
+                    }
+
+                    const typeNorm = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+
+                    actParsedAvaluo.push({
+                        id: rowIdCounter++,
+                        esp,
+                        ab,
+                        alt,
+                        isUnknown,
+                        typeNorm
+                    });
+                }
+            });
+
+            renderAvaluoBoard(true); // render and show alerts if any
         }
 
         // --- Exceptional Interaction Engine app.v3.0 ---
@@ -1230,8 +1366,8 @@
             body.style.backgroundPosition = `${clientX * 0.01}% ${clientY * 0.01}%`;
         });
 
-        // 3. 3D Tilt for Glass Cards & KPI
-        const interactibles = document.querySelectorAll('.glass-card, .kpi-stack');
+        // 3. 3D Tilt for Glass Cards & KPI (Excluding Results Tables)
+        const interactibles = document.querySelectorAll('.glass-card:not(.results-wrapper .glass-card), .kpi-stack');
         interactibles.forEach(el => {
             el.addEventListener('mousemove', (e) => {
                 const rect = el.getBoundingClientRect();
