@@ -1,0 +1,16 @@
+/**
+ * E.V.A PRO Arctic Engineering (Light Theme)
+ */
+:root {
+    --bg-obsidian: #F8FAFC;
+    --bg-panel: rgba(255, 255, 255, 0.95);
+    --primary: #0284C7;
+    --primary-glow: rgba(2, 132, 199, 0.15);
+    --secondary: #0C4A6E;
+    --success: #059669;
+    --warning: #B45309;
+    --accent: #4338CA;
+    --text-main: #020617;
+    --text-dim: #334155;
+    --border-glass: rgba(15, 23, 42, 0.1);
+}

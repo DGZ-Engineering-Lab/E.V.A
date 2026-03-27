@@ -1,0 +1,16 @@
+/**
+ * E.V.A PRO Zenith High-Contrast (Special Edition)
+ */
+:root {
+    --bg-obsidian: #020408;
+    --bg-panel: rgba(0, 0, 0, 0.9);
+    --primary: #FBBF24;
+    --primary-glow: rgba(251, 191, 36, 0.5);
+    --secondary: #D97706;
+    --success: #34D399;
+    --warning: #FBBF24;
+    --accent: #F472B6;
+    --text-main: #FFFFFF;
+    --text-dim: #CBD5E1;
+    --border-glass: rgba(251, 191, 36, 0.3);
+}

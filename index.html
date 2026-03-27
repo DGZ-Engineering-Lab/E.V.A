@@ -1,249 +1,307 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="eva-theme-dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E.V.A. | DGZ Engineering Lab</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Icons -->
+
+    <!-- UI Core -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Theme System -->
+    <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css">
+    <script src="js/theme-switcher.js" defer></script>
+
     <style>
-        :root {
-            --bg-base: #020408;
-            --bg-surface: #0a0f18;
-            --primary: #00F2FE;
-            --primary-light: #4FACFE;
-            --success: #059669;
-            --warning: #F59E0B;
-            --text-main: #F8FAFC;
-            --text-dim: #94A3B8;
-            --border: rgba(0, 242, 254, 0.15);
-            --glow: 0 0 35px rgba(0, 242, 254, 0.4);
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        :root { --ease: cubic-bezier(0.23, 1, 0.32, 1); }
+        
+        body { 
+            background-color: var(--bg-obsidian); color: var(--text-main); 
+            min-height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+            position: relative; animation: pageIn 1.2s var(--ease);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; cursor: default; }
-        ::selection { background: var(--primary); color: #000; }
+        @keyframes pageIn { from { opacity: 0; filter: blur(10px); transform: scale(1.02); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* Particle Cyber-Grid Background */
+        /* --- Exceptional Background Layer --- */
         .cyber-grid {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(5, 150, 105, 0.08) 0%, transparent 50%),
-                linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
-            animation: gridMove 20s linear infinite;
+            position: absolute; inset: 0; z-index: -2;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px; opacity: 0.5;
+            mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+            pointer-events: none;
         }
 
-        @keyframes gridMove {
-            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-            100% { background-position: 0 0, 0 0, 50px 50px, 50px 50px; }
+        .zenith-bloom {
+            position: absolute; width: 1000px; height: 1000px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
+            top: -300px; left: -300px; opacity: 0.3; z-index: -1; animation: orbit 25s infinite linear;
+            pointer-events: none;
         }
+
+        @keyframes orbit { from { transform: translate(0,0) rotate(0deg); } to { transform: translate(150px, 150px) rotate(360deg); } }
 
         .navbar {
-            padding: 1.5rem 5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            background: rgba(2, 4, 8, 0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            position: fixed; top: 0; width: 100%; z-index: 1000;
+            margin: 1.5rem auto; width: calc(100% - 4rem); max-width: 1300px;
+            padding: 0.75rem 2.5rem; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(30px); 
+            border: 1px solid var(--border-glass); border-radius: 99px;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            animation: fadeUp 0.8s var(--ease) 0.2s backwards;
         }
 
         .brand { display: flex; align-items: center; gap: 1rem; }
-        .logo { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--glow); position: relative; overflow: hidden; }
-        .logo::after { content:''; position: absolute; top:-50%; left:-50%; width:200%; height:200%; background: linear-gradient(rgba(255,255,255,0.2), transparent); transform: rotate(45deg); animation: flare 3s infinite; }
-        
-        @keyframes flare {
-            0% { transform: translateY(-100%) rotate(45deg); }
-            100% { transform: translateY(100%) rotate(45deg); }
-        }
+        .logo { width: 44px; height: 44px; border-radius: 12px; overflow: hidden; box-shadow: 0 0 25px var(--primary-glow); }
+        .logo img { width: 100%; height: 100%; object-fit: cover; }
+        .brand-name { font-family: 'Space Mono', monospace; font-weight: 900; font-size: 1.1rem; letter-spacing: 2px; }
+        .brand-name span { color: var(--primary); font-weight: 300; opacity: 0.6; }
 
-        .brand-name { font-weight: 900; font-size: 1.6rem; letter-spacing: 0.05em; font-family: 'Space Mono', monospace; }
-        .brand-name span { font-weight: 400; color: var(--primary); }
-        
-        /* Interactive Tech Stack Pills */
         .tech-stack { display: flex; gap: 1rem; }
-        .tech-pill { border: 1px solid var(--border); background: rgba(0, 242, 254, 0.05); color: var(--text-dim); padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.75rem; font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; }
-        .tech-pill:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,242,254,0.1); transform: translateY(-2px); }
+        .tech-pill {
+            padding: 0.6rem 1.2rem; border-radius: 99px; background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass); font-size: 0.65rem; color: var(--text-dim);
+            font-family: 'Space Mono'; text-transform: uppercase; letter-spacing: 2px;
+            display: flex; align-items: center; gap: 0.6rem; transition: 0.3s;
+        }
+        .tech-pill:hover { border-color: var(--primary); background: rgba(var(--primary-glow), 0.1); color: var(--text-main); transform: translateY(-3px); }
+        .tech-pill i { color: var(--primary); }
 
         .hero {
-            flex: 1; padding: 14rem 2rem 8rem; max-width: 1200px; margin: 0 auto; text-align: center;
-            animation: fadeIn 1s ease-out backwards; position: relative;
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 6rem 2rem 4rem; position: relative; z-index: 1;
         }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         .badge {
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--primary); padding: 0.6rem 1.5rem; border-radius: 99px;
-            font-size: 0.9rem; font-weight: 800; font-family: 'Space Mono', monospace;
-            border: 1px solid var(--primary-dim); margin-bottom: 2.5rem;
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            box-shadow: 0 0 20px rgba(0,242,254,0.2);
-            text-transform: uppercase; letter-spacing: 0.1em;
+            background: rgba(var(--primary-glow), 0.05); border: 1px solid var(--primary-glow); padding: 0.7rem 1.5rem;
+            border-radius: 99px; font-size: 0.75rem; font-family: 'Space Mono'; color: var(--primary);
+            letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3rem; 
+            animation: fadeUp 1s var(--ease) 0.4s backwards;
+            display: flex; align-items: center; gap: 0.8rem; box-shadow: 0 0 20px var(--primary-glow);
+            transition: 0.4s; cursor: pointer;
         }
+        .badge:hover { transform: scale(1.05); box-shadow: 0 0 35px var(--primary-glow); }
 
-        h1 { font-size: 5rem; font-weight: 900; line-height: 1.1; margin-bottom: 2rem; letter-spacing: -0.03em; }
-        h1 span { background: linear-gradient(135deg, var(--primary), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        /* Typing Effect Container */
-        .typing-container { color: var(--success); font-family: 'Space Mono', monospace; font-size: 2.5rem; font-weight: 700; display: block; margin-top: 1rem; min-height: 3.5rem; }
-        .typing-container::after { content: '|'; animation: blink 1s infinite; color: var(--primary); }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        h1 { font-size: clamp(2.8rem, 9vw, 5.5rem); font-weight: 900; line-height: 1; margin-bottom: 2.5rem; animation: fadeUp 1s var(--ease) 0.6s backwards; letter-spacing: -2px; }
+        .typing-container { color: var(--primary); text-shadow: 0 0 30px var(--primary-glow); }
 
-        p.subtitle { font-size: 1.35rem; color: var(--text-dim); margin: 0 auto 3.5rem; line-height: 1.7; max-width: 850px; font-weight: 300; }
+        .subtitle {
+            max-width: 750px; font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--text-dim); line-height: 1.8;
+            margin-bottom: 3.5rem; animation: fadeUp 1s var(--ease) 0.8s backwards;
+        }
 
         .cta {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: #020408; padding: 1.4rem 4rem; border-radius: 16px;
-            font-weight: 900; font-size: 1.2rem; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 1rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-family: 'Space Mono', monospace; letter-spacing: 0.1em;
-            box-shadow: var(--glow); position: relative; overflow: hidden;
-            cursor: pointer;
-        }
-        .cta::before { content: ''; position: absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: 0.5s; }
-        .cta:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(0, 242, 254, 0.4); }
-        .cta:hover::before { left: 100%; }
-
-        .features {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
-            padding: 0 5rem 6rem; max-width: 1600px; margin: 0 auto;
+            display: inline-flex; align-items: center; gap: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000; padding: 1.25rem 2.8rem; border-radius: 20px; text-decoration: none;
+            font-weight: 900; font-family: 'Space Mono'; letter-spacing: 3px; font-size: 1.1rem;
+            box-shadow: 0 10px 40px var(--primary-glow); transition: transform 0.6s var(--ease), filter 0.3s;
+            animation: fadeUp 1s var(--ease) 1s backwards; position: relative; overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3); will-change: transform;
         }
 
-        .card {
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid var(--border);
-            padding: 3.5rem 3rem; border-radius: 20px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative; overflow: hidden;
+        .cta-icon {
+            width: 50px; height: 50px; background: rgba(0, 0, 0, 0.15); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0,242,254,0.06), transparent 40%); opacity: 0; transition: opacity 0.5s; z-index: -1; }
-        .card:hover::after { opacity: 1; }
-        .card:hover { transform: translateY(-15px); border-color: var(--primary-light); box-shadow: 0 30px 60px -12px rgba(0,242,254,0.15); }
 
-        .icon-wrapper { width: 70px; height: 70px; background: rgba(0, 242, 254, 0.05); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; border: 1px solid var(--border); transition: 0.4s; }
-        .card:hover .icon-wrapper { background: rgba(0, 242, 254, 0.15); transform: scale(1.1); }
-        .card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.25rem; font-family: 'Space Mono', monospace; color: #fff; }
-        .card p { color: var(--text-dim); line-height: 1.8; font-size: 1.05rem; }
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .navbar {
+                padding: 1rem 2rem;
+            }
 
-        /* Terminal Footer Status Bar */
-        .terminal-bar {
-            background: #020408; border-top: 1px solid var(--border); padding: 1rem 5rem;
-            display: flex; justify-content: space-between; align-items: center;
-            font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--text-dim);
-            margin-top: auto;
+            .tech-stack {
+                display: none;
+            }
         }
-        .t-status { display: flex; gap: 2rem; align-items: center; }
-        .ping { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: blink 1s infinite; margin-right: 0.5rem; display: inline-block; }
 
-        @media (max-width: 1200px) { .features { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 4rem; } }
-        @media (max-width: 800px) { .features { grid-template-columns: 1fr; } .navbar { padding: 1.5rem 2rem; } h1 { font-size: 3rem; } .tech-stack { display: none; } }
+        @media (max-width: 600px) {
+            .hero {
+                padding-top: 6rem;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+            }
+
+            .badge {
+                font-size: 0.6rem;
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <div class="cyber-grid"></div>
+    <div class="zenith-bloom"></div>
 
     <nav class="navbar">
         <div class="brand">
-            <div class="logo"><i data-lucide="compass" style="color: white; width: 28px;"></i></div>
-            <div class="brand-name">E.V.A. <span>ENGINE</span></div>
+            <div class="logo"><img src="assets/logo.png" alt="Z-Logo"></div>
+            <div class="brand-name">E.V.A. <span> CAT-IPC</span></div>
         </div>
         <div class="tech-stack">
-            <div class="tech-pill"><i data-lucide="zap" style="width:14px;"></i> Serverless</div>
+            <div class="tech-pill"><i data-lucide="shield" style="width:14px;"></i> Forensic Grade</div>
             <div class="tech-pill"><i data-lucide="database" style="width:14px;"></i> No-DB required</div>
-            <div class="tech-pill"><i data-lucide="code-2" style="width:14px;"></i> Vanilla ES6</div>
-            <div class="tech-pill" style="border-color:var(--success); color:var(--success)"><i data-lucide="shield-check" style="width:14px;"></i> MIT Licensed</div>
+            <div class="tech-pill"><i data-lucide="zap" style="width:14px;"></i> Z-Factor v2.5</div>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="badge"><i data-lucide="globe"></i> DGZ Engineering Lab Project</div>
-        <h1>Inteligencia Geoespacial para<br><span class="typing-container" id="typewriter"></span></h1>
-        <p class="subtitle">La plataforma experta para firmas forestales y catastrales. Automatice el cálculo bidimensional de compensación biológica, proyecte la indexación matricial (Factor Zenith DANE) y audite exportaciones sin errores estructurales.</p>
+        <div class="badge"><i data-lucide="globe"></i> DGZ Engineering Lab // Enterprise Edition</div>
+        <h1>Inteligencia Forense para<br><span class="typing-container" id="typewriter"></span></h1>
+        <p class="subtitle">La plataforma de vanguardia para firmas forestales y catastrales en Colombia. Automatice
+            cálculos biológicos, proyecte indexación oficial IPC y audite resultados de alta precisión.</p>
         <a href="app.html" class="cta">
-            <i data-lucide="cpu" style="width: 24px; height: 24px;"></i>
-            INICIALIZAR COMPILACIÓN GLOBAL
+            <span class="cta-icon">
+                <i data-lucide="cpu" style="width: 28px; height: 28px;"></i>
+            </span>
+            INICIALIZAR CONSOLA PRO
         </a>
     </section>
 
-    <section class="features">
-        <div class="card" id="c1">
-            <div class="icon-wrapper"><i data-lucide="calculator" style="color: var(--primary); width: 32px; height: 32px;"></i></div>
-            <h3>I. Proyección IPC Masiva</h3>
-            <p>Automatice el factor DANE histórico sobre matrices gigantes de compensación. Ingrese y actualice montos brutos (Base 2018) contra la inflación acumulada actual (1.5226) logrando precisiones legales absolutas en milisegundos.</p>
+    <!-- Content Sections: Bento Modules -->
+    <section class="modules-grid">
+        <div class="module-card card-large">
+            <div class="card-bg-glow"></div>
+            <i data-lucide="calculator" class="m-icon"></i>
+            <h3>Indexación Dinámica IPC</h3>
+            <p>Automatice el cálculo masivo de avalúos según las variaciones oficiales del DANE y el Banco de la República. Algoritmos de precisión con trazabilidad forense.</p>
+            <div class="m-status">OPERATIONAL_v2.5</div>
         </div>
-        <div class="card" id="c2" style="border-top: 3px solid var(--warning);">
-            <div class="icon-wrapper" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2);"><i data-lucide="trees" style="color: var(--warning); width: 32px; height: 32px;"></i></div>
-            <h3>II. Avalúo Forestal Dinámico</h3>
-            <p>Integre la botánica científica con el cruce volumétrico automático empresarial. E.V.A disecciona "Abarcadura" y "Altura" infiriendo la clase maderable para ubicar el precio tasado exacto, eliminando búsquedas tabulares manuales de Excel de por vida.</p>
+
+        <div class="module-card">
+            <div class="card-bg-glow" style="background: radial-gradient(circle, var(--success) 0%, transparent 70%); opacity: 0.1;"></div>
+            <i data-lucide="trees" class="m-icon" style="color: var(--success);"></i>
+            <h3>Biometría Forestal</h3>
+            <p>Modelado avanzado de crecimiento y valoración biológica para activos maderables y ornamentales bajo normativa nacional.</p>
         </div>
-        <div class="card" id="c3" style="border-top: 3px solid var(--success);">
-            <div class="icon-wrapper" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.2);"><i data-lucide="file-check-2" style="color: var(--success); width: 32px; height: 32px;"></i></div>
-            <h3>III. Reporte ISO Auditado</h3>
-            <p>No más tablas rotas. La generación algorítmica expulsa matrices divididas (Depuración Base vs Impacto Inflacionario General) formateadas en un estándar blindado; permitiendo el copiado y pegado transparente directo a suites Office / ERP corporativo.</p>
+
+        <div class="module-card">
+            <div class="card-bg-glow" style="background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.1;"></div>
+            <i data-lucide="shield-check" class="m-icon" style="color: var(--accent);"></i>
+            <h3>Auditoría Jurídica</h3>
+            <p>Gestión de bitácoras de auditoría para peritajes judiciales. Cumplimiento total con el Código General del Proceso Colombiano.</p>
         </div>
     </section>
 
-    <div class="terminal-bar">
-        <div class="t-status">
-            <span><div class="ping"></div> SYSTEM CORE: ONLINE</span>
-            <span style="color:var(--primary)">ZENITH FACTOR: v1.5226.1 (DANE-Certified)</span>
-            <span>REPO: DGZ-Engineering-Lab/E.V.A</span>
-        </div>
-        <div>
-            Copyright © 2026 DGZ Engineering Limitada. Reconocimiento MIT.
-        </div>
-    </div>
+    <style>
+        .modules-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+            max-width: 1400px; margin: 0 auto 8rem; padding: 0 2rem;
+            animation: fadeUp 1.2s var(--ease) 1.2s backwards;
+        }
+        .module-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass);
+            padding: 3rem; border-radius: 32px; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; gap: 1.5rem; transition: 0.6s var(--ease);
+            backdrop-filter: blur(20px); will-change: transform; transform: translateZ(0);
+        }
+        .module-card:hover { transform: translateY(-15px) scale(1.02); background: rgba(255, 255, 255, 0.04); border-color: var(--primary); }
+        .card-bg-glow { position: absolute; inset: 0; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity: 0.05; z-index: -1; pointer-events: none; }
+        
+        .m-icon { width: 44px; height: 44px; color: var(--primary); }
+        .module-card h3 { font-family: 'Space Mono'; font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; }
+        .module-card p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; }
+        .m-status { font-family: 'Space Mono'; font-size: 0.65rem; color: var(--primary); background: rgba(var(--primary-glow), 0.1); padding: 0.4rem 0.8rem; border-radius: 4px; align-self: flex-start; }
+
+        @media (max-width: 1024px) { .modules-grid { grid-template-columns: 1fr; } }
+    </style>
 
     <script>
         lucide.createIcons();
 
-        // 1. Efecto Typewriter Pericial
-        const words = ["Valoración Activos.", "Topología Categórica.", "Tasación de Avalúos.", "Resolución Forestal."];
-        let wIdx = 0; let cIdx = 0; let isDeleting = false;
-        const speed = 100; const el = document.getElementById('typewriter');
-        
-        function type() {
-            const current = words[wIdx];
-            if(isDeleting) {
-                el.innerText = current.substring(0, cIdx - 1);
-                cIdx--;
-            } else {
-                el.innerText = current.substring(0, cIdx + 1);
-                cIdx++;
-            }
-            let typeSpeed = isDeleting ? speed / 2 : speed;
-            if(!isDeleting && cIdx === current.length) { typeSpeed = 2000; isDeleting = true; }
-            else if(isDeleting && cIdx === 0) { isDeleting = false; wIdx = (wIdx + 1) % words.length; typeSpeed = 500; }
-            setTimeout(type, typeSpeed);
-        }
-        setTimeout(type, 1000);
+        // High-Performance Engine
+        let mouseX = 0, mouseY = 0;
+        let lastFrame = 0;
+        const particles = [];
 
-        // 2. Interacción Efecto Luces Radial (Cards)
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
+        function initParticles() {
+            const container = document.body;
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                p.className = 'zenith-particle';
+                p.style.cssText = `position: absolute; width: 3px; height: 3px; background: var(--primary); border-radius: 50%; opacity: 0.3; pointer-events: none; z-index: -1;`;
+                container.appendChild(p);
+                particles.push({ el: p, x: Math.random() * 100, y: Math.random() * 100, vx: (Math.random()-0.5)*0.1, vy: (Math.random()-0.5)*0.1 });
+            }
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        }, { passive: true });
+
+        function update(time) {
+            if (time - lastFrame < 16) { requestAnimationFrame(update); return; } // Throttle to 60fps
+            lastFrame = time;
+
+            // Update Background Elements
+            const grid = document.querySelector('.cyber-grid');
+            const bloom = document.querySelector('.zenith-bloom');
+            const dx = (mouseX - window.innerWidth / 2) * 0.01;
+            const dy = (mouseY - window.innerHeight / 2) * 0.01;
+            
+            if(grid) grid.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+            if(bloom) bloom.style.transform = `translate3d(${dx*2}px, ${dy*2}px, 0)`;
+
+            // Update Particles
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0 || p.x > 100) p.vx *= -1;
+                if(p.y < 0 || p.y > 100) p.vy *= -1;
+                
+                const pDist = Math.hypot(mouseX - (p.x * window.innerWidth / 100), mouseY - (p.y * window.innerHeight / 100));
+                let scale = 1;
+                if (pDist < 150) scale = 2 - (pDist / 150);
+                
+                p.el.style.transform = `translate3d(${p.x}vw, ${p.y}vh, 0) scale(${scale})`;
             });
-        });
+
+            // Magnetic CTA
+            const cta = document.querySelector('.cta');
+            if (cta) {
+                const rect = cta.getBoundingClientRect();
+                const cX = rect.left + rect.width / 2;
+                const cY = rect.top + rect.height / 2;
+                const dist = Math.hypot(mouseX - cX, mouseY - cY);
+                if (dist < 200) {
+                    cta.style.transform = `translate3d(${(mouseX - cX) * 0.2}px, ${(mouseY - cY) * 0.2}px, 0) scale(1.05) rotate(${ (mouseX-cX)*0.01 }deg)`;
+                } else {
+                    cta.style.transform = `translate3d(0,0,0)`;
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        initParticles();
+        requestAnimationFrame(update);
+
+        // Typewriter (Isolated)
+        const textSnippets = ["Valoración Forestal", "Indexación IPC", "Auditoría Predial", "Peritaje Masivo"];
+        let sIdx = 0, charIdx = 0, isDel = false;
+        function type() {
+            const target = document.getElementById("typewriter");
+            if(!target) return;
+            const fullText = textSnippets[sIdx];
+            target.innerText = isDel ? fullText.substring(0, charIdx--) : fullText.substring(0, charIdx++);
+            if (!isDel && charIdx > fullText.length) { isDel = true; setTimeout(type, 2000); }
+            else if (isDel && charIdx < 0) { isDel = false; sIdx = (sIdx + 1) % textSnippets.length; setTimeout(type, 500); }
+            else { setTimeout(type, isDel ? 50 : 100); }
+        }
+        type();
     </script>
 </body>
+
 </html>

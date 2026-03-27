@@ -1,0 +1,16 @@
+/**
+ * E.V.A PRO Obsidian Night (Default Theme)
+ */
+:root {
+    --bg-obsidian: #05070a;
+    --bg-panel: rgba(10, 15, 24, 0.7);
+    --primary: #00F2FE;
+    --primary-glow: rgba(0, 242, 254, 0.4);
+    --secondary: #4FACFE;
+    --success: #10B981;
+    --warning: #FBBF24;
+    --accent: #818CF8;
+    --text-main: #F1F5F9;
+    --text-dim: #64748B;
+    --border-glass: rgba(255, 255, 255, 0.08);
+}
