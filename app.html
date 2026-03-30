@@ -967,11 +967,23 @@
                             <i data-lucide="layers" style="color: var(--success);"></i>
                             <h2>MATRIZ DE INDEXACIÓN FINAL</h2>
                         </div>
-                        <button class="btn-zenith"
-                            style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
-                            onclick="copyTable('ipcMainTable')">
-                            COPIAR MATRIZ
-                        </button>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith" 
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;" 
+                                onclick="exportTableToCSV('ipcMainTable', 'Matriz_Indexacion_IPC')">
+                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
+                            </button>
+                            <button class="btn-zenith" 
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;" 
+                                onclick="exportTableToExcel('ipcMainTable', 'Matriz_Indexacion_IPC')">
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
+                            </button>
+                            <button class="btn-zenith"
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
+                                onclick="copyTable('ipcMainTable')">
+                                COPIAR
+                            </button>
+                        </div>
                     </div>
                     <div class="table-canvas">
                         <table id="ipcMainTable">
@@ -997,8 +1009,11 @@
                             <h2>RESUMEN DE TASACIÓN GLOBAL</h2>
                         </div>
                         <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;" onclick="exportTableToCSV('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
+                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV 
+                            </button>
                             <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;" onclick="exportTableToExcel('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
-                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> EXCEL
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
                             </button>
                             <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;" onclick="copyTable('tSummaryAvaluo')">
                                 COPIAR
@@ -1027,8 +1042,11 @@
                             <h2>DETALLE VOLUMÉTRICO DE ESPECIES</h2>
                         </div>
                         <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);" onclick="exportTableToCSV('tDetailAvaluo', 'Detalle_Volumetrico')">
+                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
+                            </button>
                             <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);" onclick="exportTableToExcel('tDetailAvaluo', 'Detalle_Volumetrico')">
-                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> EXCEL
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
                             </button>
                             <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);" onclick="copyTable('tDetailAvaluo')">
                                 COPIAR
@@ -1063,447 +1081,8 @@
         <div class="segment">PRECISION_FORENSICS_ENGINE</div>
     </div>
 
-    <!-- Execution Engine -->
-    <script>
-        lucide.createIcons();
-
-        // --- Immortal Persistence (Auto-Save) ---
-        const sysInputArea = document.getElementById('mainInput');
-        if (localStorage.getItem('evaInputData')) {
-            sysInputArea.value = localStorage.getItem('evaInputData');
-        }
-        sysInputArea.addEventListener('input', (e) => {
-            localStorage.setItem('evaInputData', e.target.value);
-        });
-
-        const ZENITH_FACTOR = 1.5226;
-        const fmtElite = new Intl.NumberFormat('es-CO', {
-            style: 'currency', currency: 'COP', maximumFractionDigits: 0
-        });
-
-        function sanitizeText(str) {
-            if (!str) return '';
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        function exportTableToExcel(tableId, filename) {
-            const table = document.getElementById(tableId);
-            const cloneTable = table.cloneNode(true);
-            
-            // Reemplazar <select> en el clon por el valor real de texto
-            const originalSelects = table.querySelectorAll('select');
-            const clonedSelects = cloneTable.querySelectorAll('select');
-            for(let i = 0; i < originalSelects.length; i++) {
-                clonedSelects[i].parentNode.innerText = originalSelects[i].value;
-            }
-
-            const html = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-                <head><meta charset="UTF-8">
-                <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${filename}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
-                </head>
-                <body><table border="1">${cloneTable.innerHTML}</table></body>
-                </html>
-            `;
-
-            const blob = new Blob([html], { type: "application/vnd.ms-excel" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", filename + ".xls");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function cleanVal(str) {
-            const cleaned = str.replace(/[^\d,.-]/g, '');
-            if (!cleaned) return 0;
-            if (cleaned.includes(',') && cleaned.includes('.')) {
-                const lastComma = cleaned.lastIndexOf(',');
-                const lastDot = cleaned.lastIndexOf('.');
-                if (lastComma > lastDot) {
-                    // Colombian: dots=thousands, comma=decimal
-                    return parseFloat(cleaned.replace(/\./g, '').replace(',', '.')) || 0;
-                } else {
-                    // US: commas=thousands, dot=decimal
-                    return parseFloat(cleaned.replace(/,/g, '')) || 0;
-                }
-            }
-            if (cleaned.includes(',') && !cleaned.includes('.')) {
-                const parts = cleaned.split(',');
-                if (parts.length === 2 && parts[1].length <= 2) {
-                    return parseFloat(cleaned.replace(',', '.')) || 0;
-                }
-                return parseFloat(cleaned.replace(/,/g, '')) || 0;
-            }
-            return parseFloat(cleaned) || 0;
-        }
-
-        let currentMode = 'ipc';
-
-        function switchMode(mode) {
-            currentMode = mode;
-            const bIpc = document.getElementById('btnIpc');
-            const bAva = document.getElementById('btnAvaluo');
-            const bExec = document.getElementById('execBtn');
-            const pTitle = document.getElementById('panelTitle');
-            const pIcon = document.getElementById('panelIcon');
-            const mInput = document.getElementById('mainInput');
-
-            if (mode === 'ipc') {
-                bIpc.classList.add('active'); bAva.classList.remove('active');
-                bExec.innerHTML = '<i data-lucide="play"></i> EJECUTAR PROCESAMIENTO';
-                bExec.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
-                pTitle.innerText = 'CENTRO DE PROCESAMIENTO IPC';
-                pIcon.style.color = 'var(--primary)';
-                mInput.placeholder = "> PEGAR VALORES PARA INDEXACIÓN...";
-                document.getElementById('resultsAvaluo').style.display = 'none';
-            } else {
-                bAva.classList.add('active'); bIpc.classList.remove('active');
-                bExec.innerHTML = '<i data-lucide="zap"></i> CALCULAR AVALÚO GLOBAL';
-                bExec.style.background = 'linear-gradient(135deg, var(--warning), #D97706)';
-                pTitle.innerText = 'MOTOR DE VALORACIÓN BIOLÓGICA';
-                pIcon.style.color = 'var(--warning)';
-                mInput.placeholder = "> PEGAR: ESPECIE | ABARC(cm) | ALT(m)...";
-                document.getElementById('resultsUI').style.display = 'none';
-            }
-            lucide.createIcons();
-        }
-
-        function executeAction() {
-            if (currentMode === 'ipc') executeZenith();
-            else executeAvaluo();
-        }
-
-        function clearInput() {
-            document.getElementById('mainInput').value = '';
-            document.getElementById('resultsUI').style.display = 'none';
-            document.getElementById('resultsAvaluo').style.display = 'none';
-            document.getElementById('kpiCount').textContent = '0';
-            localStorage.removeItem('evaInputData'); // Limpia también la memoria persistente
-        }
-
-        function copyTable(id) {
-            const el = document.getElementById(id);
-            const range = document.createRange();
-            range.selectNodeContents(el);
-            const selection = window.getSelection();
-            selection.removeAllRanges(); selection.addRange(range);
-            document.execCommand('copy');
-            alert('Matriz copiada al portapapeles con éxito.');
-            selection.removeAllRanges();
-        }
-
-        function executeZenith() {
-            const txt = document.getElementById('mainInput').value;
-            if (!txt.trim()) return;
-            const lines = txt.split('\n');
-            const tbody = document.getElementById('eliteBody');
-            tbody.innerHTML = ''; let count = 0;
-
-            lines.forEach((line) => {
-                const parts = line.split(/\t|\s{2,}/).filter(p => p.trim().length > 0);
-                const tags = (parts.length === 4) ? [' (40%)', ' (60%)', ' (70%)', ' (100%)'] : ['', '', '', ''];
-
-                parts.forEach((part, idx) => {
-                    const val = cleanVal(part);
-                    if (val > 0) {
-                        count++;
-                        const updated = Math.round(val * ZENITH_FACTOR);
-                        const delta = updated - val;
-                        const tag = tags[idx] || '';
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td class="num">#ZEN_${count.toString().padStart(3, '0')}${tag}</td>
-                            <td class="num">${fmtElite.format(val)}</td>
-                            <td class="num upd">${fmtElite.format(updated)}</td>
-                            <td class="num"><span class="delta">+ ${fmtElite.format(delta)}</span></td>
-                        `;
-                        tbody.appendChild(row);
-                    }
-                });
-            });
-
-            if (count > 0) {
-                document.getElementById('resultsUI').style.display = 'block';
-                document.getElementById('kpiCount').textContent = count;
-                lucide.createIcons();
-                window.scrollTo({ top: document.getElementById('resultsUI').offsetTop - 100, behavior: 'smooth' });
-            }
-        }
-
-        let actParsedAvaluo = [];
-
-        function showCustomAlert(speciesArray) {
-            const overlay = document.createElement('div');
-            overlay.className = 'modal-overlay';
-            
-            const html = `
-                <div class="modal-box">
-                    <div class="modal-title">
-                        <i data-lucide="triangle-alert"></i> SIN REGISTRO EN BASE DE DATOS
-                    </div>
-                    <div class="modal-body">
-                        Se detectaron <strong>${speciesArray.length}</strong> especie(s) ajena(s) a la matriz central. Se les ha asignado la categoría "Tercera" por defecto para no frenar la liquidación.
-                        <ul class="modal-list">
-                            ${speciesArray.map(s => `<li>${s}</li>`).join('')}
-                        </ul>
-                        💡 TIP: Puedes actualizar la categoría exacta de estas especies usando el selector desplegable <span style="color:var(--warning);">amarillo</span> directamente en la tabla de detalles. La inteligencia financiera se recalculará automáticamente.
-                    </div>
-                    <button class="modal-btn" onclick="this.closest('.modal-overlay').remove()">ENTENDIDO · CONTINUAR</button>
-                </div>
-            `;
-            
-            overlay.innerHTML = html;
-            document.body.appendChild(overlay);
-            lucide.createIcons(); // render the triangle alert icon
-            
-            // Trigger animation
-            setTimeout(() => overlay.classList.add('active'), 10);
-        }
-
-        function updateRowCat(id, newCat) {
-            const rowIdx = actParsedAvaluo.findIndex(r => r.id === id);
-            if (rowIdx > -1) {
-                actParsedAvaluo[rowIdx].typeNorm = newCat;
-                // Re-render board with updated state
-                renderAvaluoBoard(false); // false means don't show the initial alert again
-            }
-        }
-
-        function renderAvaluoBoard(showAlerts = false) {
-            const tbody = document.getElementById('avaluoBody');
-            const tbodySum = document.getElementById('avaluoSummaryBody');
-            tbody.innerHTML = ''; tbodySum.innerHTML = '';
-
-            let count = 0, s40 = 0, s60 = 0, s70 = 0, s100 = 0;
-            const unknownSpecies = [];
-
-            actParsedAvaluo.forEach(item => {
-                const { id, esp, ab, alt, isUnknown, typeNorm } = item;
-                const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
-
-                const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
-                const abM = ab / 100;
-                let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
-                let rI = t.Rows.findIndex(r => r >= alt); if (rI === -1) rI = t.Rows.length - 1;
-                let base = t.Data[rI][cI] || 0;
-
-                // Selección gets a 20% premium over Primera
-                if (typeNorm === 'Selección') base = Math.round(base * 1.2);
-
-                const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
-                s40 += v40; s60 += v60; s70 += v70; s100 += v100;
-                count++;
-
-                if (isUnknown && showAlerts) unknownSpecies.push(esp);
-
-                // Build category cell (plain text or interactive select)
-                let catHTML = `<td style="color:var(--text-dim);">${typeNorm}</td>`;
-                if (isUnknown) {
-                    const sel1 = typeNorm === 'Primera' ? 'selected' : '';
-                    const sel2 = typeNorm === 'Segunda' ? 'selected' : '';
-                    const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
-                    const selS = typeNorm === 'Selección' ? 'selected' : '';
-
-                    catHTML = `<td>
-                        <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría">
-                            <option value="Primera" ${sel1}>Primera</option>
-                            <option value="Segunda" ${sel2}>Segunda</option>
-                            <option value="Tercera" ${sel3}>Tercera</option>
-                            <option value="Selección" ${selS}>Selección</option>
-                        </select>
-                    </td>`;
-                }
-
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ SIN_REGISTRO</span>' : ''}</td>
-                    ${catHTML}
-                    <td class="num">${ab}</td>
-                    <td class="num">${alt}</td>
-                    <td class="num">${fmtElite.format(v40)}</td>
-                    <td class="num">${fmtElite.format(v60)}</td>
-                    <td class="num">${fmtElite.format(v70)}</td>
-                    <td class="num">${fmtElite.format(v100)}</td>
-                `;
-                tbody.appendChild(row);
-            });
-
-            // Show sleek modal alert for unknown species
-            if (unknownSpecies.length > 0 && showAlerts) {
-                showCustomAlert([...new Set(unknownSpecies)]);
-            }
-
-            if (count > 0) {
-                const sums = [{ l: "Valor Base (40%)", b: s40 }, { l: "Valor al 60%", b: s60 }, { l: "Valor al 70%", b: s70 }, { l: "Valor al 100%", b: s100 }];
-                sums.forEach(s => {
-                    const proyectado = Math.round(s.b * ZENITH_FACTOR);
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td style="font-weight:900;">${s.l.toUpperCase()}</td>
-                        <td class="num">${fmtElite.format(s.b)}</td>
-                        <td class="num upd">${fmtElite.format(proyectado)}</td>
-                        <td class="num"><span class="delta">+ ${fmtElite.format(proyectado - s.b)}</span></td>
-                    `;
-                    tbodySum.appendChild(row);
-                });
-                document.getElementById('resultsAvaluo').style.display = 'block';
-                document.getElementById('kpiCount').textContent = count;
-                lucide.createIcons();
-
-                // Only scroll smoothly on initial execution
-                if (showAlerts) {
-                    window.scrollTo({ top: document.getElementById('resultsAvaluo').offsetTop - 100, behavior: 'smooth' });
-                }
-            }
-        }
-
-        function executeAvaluo() {
-            const txt = document.getElementById('mainInput').value;
-            if (!txt.trim()) return;
-            const lines = txt.split('\n');
-
-            if (typeof AVALUO_DB === 'undefined') { alert('ERR: DB Core Not Found.'); return; }
-
-            actParsedAvaluo = []; // reset state
-            let rowIdCounter = 0;
-
-            lines.forEach((line) => {
-                if (!line.trim()) return;
-                const p = line.split(/\t|\||;/).map(x => x.trim()).filter(x => x !== '');
-                if (p.length >= 3) {
-                    const espRaw = p[0], ab = parseFloat(p[1].replace(',', '.')), alt = parseFloat(p[2].replace(',', '.'));
-                    if (isNaN(ab) || isNaN(alt)) return;
-
-                    const esp = sanitizeText(espRaw);
-
-                    let type = null;
-                    let spL = esp.toLowerCase().trim();
-                    let isUnknown = false;
-
-                    const directCategories = ['selección', 'seleccion', 'primera', 'segunda', 'tercera'];
-                    if (directCategories.includes(spL)) {
-                        type = spL === 'seleccion' ? 'Selección' : esp.charAt(0).toUpperCase() + esp.slice(1).toLowerCase();
-                    } else {
-                        for (let s of AVALUO_DB.Species) {
-                            if (s.Name.toLowerCase().trim() === spL) {
-                                type = s.Type;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!type) {
-                        isUnknown = true;
-                        type = "Tercera"; // Default fallback
-                    }
-
-                    const typeNorm = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
-
-                    actParsedAvaluo.push({
-                        id: rowIdCounter++,
-                        esp,
-                        ab,
-                        alt,
-                        isUnknown,
-                        typeNorm
-                    });
-                }
-            });
-
-            renderAvaluoBoard(true); // render and show alerts if any
-        }
-
-        // --- Exceptional Interaction Engine app.v3.0 ---
-        let ticking = false;
-
-        document.addEventListener('mousemove', (e) => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const { clientX, clientY } = e;
-
-                    // 1. Magnetic Sidebar Items
-                    document.querySelectorAll('.nav-item').forEach(item => {
-                        const rect = item.getBoundingClientRect();
-                        const dist = Math.hypot(clientX - (rect.left + rect.width / 2), clientY - (rect.top + rect.height / 2));
-                        if (dist < 100) {
-                            const x = (clientX - (rect.left + rect.width / 2)) * 0.4;
-                            const y = (clientY - (rect.top + rect.height / 2)) * 0.4;
-                            item.style.transform = `translate(${x}px, ${y}px) scale(1.15)`;
-                        } else {
-                            item.style.transform = `translate(0,0) scale(1)`;
-                        }
-                    });
-
-                    // 2. Parallax Bloom Background
-                    document.body.style.backgroundPosition = `${clientX * 0.01}% ${clientY * 0.01}%`;
-                    
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-
-        // 3. 3D Tilt for Glass Cards & KPI (Excluding Results Tables)
-        const interactibles = document.querySelectorAll('.glass-card:not(.results-wrapper .glass-card), .kpi-stack');
-        interactibles.forEach(el => {
-            el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width;
-                const y = (e.clientY - rect.top) / rect.height;
-                const rotateX = (y - 0.5) * 8;
-                const rotateY = (x - 0.5) * -8;
-                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
-                el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.3), 0 0 20px var(--primary-glow)`;
-            });
-            el.addEventListener('mouseleave', () => {
-                el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
-                el.style.boxShadow = `0 10px 40px rgba(0,0,0,0.2)`;
-            });
-        });
-
-        // 4. Enhanced Execution Feedback
-        const execBtnOrig = document.getElementById('execBtn');
-        if (execBtnOrig) {
-            const oldExecute = window.executeAction;
-            window.executeAction = () => {
-                document.body.style.filter = 'brightness(1.1) contrast(1.1)';
-                setTimeout(() => document.body.style.filter = 'none', 150);
-                if (oldExecute) oldExecute();
-            };
-        }
-
-        const ctx = document.getElementById('eliteChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
-                datasets: [{
-                    label: 'Factor Zenith Accum',
-                    data: [1.0, 1.038, 1.075, 1.132, 1.258, 1.392, 1.481, 1.5226],
-                    borderColor: '#00F2FE',
-                    backgroundColor: 'rgba(0, 242, 254, 0.1)',
-                    borderWidth: 2.5, tension: 0.4, fill: true, pointRadius: 4, pointHoverRadius: 6
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } }
-                }
-            }
-        });
-
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('[E.V.A. APP] SW registered:', reg.scope))
-                .catch(err => console.warn('[E.V.A. APP] SW failed:', err));
-        }
-    </script>
+    <!-- Engine Module -->
+    <script src="js/engine.js" defer></script>
 </body>
 
 </html>
