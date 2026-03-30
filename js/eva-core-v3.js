@@ -97,11 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         container.innerHTML = sessionLedger.map(item => `
             <div class="history-item" onclick="loadFromLedger(${item.id})">
-                <div class="h-time">${item.date} ${item.time}</div>
-                <div class="h-desc">${item.mode.toUpperCase()}: ${item.summary}</div>
+                <div class="h-main">
+                    <div class="h-time">${item.date} ${item.time}</div>
+                    <div class="h-desc">${item.mode.toUpperCase()}: ${item.summary}</div>
+                </div>
+                <button class="h-del" onclick="event.stopPropagation(); deleteFromLedger(${item.id})" title="ELIMINAR REGISTRO">
+                    <i data-lucide="trash-2"></i>
+                </button>
             </div>
         `).join('');
+        if (window.lucide) lucide.createIcons();
     }
+
+    window.deleteFromLedger = function(id) {
+        sessionLedger = sessionLedger.filter(i => i.id !== id);
+        localStorage.setItem('evaLedger', JSON.stringify(sessionLedger));
+        renderLedger();
+        EVA.toast('ELIMINADO_DEL_HISTORIAL', 'warning');
+    };
 
     window.loadFromLedger = function(id) {
         const item = sessionLedger.find(i => i.id === id);
@@ -109,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sysInputArea.value = item.data;
             switchMode(item.mode);
             executeAction();
-            EVA.toast('Sesión recuperada del Ledger');
+            EVA.toast('SESIÓN_RESTABLECIDA', 'info');
         }
     };
     renderLedger(); // Initial load
@@ -188,43 +201,35 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('evaInputData');
     };
 
-    // --- Professional HUD Hub ---
-    const hudHub = document.createElement('div');
-    hudHub.id = 'eva-hud-hub';
-    document.body.appendChild(hudHub);
+    // --- Advanced Forensic Notification Protocol ---
+    const hudPool = document.createElement('div');
+    hudPool.id = 'eva-monolith-pool';
+    document.body.appendChild(hudPool);
 
     window.EVA = {
-        toast: function(msg, type = 'success', duration = 5000) {
+        toast: function(msg, type = 'success', duration = 3000) {
             const entry = document.createElement('div');
-            entry.className = `hud-entry ${type}`;
-            
-            const iconMap = { 'success': 'shield-check', 'warning': 'triangle-alert', 'error': 'octagon-x', 'info': 'activity' };
-            const icon = iconMap[type] || 'bell';
-            const nodeID = Math.floor(Math.random() * 999).toString().padStart(3, '0');
+            entry.className = `eva-mono-entry ${type}`;
             
             entry.innerHTML = `
-                <div class="hud-glitch-layer"></div>
-                <div class="hud-hex-icon"><i data-lucide="${icon}"></i></div>
-                <div class="hud-corpus">
-                    <div class="hud-meta">
-                        <span class="m-node">NODE_${nodeID}</span>
-                        <span class="m-type">${type.toUpperCase()}</span>
-                    </div>
-                    <div class="hud-msg">${msg}</div>
+                <div class="mono-blur"></div>
+                <div class="mono-bar"></div>
+                <div class="mono-content">
+                    <span class="mono-tag">[LOG_${type.toUpperCase().slice(0,3)}]</span>
+                    <span class="mono-msg">${msg.toUpperCase()}</span>
                 </div>
-                <div class="hud-timer"></div>
             `;
-            hudHub.appendChild(entry);
-            lucide.createIcons();
+            hudPool.appendChild(entry);
 
-            // Auto-cleanup with staggered removal
-            setTimeout(() => entry.classList.add('active'), 10);
+            setTimeout(() => entry.classList.add('phase-in'), 10);
             setTimeout(() => {
-                entry.classList.remove('active');
+                entry.classList.remove('phase-in');
                 setTimeout(() => entry.remove(), 800);
             }, duration);
         }
     };
+
+
 
 
 
@@ -545,55 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAvaluoBoard(true);
     }
 
-    // --- Interaction Engine ---
-    let ticking = false;
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
+    // --- Interaction Engine Disabled (Static Protocol) ---
 
-    document.addEventListener('mousemove', (e) => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const { clientX, clientY } = e;
-                // Magnetic Sidebar Items (Only for desktop)
-                if (!isMobile) {
-                    document.querySelectorAll('.nav-item').forEach(item => {
-                        const rect = item.getBoundingClientRect();
-                        const dist = Math.hypot(clientX - (rect.left + rect.width / 2), clientY - (rect.top + rect.height / 2));
-                        if (dist < 100) {
-                            const x = (clientX - (rect.left + rect.width / 2)) * 0.4;
-                            const y = (clientY - (rect.top + rect.height / 2)) * 0.4;
-                            item.style.transform = `translate(${x}px, ${y}px) scale(1.15)`;
-                        } else {
-                            item.style.transform = `translate(0,0) scale(1)`;
-                        }
-                    });
-                }
-                // Parallax Background
-                document.body.style.backgroundPosition = `${clientX * 0.01}% ${clientY * 0.01}%`;
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-
-    // 3D Tilt Optimization: Disable on mobile to save battery
-    if (!isMobile) {
-        const interactibles = document.querySelectorAll('.glass-card:not(.results-wrapper .glass-card), .kpi-stack');
-        interactibles.forEach(el => {
-            el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width;
-                const y = (e.clientY - rect.top) / rect.height;
-                const rotateX = (y - 0.5) * 8;
-                const rotateY = (x - 0.5) * -8;
-                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
-                el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.3), 0 0 20px var(--primary-glow)`;
-            });
-            el.addEventListener('mouseleave', () => {
-                el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
-                el.style.boxShadow = `0 10px 40px rgba(0,0,0,0.2)`;
-            });
-        });
-    }
 
     // --- Phase 3: Live Analytics Dashboard ---
     let distChart = null;

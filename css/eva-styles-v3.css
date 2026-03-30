@@ -146,7 +146,6 @@ header {
 
 .sys-status:hover {
     border-color: var(--primary-dim);
-    transform: translateY(-2px);
 }
 
 .sys-status.active-ipc {
@@ -212,7 +211,6 @@ header {
 }
 
 .kpi-card:hover {
-    transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
     border-color: var(--primary-light);
 }
@@ -312,7 +310,6 @@ textarea:focus {
 
 .btn-zenith:hover {
     filter: brightness(1.2);
-    transform: translateY(-2px);
     box-shadow: var(--glow);
 }
 
@@ -467,141 +464,118 @@ tr:hover td {
     }
 }
 
-/* --- Professional E.V.A. HUD HUB --- */
-#eva-hud-hub {
+/* --- [E.V.A. V3] ULTRA-MINIMALIST MONOLITH HUB --- */
+#eva-monolith-pool {
     position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 20000;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100000;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    align-items: center;
+    gap: 0.5rem;
     pointer-events: none;
 }
 
-.hud-entry {
-    width: 380px;
-    background: rgba(2, 4, 8, 0.9);
-    backdrop-filter: blur(35px) saturate(180%);
-    -webkit-backdrop-filter: blur(35px) saturate(180%);
+.eva-mono-entry {
+    background: rgba(10, 15, 26, 0.4);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 1rem 1.25rem;
+    border-radius: 4px;
+    height: 38px;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    position: relative;
-    overflow: hidden;
-    transform: translateX(100px);
+    padding: 0 1.5rem;
+    gap: 1.5rem;
+    color: var(--text-main);
+    transform: translateY(-20px) scale(0.98);
     opacity: 0;
-    transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    pointer-events: all;
-    box-shadow: 
-        0 15px 40px rgba(0,0,0,0.5),
-        inset 0 0 1px 1px rgba(255,255,255,0.05);
+    transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
 }
 
-.hud-entry::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    background: var(--primary);
-    box-shadow: 0 0 10px var(--primary);
-}
-
-.hud-entry.active {
-    transform: translateX(0);
+.eva-mono-entry.phase-in {
+    transform: translateY(0) scale(1);
     opacity: 1;
 }
 
-.hud-hex-icon {
-    width: 42px;
-    height: 42px;
-    background: rgba(0, 242, 254, 0.03);
-    border: 1px solid rgba(0, 242, 254, 0.15);
+.mono-bar {
+    width: 2px;
+    height: 12px;
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.eva-mono-entry.warning .mono-bar { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
+.eva-mono-entry.info .mono-bar { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+.mono-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Space Mono', monospace;
+}
+
+.mono-tag {
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 2px;
+    opacity: 0.6;
+}
+
+.mono-msg {
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* --- Session Ledger Trash Can Styles --- */
+.history-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s var(--ease);
+}
+
+.history-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.h-main { flex: 1; }
+
+.h-del {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(244, 63, 94, 0.03);
+    color: var(--text-dim);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary);
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    flex-shrink: 0;
-}
-
-.hud-hex-icon i {
-    width: 18px;
-    height: 18px;
-}
-
-.hud-corpus {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.hud-meta {
-    display: flex;
-    gap: 0.75rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    font-weight: 900;
-    color: var(--primary);
-    opacity: 0.5;
-    margin-bottom: 2px;
-    letter-spacing: 1.5px;
-}
-
-.m-type {
-    padding-left: 0.75rem;
-    border-left: 1px solid rgba(255,255,255,0.1);
-}
-
-.hud-msg {
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: var(--text-main);
-    line-height: 1.4;
-}
-
-.hud-timer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 1px;
-    width: 100%;
-    background: var(--primary);
-    opacity: 0.4;
-    animation: hud-timer-deplete 5s linear forwards;
-    transform-origin: left;
-}
-
-@keyframes hud-timer-deplete {
-    from { transform: scaleX(1); }
-    to { transform: scaleX(0); }
-}
-
-/* HUD System Variants */
-.hud-entry.warning::before, .hud-entry.warning .hud-timer { background: var(--warning); }
-.hud-entry.warning .hud-hex-icon { border-color: var(--warning); color: var(--warning); background: rgba(245, 158, 11, 0.03); }
-.hud-entry.warning .hud-meta { color: var(--warning); }
-
-.hud-entry.error::before, .hud-entry.error .hud-timer { background: #F43F5E; }
-.hud-entry.error .hud-hex-icon { border-color: #F43F5E; color: #F43F5E; background: rgba(244, 63, 94, 0.03); }
-.hud-entry.error .hud-meta { color: #F43F5E; }
-
-.hud-glitch-layer {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px);
-    background-size: 100% 3px;
-    pointer-events: none;
+    cursor: pointer;
+    transition: 0.3s var(--ease);
     opacity: 0.3;
 }
 
+.h-del:hover {
+    opacity: 1;
+    background: rgba(244, 63, 94, 0.1);
+    color: #f43f5e;
+    border-color: rgba(244, 63, 94, 0.3);
+}
+
+.h-del i { width: 14px; height: 14px; }
+
 @media (max-width: 600px) {
-    #eva-hud-hub { right: 1rem; left: 1rem; top: 1rem; }
-    .hud-entry { width: 100%; }
+    .eva-mono-entry { width: calc(100vw - 40px); justify-content: center; padding: 0 1rem; }
 }
 
 

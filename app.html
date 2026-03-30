@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E.V.A. — IPC y Avalúo Forestal | DGZ Engineering Lab</title>
     <meta name="description"
-        content="Consola profesional E.V.A. PRO para procesamiento masivo de indexación IPC y avalúo de activos forestales. Motor Z-Factor v1.5226 con precisión forense.">
+        content="Consola profesional E.V.A. para procesamiento masivo de indexación IPC y avalúo de activos forestales. Motor Z-Factor v1.5226 con precisión forense.">
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/png" href="assets/logo.png">
 
@@ -24,9 +24,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="js/avaluo_db.js"></script>
 
-    <!-- Theme System Logic -->
-    <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css?v=3.1.4">
-    <script src="js/theme-switcher.js?v=3.1.4" defer></script>
+    <!-- Core Assets (Expert HUD Protocol) -->
+    <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css?v=2026.3">
+    <link rel="stylesheet" href="css/eva-styles-v3.css?v=2026.3">
+    <script src="js/theme-switcher.js?v=2026.3" defer></script>
+    <script src="js/eva-core-v3.js?v=2026.3" defer></script>
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -233,6 +235,8 @@
         /* Dynamic active state detection via body class */
         .eva-theme-dark .dot-dark,
         .eva-theme-light .dot-light,
+        .eva-theme-forest .dot-forest,
+        .eva-theme-minimal .dot-minimal,
         .eva-theme-zenith .dot-zenith {
             transform: scale(1.4);
             border-color: var(--primary);
@@ -245,6 +249,14 @@
 
         .dot-light {
             background: #F8FAFC;
+        }
+
+        .dot-forest {
+            background: #10B981;
+        }
+
+        .dot-minimal {
+            background: #64748B;
         }
 
         .dot-zenith {
@@ -1067,7 +1079,7 @@
 <body>
 
     <nav class="sidebar-nav">
-        <div class="nav-logo" title="EVA PRO ENGINE">
+        <div class="nav-logo" title="EVA ">
             <img src="assets/logo.png" alt="Z-Logo">
         </div>
 
@@ -1081,6 +1093,8 @@
         <div class="theme-selector">
             <div class="theme-node dot-dark" onclick="setTheme('dark')" title="Obsidian UI"></div>
             <div class="theme-node dot-light" onclick="setTheme('light')" title="Arctic High-Contrast"></div>
+            <div class="theme-node dot-forest" onclick="setTheme('forest')" title="Deep Forest Mode"></div>
+            <div class="theme-node dot-minimal" onclick="setTheme('minimal')" title="Minimalist Lab"></div>
             <div class="theme-node dot-zenith" onclick="setTheme('zenith')" title="Zenith Analytics"></div>
         </div>
     </nav>
@@ -1088,7 +1102,7 @@
     <div class="app-container">
         <header>
             <div class="brand-box">
-                <h1>E.V.A. PRO // <span>Z-ENGINE v2.5.1</span></h1>
+                <h1>E.V.A. // <span>v2.5.1</span></h1>
             </div>
 
             <div class="header-meta">
@@ -1166,159 +1180,160 @@
                 </div>
             </div>
 
-    <!-- Analytical Sidebar -->
-    <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <div class="glass-card stat-box" style="border-left: 5px solid var(--primary);">
-            <div class="card-title">
-                <i data-lucide="line-chart"></i>
-                <h2>EVOLUCIÓN IPC ZENITH</h2>
-            </div>
-            <div id="eliteChartContainer">
-                <canvas id="eliteChart"></canvas>
-            </div>
-        </div>
+            <!-- Analytical Sidebar -->
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="glass-card stat-box" style="border-left: 5px solid var(--primary);">
+                    <div class="card-title">
+                        <i data-lucide="line-chart"></i>
+                        <h2>EVOLUCIÓN IPC ZENITH</h2>
+                    </div>
+                    <div id="eliteChartContainer">
+                        <canvas id="eliteChart"></canvas>
+                    </div>
+                </div>
 
-        <div class="glass-card stat-box" id="distPanel" style="display:none; border-left: 5px solid var(--warning);">
-            <div class="card-title">
-                <i data-lucide="pie-chart" style="color: var(--warning);"></i>
-                <h2>DISTRIBUCIÓN DE VALOR</h2>
+                <div class="glass-card stat-box" id="distPanel"
+                    style="display:none; border-left: 5px solid var(--warning);">
+                    <div class="card-title">
+                        <i data-lucide="pie-chart" style="color: var(--warning);"></i>
+                        <h2>DISTRIBUCIÓN DE VALOR</h2>
+                    </div>
+                    <div id="distributionChartContainer">
+                        <canvas id="distChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass-card" style="padding: 1.5rem; background: rgba(129, 140, 248, 0.03);">
+                    <p style="font-size: 0.85rem; line-height: 1.8; color: var(--text-dim);">
+                        <strong style="color:var(--text-main);">Auditoría Forense:</strong> El algoritmo procesa
+                        factores exponenciales basados en el IPC DANE 2018-2025 para garantizar la invariabilidad del
+                        avalúo biológico.
+                    </p>
+                </div>
             </div>
-            <div id="distributionChartContainer">
-                <canvas id="distChart"></canvas>
-            </div>
-        </div>
-        <div class="glass-card" style="padding: 1.5rem; background: rgba(129, 140, 248, 0.03);">
-            <p style="font-size: 0.85rem; line-height: 1.8; color: var(--text-dim);">
-                <strong style="color:var(--text-main);">Auditoría Forense:</strong> El algoritmo procesa
-                factores exponenciales basados en el IPC DANE 2018-2025 para garantizar la invariabilidad del
-                avalúo biológico.
-            </p>
-        </div>
-    </div>
 
-    <!-- Quantitative Results -->
-    <div id="resultsUI" class="results-wrapper">
-        <div class="glass-card">
-            <div class="card-title" style="justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <i data-lucide="layers" style="color: var(--success);"></i>
-                    <h2>MATRIZ DE INDEXACIÓN FINAL</h2>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn-zenith"
-                        style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
-                        onclick="exportTableToCSV('ipcMainTable', 'Matriz_Indexacion_IPC')">
-                        <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
-                    </button>
-                    <button class="btn-zenith"
-                        style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
-                        onclick="exportTableToExcel('ipcMainTable', 'Matriz_Indexacion_IPC')">
-                        <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
-                    </button>
-                    <button class="btn-zenith"
-                        style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
-                        onclick="copyTable('ipcMainTable')">
-                        COPIAR
-                    </button>
+            <!-- Quantitative Results -->
+            <div id="resultsUI" class="results-wrapper">
+                <div class="glass-card">
+                    <div class="card-title" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i data-lucide="layers" style="color: var(--success);"></i>
+                            <h2>MATRIZ DE INDEXACIÓN FINAL</h2>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith"
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
+                                onclick="exportTableToCSV('ipcMainTable', 'Matriz_Indexacion_IPC')">
+                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
+                            </button>
+                            <button class="btn-zenith"
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
+                                onclick="exportTableToExcel('ipcMainTable', 'Matriz_Indexacion_IPC')">
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
+                            </button>
+                            <button class="btn-zenith"
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
+                                onclick="copyTable('ipcMainTable')">
+                                COPIAR
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                        <table id="ipcMainTable">
+                            <thead>
+                                <tr>
+                                    <th>CÓDIGO_REF</th>
+                                    <th>VALOR BASE (2018)</th>
+                                    <th>INDEXADO (2025)</th>
+                                    <th>DIFERENCIAL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eliteBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                <table id="ipcMainTable">
-                    <thead>
-                        <tr>
-                            <th>CÓDIGO_REF</th>
-                            <th>VALOR BASE (2018)</th>
-                            <th>INDEXADO (2025)</th>
-                            <th>DIFERENCIAL</th>
-                        </tr>
-                    </thead>
-                    <tbody id="eliteBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 
-    <div id="resultsAvaluo" class="results-wrapper">
-        <div class="glass-card" style="margin-bottom: 2rem; border-top: 5px solid var(--primary);">
-            <div class="card-title" style="justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <i data-lucide="trending-up" style="color: var(--primary);"></i>
-                    <h2>RESUMEN DE TASACIÓN GLOBAL</h2>
+            <div id="resultsAvaluo" class="results-wrapper">
+                <div class="glass-card" style="margin-bottom: 2rem; border-top: 5px solid var(--primary);">
+                    <div class="card-title" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i data-lucide="trending-up" style="color: var(--primary);"></i>
+                            <h2>RESUMEN DE TASACIÓN GLOBAL</h2>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
+                                onclick="exportTableToCSV('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
+                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
+                            </button>
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
+                                onclick="exportTableToExcel('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
+                            </button>
+                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
+                                onclick="copyTable('tSummaryAvaluo')">
+                                COPIAR
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                        <table id="tSummaryAvaluo">
+                            <thead>
+                                <tr>
+                                    <th>ESCENARIO</th>
+                                    <th>VALOR BASE IPC 2018</th>
+                                    <th>VALOR IPC 2025</th>
+                                    <th>AUMENTO %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="avaluoSummaryBody"></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
-                        onclick="exportTableToCSV('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
-                        <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
-                    </button>
-                    <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
-                        onclick="exportTableToExcel('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
-                        <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
-                    </button>
-                    <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
-                        onclick="copyTable('tSummaryAvaluo')">
-                        COPIAR
-                    </button>
-                </div>
-            </div>
-            <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                <table id="tSummaryAvaluo">
-                    <thead>
-                        <tr>
-                            <th>ESCENARIO</th>
-                            <th>VALOR BASE IPC 2018</th>
-                            <th>VALOR IPC 2025</th>
-                            <th>AUMENTO %</th>
-                        </tr>
-                    </thead>
-                    <tbody id="avaluoSummaryBody"></tbody>
-                </table>
-            </div>
-        </div>
 
-        <div class="glass-card" style="border-top: 5px solid var(--warning);">
-            <div class="card-title" style="justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <i data-lucide="trees" style="color: var(--warning);"></i>
-                    <h2>DETALLE VOLUMÉTRICO DE ESPECIES</h2>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn-zenith"
-                        style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
-                        onclick="exportTableToCSV('tDetailAvaluo', 'Detalle_Volumetrico')">
-                        <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
-                    </button>
-                    <button class="btn-zenith"
-                        style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
-                        onclick="exportTableToExcel('tDetailAvaluo', 'Detalle_Volumetrico')">
-                        <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
-                    </button>
-                    <button class="btn-zenith"
-                        style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
-                        onclick="copyTable('tDetailAvaluo')">
-                        COPIAR
-                    </button>
+                <div class="glass-card" style="border-top: 5px solid var(--warning);">
+                    <div class="card-title" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i data-lucide="trees" style="color: var(--warning);"></i>
+                            <h2>DETALLE VOLUMÉTRICO DE ESPECIES</h2>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-zenith"
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
+                                onclick="exportTableToCSV('tDetailAvaluo', 'Detalle_Volumetrico')">
+                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
+                            </button>
+                            <button class="btn-zenith"
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
+                                onclick="exportTableToExcel('tDetailAvaluo', 'Detalle_Volumetrico')">
+                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
+                            </button>
+                            <button class="btn-zenith"
+                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
+                                onclick="copyTable('tDetailAvaluo')">
+                                COPIAR
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                        <table id="tDetailAvaluo">
+                            <thead>
+                                <tr>
+                                    <th>ESPECIE</th>
+                                    <th>CAT</th>
+                                    <th>ABAR(cm)</th>
+                                    <th>ALT(m)</th>
+                                    <th>VALOR 40%</th>
+                                    <th>VALOR 60%</th>
+                                    <th>VALOR 70%</th>
+                                    <th>VALOR 100%</th>
+                                </tr>
+                            </thead>
+                            <tbody id="avaluoBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                <table id="tDetailAvaluo">
-                    <thead>
-                        <tr>
-                            <th>ESPECIE</th>
-                            <th>CAT</th>
-                            <th>ABAR(cm)</th>
-                            <th>ALT(m)</th>
-                            <th>VALOR 40%</th>
-                            <th>VALOR 60%</th>
-                            <th>VALOR 70%</th>
-                            <th>VALOR 100%</th>
-                        </tr>
-                    </thead>
-                    <tbody id="avaluoBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    </main>
+        </main>
     </div>
 
     <div class="sys-log">

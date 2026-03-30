@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function setTheme(theme) {
     const themeLink = document.getElementById('theme-styles');
     if (themeLink) {
-        themeLink.href = `css/themes/${theme}.css`;
+        themeLink.href = `css/themes/${theme}.css?v=2026.3`;
         localStorage.setItem('eva-theme', theme);
         
         // Add a class to body for specific CSS tweaks if needed
