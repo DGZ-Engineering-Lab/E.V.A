@@ -408,22 +408,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (isUnknown && showAlerts) unknownSpecies.push(esp);
 
-            let catHTML = `<td style="color:var(--text-dim);">${typeNorm}</td>`;
-            if (isUnknown) {
-                const sel1 = typeNorm === 'Primera' ? 'selected' : '';
-                const sel2 = typeNorm === 'Segunda' ? 'selected' : '';
-                const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
-                const selS = typeNorm === 'Selección' ? 'selected' : '';
+            const sel1 = typeNorm === 'Primera' ? 'selected' : '';
+            const sel2 = typeNorm === 'Segunda' ? 'selected' : '';
+            const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
+            const selS = typeNorm === 'Selección' ? 'selected' : '';
 
-                catHTML = `<td>
-                    <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría">
-                        <option value="Primera" ${sel1}>Primera</option>
-                        <option value="Segunda" ${sel2}>Segunda</option>
-                        <option value="Tercera" ${sel3}>Tercera</option>
-                        <option value="Selección" ${selS}>Selección</option>
-                    </select>
-                </td>`;
-            }
+            let catHTML = `<td>
+                <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría" ${!isUnknown ? 'style="border-color:rgba(255,255,255,0.1); color:var(--text-dim); background:transparent;"' : ''}>
+                    <option value="Primera" ${sel1}>Primera</option>
+                    <option value="Segunda" ${sel2}>Segunda</option>
+                    <option value="Tercera" ${sel3}>Tercera</option>
+                    <option value="Selección" ${selS}>Selección</option>
+                </select>
+            </td>`;
 
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -438,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             tbody.appendChild(row);
         });
+
 
         if (unknownSpecies.length > 0 && showAlerts) {
             showCustomAlert([...new Set(unknownSpecies)]);

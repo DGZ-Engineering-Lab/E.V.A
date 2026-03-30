@@ -5,20 +5,17 @@ All notable changes to **E.V.A.** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.5.1] — 2026-03-27
+## [3.0.0] — 2026-03-30
 
 ### Added
-- GPU-accelerated interaction engine (`requestAnimationFrame` loop)
-- 3D Tilt effect on module cards and KPI panels
-- Magnetic CTA button with proximity detection
-- Zenith Particle system with mouse-aware attractor physics
-- Parallax background layers (Cyber-Grid + Zenith Bloom)
-- Staggered reveal animations with cubic-spring easing
-- Page-in blur transition for cinematic entrance
-- Project metadata strip in app header (Project ID, Terminal Node)
-- Bento module grid on landing page (IPC, Biometry, Legal Audit)
-- Smart-batch detection for 4-column IPC inputs (40/60/70/100%)
-- High-precision currency parser with mixed-format tolerance
+- **Smart-Input Linter**: Real-time syntax validation for IPC and Avalúo data entries.
+- **Forensic Session Ledger**: Persistent history of calculations stored locally with instant retrieval.
+- **Dynamic Category Overrides**: Ability to manually adjust tree categories in real-time with automatic value updates.
+- **Live Analytics Dashboard**: Real-time distribution charts for species valuation.
+- **Integrated PDF Reporting**: Generate professional forensic reports directly from the app.
+- **Optimized Service Worker**: Enhanced offline-first performance with explicit cache management.
+
+## [2.5.1] — 2026-03-27
 
 ### Changed
 - Unified animation curve to `cubic-bezier(0.23, 1, 0.32, 1)` across all interfaces
