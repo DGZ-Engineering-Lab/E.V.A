@@ -188,56 +188,44 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('evaInputData');
     };
 
-    // --- High-End Notification System ---
-    const toastContainer = document.createElement('div');
-    toastContainer.id = 'toast-container';
-    document.body.appendChild(toastContainer);
+    // --- Professional HUD Hub ---
+    const hudHub = document.createElement('div');
+    hudHub.id = 'eva-hud-hub';
+    document.body.appendChild(hudHub);
 
     window.EVA = {
         toast: function(msg, type = 'success', duration = 5000) {
-            const toast = document.createElement('div');
-            toast.className = `eva-toast ${type}`;
+            const entry = document.createElement('div');
+            entry.className = `hud-entry ${type}`;
             
             const iconMap = { 'success': 'shield-check', 'warning': 'triangle-alert', 'error': 'octagon-x', 'info': 'activity' };
             const icon = iconMap[type] || 'bell';
-            const transId = Math.random().toString(16).slice(2, 8).toUpperCase();
+            const nodeID = Math.floor(Math.random() * 999).toString().padStart(3, '0');
             
-            toast.innerHTML = `
-                <div class="toast-side-bar"></div>
-                <div class="toast-main">
-                    <div class="toast-header">
-                        <span class="t-node">NODE: ZEN_ALPHA_42</span>
-                        <span class="t-id">TX_ID: ${transId}</span>
+            entry.innerHTML = `
+                <div class="hud-glitch-layer"></div>
+                <div class="hud-hex-icon"><i data-lucide="${icon}"></i></div>
+                <div class="hud-corpus">
+                    <div class="hud-meta">
+                        <span class="m-node">NODE_${nodeID}</span>
+                        <span class="m-type">${type.toUpperCase()}</span>
                     </div>
-                    <div class="toast-body">
-                        <div class="t-icon-box"><i data-lucide="${icon}"></i></div>
-                        <div class="t-msg-box">
-                            <label>SYSTEM NOTICE // ${type.toUpperCase()}</label>
-                            <p>${msg}</p>
-                        </div>
-                    </div>
-                    <div class="toast-footer">
-                        <div class="t-progress-track"><div class="t-progress-bar"></div></div>
-                    </div>
+                    <div class="hud-msg">${msg}</div>
                 </div>
+                <div class="hud-timer"></div>
             `;
-            toastContainer.appendChild(toast);
+            hudHub.appendChild(entry);
             lucide.createIcons();
 
-            const pBar = toast.querySelector('.t-progress-bar');
-            pBar.style.transition = `transform ${duration}ms linear`;
-            
+            // Auto-cleanup with staggered removal
+            setTimeout(() => entry.classList.add('active'), 10);
             setTimeout(() => {
-                toast.classList.add('active');
-                setTimeout(() => pBar.style.transform = 'scaleX(0)', 50);
-            }, 50);
-
-            setTimeout(() => {
-                toast.classList.remove('active');
-                setTimeout(() => toast.remove(), 700);
+                entry.classList.remove('active');
+                setTimeout(() => entry.remove(), 800);
             }, duration);
         }
     };
+
 
 
 
