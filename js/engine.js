@@ -194,48 +194,51 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(toastContainer);
 
     window.EVA = {
-        toast: function(msg, type = 'success', duration = 4000) {
+        toast: function(msg, type = 'success', duration = 5000) {
             const toast = document.createElement('div');
             toast.className = `eva-toast ${type}`;
             
-            // Icon mapping
-            const iconMap = {
-                'success': 'check-circle',
-                'warning': 'alert-triangle',
-                'error': 'shield-alert',
-                'info': 'info'
-            };
+            const iconMap = { 'success': 'shield-check', 'warning': 'triangle-alert', 'error': 'octagon-x', 'info': 'activity' };
             const icon = iconMap[type] || 'bell';
+            const transId = Math.random().toString(16).slice(2, 8).toUpperCase();
             
             toast.innerHTML = `
-                <i data-lucide="${icon}"></i> 
-                <div class="toast-content">
-                    <div style="font-weight:900; font-size:0.65rem; opacity:0.5; margin-bottom:4px; letter-spacing:1px;">SYSTEM_NOTICE // ${type.toUpperCase()}</div>
-                    <span>${msg}</span>
+                <div class="toast-side-bar"></div>
+                <div class="toast-main">
+                    <div class="toast-header">
+                        <span class="t-node">NODE: ZEN_ALPHA_42</span>
+                        <span class="t-id">TX_ID: ${transId}</span>
+                    </div>
+                    <div class="toast-body">
+                        <div class="t-icon-box"><i data-lucide="${icon}"></i></div>
+                        <div class="t-msg-box">
+                            <label>SYSTEM NOTICE // ${type.toUpperCase()}</label>
+                            <p>${msg}</p>
+                        </div>
+                    </div>
+                    <div class="toast-footer">
+                        <div class="t-progress-track"><div class="t-progress-bar"></div></div>
+                    </div>
                 </div>
-                <div class="toast-progress"></div>
             `;
             toastContainer.appendChild(toast);
             lucide.createIcons();
 
-            // Animate progress bar
-            const progressBar = toast.querySelector('.toast-progress');
-            progressBar.style.transition = `transform ${duration}ms linear`;
-            progressBar.style.transform = 'scaleX(1)';
-
+            const pBar = toast.querySelector('.t-progress-bar');
+            pBar.style.transition = `transform ${duration}ms linear`;
+            
             setTimeout(() => {
                 toast.classList.add('active');
-                setTimeout(() => {
-                    progressBar.style.transform = 'scaleX(0)';
-                }, 50);
-            }, 10);
+                setTimeout(() => pBar.style.transform = 'scaleX(0)', 50);
+            }, 50);
 
             setTimeout(() => {
                 toast.classList.remove('active');
-                setTimeout(() => toast.remove(), 600);
+                setTimeout(() => toast.remove(), 700);
             }, duration);
         }
     };
+
 
 
     window.copyTable = async function(id) {

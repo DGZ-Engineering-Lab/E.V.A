@@ -467,101 +467,143 @@ tr:hover td {
     }
 }
 
-/* --- Premium Forensic Toast System --- */
+/* --- [E.V.A. PRO] ULTIMATE HUD NOTIFICATION SYSTEM --- */
 #toast-container {
-    position: fixed; 
-    top: 20px; 
-    right: 20px;
-    z-index: 10000; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 12px;
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20000;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     pointer-events: none;
-    perspective: 1000px;
-}
-
-@media (max-width: 1024px) {
-    #toast-container { top: 80px; right: 20px; left: 20px; align-items: center; }
-    .eva-toast { width: 100%; max-width: 420px; }
+    perspective: 1500px;
 }
 
 .eva-toast {
-    background: rgba(10, 15, 26, 0.85); 
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: 4px solid var(--primary);
-    padding: 1.25rem; 
-    border-radius: 12px; 
+    background: linear-gradient(135deg, rgba(8, 12, 20, 0.95), rgba(15, 23, 42, 0.85));
+    backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
     color: var(--text-main);
-    font-family: 'Space Mono', monospace; 
-    font-size: 0.8rem;
-    box-shadow: 
-        0 20px 40px rgba(0,0,0,0.4),
-        0 0 20px rgba(var(--primary-glow), 0.1),
-        inset 0 0 10px rgba(255,255,255,0.02);
-    display: flex; 
-    align-items: flex-start; 
-    gap: 15px;
-    transform: translateX(120%) rotateY(-10deg); 
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    pointer-events: all;
-    position: relative;
+    display: flex;
+    min-width: 450px;
     overflow: hidden;
-    min-width: 320px;
+    box-shadow: 
+        0 30px 60px rgba(0,0,0,0.6),
+        0 0 40px rgba(var(--primary-glow), 0.15),
+        inset 0 0 20px rgba(255,255,255,0.02);
+    transform: translateY(-50px) rotateX(-20deg) scale(0.95);
+    opacity: 0;
+    transition: all 0.7s cubic-bezier(0.2, 1.4, 0.3, 1);
+    pointer-events: all;
+    clip-path: polygon(5% 0, 100% 0, 100% 80%, 95% 100%, 0 100%, 0 20%);
 }
 
-.eva-toast.active { 
-    transform: translateX(0) rotateY(0); 
+.eva-toast.active {
+    transform: translateY(0) rotateX(0) scale(1);
+    opacity: 1;
 }
 
-.eva-toast.success { border-left-color: var(--primary); }
-.eva-toast.warning { border-left-color: var(--warning); }
-.eva-toast.info { border-left-color: var(--accent); }
-
-.eva-toast i { 
-    width: 20px; 
-    height: 20px; 
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-/* Forensic Progress Bar */
-.toast-progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2px;
+.toast-side-bar {
+    width: 6px;
     background: var(--primary);
+    flex-shrink: 0;
+    box-shadow: 0 0 15px var(--primary);
+}
+
+.eva-toast.warning .toast-side-bar { background: var(--warning); box-shadow: 0 0 15px var(--warning); }
+.eva-toast.error .toast-side-bar { background: #F43F5E; box-shadow: 0 0 15px #F43F5E; }
+.eva-toast.info .toast-side-bar { background: var(--accent); box-shadow: 0 0 15px var(--accent); }
+
+.toast-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.toast-header {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 15px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.toast-body {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.t-icon-box {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    transform: rotate(45deg);
+}
+
+.t-icon-box i {
+    transform: rotate(-45deg);
+    width: 22px;
+    height: 22px;
+}
+
+.t-msg-box label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-weight: 900;
+    font-size: 0.65rem;
+    color: var(--primary);
+    margin-bottom: 4px;
+    letter-spacing: 1.5px;
+}
+
+.t-msg-box p {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.toast-footer {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.t-progress-track {
     width: 100%;
-    transform-origin: left;
-    opacity: 0.6;
-}
-
-.eva-toast.warning .toast-progress { background: var(--warning); }
-.eva-toast.info .toast-progress { background: var(--accent); }
-
-/* Scanning Effect Animation */
-.eva-toast::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
     height: 100%;
-    background: linear-gradient(
-        90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.05), 
-        transparent
-    );
-    animation: toast-scan 3s infinite linear;
 }
 
-@keyframes toast-scan {
-    0% { left: -100%; }
-    100% { left: 200%; }
+.t-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    transform-origin: left;
+    transform: scaleX(1);
+    box-shadow: 0 0 10px var(--primary);
 }
+
+.eva-toast.warning .t-progress-bar { background: var(--warning); }
+
+@media (max-width: 600px) {
+    .eva-toast {
+        min-width: calc(100vw - 40px);
+    }
+}
+
 
 /* --- Professional Print Mode --- */
 @media print {
