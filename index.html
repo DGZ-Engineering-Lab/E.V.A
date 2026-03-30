@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E.V.A. — Motor de Valoración Forestal e Indexación IPC | DGZ Engineering Lab</title>
+    <title>E.V.A. — Motor de Valoración Forestal e Indexación IPC Colombia | DGZ Engineering Lab</title>
     <meta name="description"
         content="E.V.A. es una suite forense de grado profesional para la valoración de activos biológicos y la indexación IPC masiva en Colombia. Automatice peritajes catastrales y forestales con precisión superior.">
     <meta name="keywords"
@@ -19,8 +19,15 @@
     <meta property="og:title" content="E.V.A. — Motor de Valoración Forestal e Indexación IPC">
     <meta property="og:description"
         content="Suite forense profesional para valoración de activos biológicos e indexación IPC masiva en Colombia.">
-    <meta property="og:image" content="assets/logo.png">
+    <meta property="og:image" content="https://dgz-engineering-lab.github.io/E.V.A/assets/logo.png">
+    <meta property="og:url" content="https://dgz-engineering-lab.github.io/E.V.A/">
     <meta property="og:locale" content="es_CO">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="E.V.A. — Motor de Valoración Forestal e Indexación IPC">
+    <meta name="twitter:description" content="Suite forense profesional para valoración de activos biológicos e indexación IPC masiva en Colombia.">
+    <meta name="twitter:image" content="https://dgz-engineering-lab.github.io/E.V.A/assets/logo.png">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -42,16 +49,16 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.344.0"></script>
 
     <!-- Theme System -->
-    <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css">
-    <script src="js/theme-switcher.js" defer></script>
+    <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css?v=2026.3">
+    <script src="js/theme-switcher.js?v=2026.3" defer></script>
 
-    <!-- PWA -->
+    <!-- PWA Optimized -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00F2FE">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
@@ -66,6 +73,15 @@
         *::before,
         *::after {
             transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::selection {
+            background: var(--primary);
+            color: #000;
         }
 
         :root {
@@ -105,7 +121,8 @@
             background-color: var(--bg-obsidian);
             color: var(--text-main);
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -378,10 +395,129 @@
                 font-size: 0.6rem;
             }
         }
+
+        /* Accessibility: Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .zenith-bloom, .zenith-particle { display: none; }
+        }
+
+        /* Noscript Fallback */
+        .noscript-banner {
+            background: linear-gradient(135deg, #FBBF24, #D97706);
+            color: #000;
+            text-align: center;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 99999;
+        }
+
+        /* ── Modules Bento Grid ── */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto 8rem;
+            padding: 0 2rem;
+            animation: fadeUp 1.2s var(--ease) 1.2s backwards;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            padding: 3rem;
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: 0.6s var(--ease);
+            backdrop-filter: blur(20px);
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .module-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 242, 254, 0.08);
+        }
+
+        .card-bg-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.05;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .m-icon {
+            width: 44px;
+            height: 44px;
+            color: var(--primary);
+        }
+
+        .module-card h2 {
+            font-family: 'Space Mono';
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .module-card p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        .m-status {
+            font-family: 'Space Mono';
+            font-size: 0.65rem;
+            color: var(--primary);
+            background: rgba(0, 242, 254, 0.08);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+
+        @media (max-width: 1024px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        .eva-footer {
+            text-align: center;
+            padding: 2rem;
+            font-family: 'Space Mono';
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            opacity: 0.6;
+            margin-top: auto;
+        }
     </style>
 </head>
 
 <body>
+
+    <noscript>
+        <div class="noscript-banner">⚠ E.V.A. requiere JavaScript habilitado para funcionar correctamente.</div>
+    </noscript>
 
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
@@ -450,88 +586,11 @@
         </section>
     </main>
 
-    <footer
-        style="text-align:center; padding:2rem; font-family:'Space Mono'; font-size:0.65rem; color:var(--text-dim); letter-spacing:2px; opacity:0.6;">
-        DGZ ENGINEERING LAB © 2026 — MIT LICENSE — PRECISION FORENSICS ENGINE v2.5.1
+    <footer style="padding: 2rem; text-align: center; font-size: 0.75rem; color: var(--text-dim); border-top: 1px solid var(--border); letter-spacing: 0.2em; font-weight: 500;">
+        <a href="https://dgz-engineering.vercel.app/" target="_blank" style="color: inherit; text-decoration: none; opacity: 0.8; transition: opacity 0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">DGZ ENGINEERING LAB © 2026</a> — MIT LICENSE — PRECISION FORENSICS ENGINE v2.5.1
     </footer>
 
-    <style>
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto 8rem;
-            padding: 0 2rem;
-            animation: fadeUp 1.2s var(--ease) 1.2s backwards;
-        }
 
-        .module-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-glass);
-            padding: 3rem;
-            border-radius: 32px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            transition: 0.6s var(--ease);
-            backdrop-filter: blur(20px);
-            will-change: transform;
-            transform: translateZ(0);
-        }
-
-        .module-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            background: rgba(255, 255, 255, 0.04);
-            border-color: var(--primary);
-        }
-
-        .card-bg-glow {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-            opacity: 0.05;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .m-icon {
-            width: 44px;
-            height: 44px;
-            color: var(--primary);
-        }
-
-        .module-card h2 {
-            font-family: 'Space Mono';
-            font-size: 1.25rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-        }
-
-        .module-card p {
-            font-size: 0.95rem;
-            color: var(--text-dim);
-            line-height: 1.7;
-        }
-
-        .m-status {
-            font-family: 'Space Mono';
-            font-size: 0.65rem;
-            color: var(--primary);
-            background: rgba(var(--primary-glow), 0.1);
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            align-self: flex-start;
-        }
-
-        @media (max-width: 1024px) {
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 
     <script>
         lucide.createIcons();

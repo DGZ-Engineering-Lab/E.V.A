@@ -30,10 +30,16 @@ function updateChartTheme(theme) {
         const color = isDark ? '#64748B' : '#475569';
         const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
         
-        chart.options.scales.x.grid.color = gridColor;
-        chart.options.scales.y.grid.color = gridColor;
-        chart.options.scales.x.ticks.color = color;
-        chart.options.scales.y.ticks.color = color;
+        if (chart.options.scales) {
+            if (chart.options.scales.x) {
+                if (chart.options.scales.x.grid) chart.options.scales.x.grid.color = gridColor;
+                if (chart.options.scales.x.ticks) chart.options.scales.x.ticks.color = color;
+            }
+            if (chart.options.scales.y) {
+                if (chart.options.scales.y.grid) chart.options.scales.y.grid.color = gridColor;
+                if (chart.options.scales.y.ticks) chart.options.scales.y.ticks.color = color;
+            }
+        }
         chart.update();
     });
 }

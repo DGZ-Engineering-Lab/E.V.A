@@ -6,7 +6,7 @@
  * where internet connectivity is unreliable.
  */
 
-const CACHE_NAME = 'eva-pro-v3.2.0-hud-hub';
+const CACHE_NAME = 'eva-pro-v3.3.0-seo-visual';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -18,9 +18,9 @@ const ASSETS_TO_CACHE = [
     './css/themes/zenith.css',
     './css/themes/forest.css',
     './css/themes/minimal.css',
-    './css/base.css',
+    './css/eva-styles-v3.css',
     './js/avaluo_db.js',
-    './js/engine.js',
+    './js/eva-core-v3.js',
     './js/theme-switcher.js'
 ];
 

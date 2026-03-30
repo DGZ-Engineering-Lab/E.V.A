@@ -1,11 +1,14 @@
 /**
  * E.V.A PRO Arctic Engineering (Light Theme)
+ * DGZ Engineering Lab © 2026
  */
 :root {
     --bg-obsidian: #F8FAFC;
     --bg-panel: rgba(255, 255, 255, 0.95);
     --primary: #0284C7;
     --primary-glow: rgba(2, 132, 199, 0.15);
+    --primary-dim: rgba(2, 132, 199, 0.1);
+    --primary-light: #0EA5E9;
     --secondary: #0C4A6E;
     --success: #059669;
     --warning: #B45309;
@@ -13,4 +16,168 @@
     --text-main: #020617;
     --text-dim: #334155;
     --border-glass: rgba(15, 23, 42, 0.1);
+    --border: rgba(15, 23, 42, 0.12);
+    --bg-main: #F8FAFC;
+    --glow: 0 4px 20px rgba(2, 132, 199, 0.15);
+}
+
+body {
+    background-color: var(--bg-obsidian);
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(2, 132, 199, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.06) 0%, transparent 40%);
+    color: var(--text-main);
+}
+
+::selection {
+    background: var(--primary);
+    color: #FFFFFF;
+}
+
+header {
+    background: rgba(248, 250, 252, 0.92);
+    border-bottom: 1px solid var(--border-glass);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--border-glass);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(12px);
+}
+
+.glass::before {
+    opacity: 0.15;
+}
+
+textarea {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary);
+    border: 1px solid rgba(15, 23, 42, 0.15);
+}
+
+textarea::placeholder {
+    color: #94A3B8;
+}
+
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+.sys-status {
+    background: rgba(248, 250, 252, 0.8);
+    color: var(--text-dim);
+    border: 1px solid var(--border-glass);
+}
+
+.sys-status:hover {
+    background: rgba(2, 132, 199, 0.04);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.sys-status.active-ipc {
+    background: rgba(2, 132, 199, 0.08);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 0 15px rgba(2, 132, 199, 0.12);
+}
+
+.sys-status.active-avaluo {
+    background: rgba(180, 83, 9, 0.08);
+    border-color: var(--warning);
+    color: var(--warning);
+    box-shadow: 0 0 15px rgba(180, 83, 9, 0.12);
+}
+
+th {
+    background: rgba(248, 250, 252, 0.9);
+    color: var(--text-dim);
+    border-bottom: 2px solid rgba(15, 23, 42, 0.1);
+}
+
+tr:hover td {
+    background: rgba(2, 132, 199, 0.04);
+}
+
+.pct-badge {
+    background: rgba(2, 132, 199, 0.08);
+    border: 1px solid rgba(2, 132, 199, 0.2);
+}
+
+.tech-note {
+    background: rgba(2, 132, 199, 0.04);
+    border-left-color: var(--primary);
+}
+
+.btn-zenith {
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+
+.btn-zenith:hover {
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
+}
+
+.kpi-card {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.kpi-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.brand-name span {
+    color: var(--primary);
+}
+
+.logo-box {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+/* Light theme sidebar adjustments */
+.sidebar-nav {
+    background: rgba(248, 250, 252, 0.95) !important;
+    border-right-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: rgba(2, 132, 199, 0.08) !important;
+}
+
+/* Light theme glass cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+.glass-card::before {
+    opacity: 0.1;
+}
+
+/* Light theme input card */
+.input-card {
+    background: rgba(248, 250, 252, 0.95) !important;
+    border-color: var(--primary) !important;
+}
+
+/* Light theme outcome card */
+.outcome-card {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.04), rgba(14, 165, 233, 0.04)) !important;
+}
+
+/* Light theme table */
+.table-canvas {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Light theme footer */
+.sys-log {
+    background: rgba(248, 250, 252, 0.92) !important;
+    border-top-color: rgba(15, 23, 42, 0.08) !important;
 }

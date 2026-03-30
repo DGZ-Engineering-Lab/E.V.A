@@ -114,6 +114,24 @@ Z = 1.5226
 
 Source: [DANE — Índice de Precios al Consumidor](https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc)
 
+## 📊 Phase 4: Forensic Analytics & Reporting (New!)
+
+E.V.A. now features a high-performance **Analytica Grid** to provide deep insights for peritaje reports:
+
+*   **Comparative Values**: Side-by-side bar chart showing **Original vs. Updated** book value.
+*   **Species Distribution**: Automated pie chart with percentage labels for stand composition.
+*   **Forensic KPI Metrics**: Real-time mean value, max-peak individual value, and overall variance tracking.
+*   **Export Pro**: 
+    - **PDF**: High-DPI professional report capture with layout-safety rendering.
+    - **Excel (XLS)**: Office-compatible spreadsheet export with UTF-8 support.
+    - **CSV**: Standard data exchange format.
+
+## ⚙️ Judicial Features
+
+1.  **Bogota Time Sinc**: The system clock is forced to `America/Bogota` (UTC-5) 24h format for official time-stamping of appraisals.
+2.  **Premium Notifications**: "Glass-Floating" toast system with staggered animations and Lucide iconography.
+3.  **Audit Trail**: Session ledger for tracking real-time data input and processing milestones.
+
 ## 🎨 Themes
 
 | Theme | Description | Use Case |
@@ -122,7 +140,7 @@ Source: [DANE — Índice de Precios al Consumidor](https://www.dane.gov.co/inde
 | **Arctic Engineering** | High-contrast light mode | Print-ready reports, daylight use |
 | **Zenith High-Contrast** | Black + amber accents | Presentation mode, accessibility |
 | **Forest Nature** | Deep green palette | Forestry-focused sessions |
-| **Pure Minimal** | Monochrome B&W | Document-grade output |
+| **Minimal Chrome** | Monochrome B&W | Document-grade output |
 
 ## 📜 Legal Framework
 

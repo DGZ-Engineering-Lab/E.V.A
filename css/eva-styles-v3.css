@@ -529,8 +529,7 @@ tr:hover td {
 .mono-msg {
     font-size: 0.7rem;
     font-weight: 400;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* --- Session Ledger Trash Can Styles --- */
@@ -618,3 +617,91 @@ tr:hover td {
     }
 }
 
+/* --- [E.V.A. V4] ADVANCED ANALYTICS GRID --- */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.analytics-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.chart-container-fixed {
+    height: 300px;
+    margin-top: 1rem;
+    position: relative;
+}
+
+.metrics-card {
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.6) 100%);
+}
+
+.kpi-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.mini-kpi {
+    padding: 1.25rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: 0.3s var(--ease);
+}
+
+.mini-kpi:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.mini-kpi .l {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    font-weight: 700;
+}
+
+.mini-kpi .v {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--text-main);
+    font-family: 'Space Mono', monospace;
+}
+
+/* --- [E.V.A. V4] PREMIUM NOTIFICATIONS --- */
+.eva-mono-entry {
+    background: rgba(10, 15, 23, 0.7) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    height: 48px !important;
+    padding: 0 1.8rem !important;
+    border-radius: 24px !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1) !important;
+}
+
+.eva-mono-entry.success { border-left: 3px solid var(--success) !important; }
+.eva-mono-entry.warning { border-left: 3px solid var(--warning) !important; }
+.eva-mono-entry.info { border-left: 3px solid var(--primary) !important; }
+
+.mono-tag {
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--text-main) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-family: 'Space Mono', monospace;
+}

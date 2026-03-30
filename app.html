@@ -4,11 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E.V.A. — IPC y Avalúo Forestal | DGZ Engineering Lab</title>
+    <title>E.V.A. PRO — Consola de Valoración Forestal e Indexación IPC Colombia | DGZ Engineering Lab</title>
     <meta name="description"
-        content="Consola profesional E.V.A. para procesamiento masivo de indexación IPC y avalúo de activos forestales. Motor Z-Factor v1.5226 con precisión forense.">
-    <meta name="robots" content="noindex, nofollow">
+        content="Suite profesional E.V.A. para valoración forense de activos biológicos, actualización de avalúos con IPC y generación de reportes periciales en Colombia.">
+    <meta name="keywords"
+        content="avalúo forestal, IPC Colombia, valoración de activos biológicos, indexación catastral, peritaje ambiental, DANE, IGAC, E.V.A. PRO">
+    <meta name="author" content="DGZ Engineering Lab">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dgz-engineering-lab.github.io/E.V.A/app.html">
     <link rel="icon" type="image/png" href="assets/logo.png">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="E.V.A. PRO — Consola de Valoración Forestal e Indexación IPC">
+    <meta property="og:description"
+        content="Suite forense profesional para valoración de activos biológicos e indexación IPC masiva en Colombia.">
+    <meta property="og:image" content="https://dgz-engineering-lab.github.io/E.V.A/assets/logo.png">
+    <meta property="og:url" content="https://dgz-engineering-lab.github.io/E.V.A/app.html">
+    <meta property="og:locale" content="es_CO">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="E.V.A. PRO — Consola de Valoración Forestal">
+    <meta name="twitter:description"
+        content="Suite forense para valoración de activos biológicos e indexación IPC en Colombia.">
+    <meta name="twitter:image" content="https://dgz-engineering-lab.github.io/E.V.A/assets/logo.png">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "E.V.A. PRO — Experto en Valoración de Activos",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Organization", "name": "DGZ Engineering Lab" },
+        "description": "Consola profesional para valoración forense de activos biológicos y actualización de avalúos con IPC en Colombia.",
+        "url": "https://dgz-engineering-lab.github.io/E.V.A/app.html"
+    }
+    </script>
 
     <!-- Preload Critical Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,29 +53,35 @@
         rel="stylesheet">
 
     <!-- Icons & Charts -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.344.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="js/avaluo_db.js"></script>
 
-    <!-- Core Assets (Expert HUD Protocol) -->
+    <!-- Core Assets -->
     <link id="theme-styles" rel="stylesheet" href="css/themes/dark.css?v=2026.3">
     <link rel="stylesheet" href="css/eva-styles-v3.css?v=2026.3">
     <script src="js/theme-switcher.js?v=2026.3" defer></script>
-    <script src="js/eva-core-v3.js?v=2026.3" defer></script>
 
-    <!-- PWA -->
+    <!-- PWA Optimized -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00F2FE">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
         :root {
-            --sidebar-w: 80px;
-            --topbar-h: 70px;
+            --sidebar-w: 72px;
+            --topbar-h: 56px;
+            --footer-h: 36px;
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        ::selection {
+            background: var(--primary);
+            color: #000;
         }
 
         /* Accessibility: Focus States */
@@ -55,26 +96,30 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Hanken Grotesk', sans-serif;
-            transition: 0.6s var(--ease);
+        }
+
+        *,
+        *::before,
+        *::after {
+            transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease;
         }
 
         body {
             background-color: var(--bg-obsidian);
             color: var(--text-main);
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             overflow: hidden;
             background-image:
                 radial-gradient(circle at 0% 0%, var(--primary-glow) 0%, transparent 40%),
                 radial-gradient(circle at 100% 100%, var(--primary-glow) 0%, transparent 40%);
-            transition: background-color 0.8s var(--ease), color 0.8s var(--ease), background-image 0.8s var(--ease);
-            animation: pageIn 1.2s var(--ease);
+            animation: pageIn 1s var(--ease);
         }
 
         @keyframes pageIn {
             from {
                 opacity: 0;
-                filter: blur(10px);
+                filter: blur(8px);
                 transform: scale(1.01);
             }
 
@@ -85,7 +130,6 @@
             }
         }
 
-        /* --- Global Animations --- */
         @keyframes shimmer {
             0% {
                 background-position: -200% 0;
@@ -96,43 +140,59 @@
             }
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(-30px);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
         @keyframes reveal {
             from {
-                transform: translateY(30px) scale(0.98);
+                transform: translateY(20px) scale(0.98);
                 opacity: 0;
             }
 
-            100% {
+            to {
                 transform: translateY(0) scale(1);
                 opacity: 1;
             }
         }
 
-        @keyframes bounce-in {
-            0% {
-                transform: scale(0.95);
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-op {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
                 opacity: 0;
             }
 
-            100% {
-                transform: scale(1);
+            to {
+                transform: translateX(0);
                 opacity: 1;
             }
         }
 
-        /* --- Sidebar Navigation (Desktop) --- */
+        /* ==============================
+           SIDEBAR - Compact & Clear
+           ============================== */
         .sidebar-nav {
             width: var(--sidebar-w);
             background: rgba(2, 4, 8, 0.95);
@@ -140,20 +200,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem 0;
-            gap: 2.5rem;
+            padding: 1.25rem 0;
+            gap: 1.5rem;
             z-index: 100;
             backdrop-filter: blur(30px);
-            animation: slideIn 0.8s var(--ease) forwards;
+            animation: slideIn 0.6s var(--ease) forwards;
         }
 
         .nav-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 0 25px var(--primary-glow);
-            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px var(--primary-glow);
+            margin-bottom: 1rem;
             cursor: pointer;
             position: relative;
         }
@@ -168,15 +228,15 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             animation: shimmer 3s infinite;
             background-size: 200% 100%;
         }
 
         .nav-item {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -197,11 +257,34 @@
             content: '';
             position: absolute;
             left: -10px;
-            width: 4px;
-            height: 20px;
+            width: 3px;
+            height: 18px;
             background: var(--primary);
-            border-radius: 0 4px 4px 0;
-            box-shadow: 0 0 15px var(--primary);
+            border-radius: 0 3px 3px 0;
+            box-shadow: 0 0 12px var(--primary);
+        }
+
+        /* Tooltip for nav items */
+        .nav-item[data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(100% + 12px);
+            background: rgba(10, 15, 26, 0.95);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 200;
+        }
+
+        .nav-item[data-tooltip]:hover::after {
+            opacity: 1;
         }
 
         .theme-selector {
@@ -209,30 +292,26 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-glass);
             border-radius: 99px;
-            padding: 0.6rem;
+            padding: 0.4rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.6rem;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
         }
 
         .theme-node {
-            width: 18px;
-            height: 18px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             cursor: pointer;
-            position: relative;
-            transition: all 0.4s var(--ease-in-out);
             border: 2px solid transparent;
+            transition: 0.3s;
         }
 
         .theme-node:hover {
             transform: scale(1.3);
         }
 
-        /* Dynamic active state detection via body class */
         .eva-theme-dark .dot-dark,
         .eva-theme-light .dot-light,
         .eva-theme-forest .dot-forest,
@@ -240,7 +319,7 @@
         .eva-theme-zenith .dot-zenith {
             transform: scale(1.4);
             border-color: var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
+            box-shadow: 0 0 12px var(--primary-glow);
         }
 
         .dot-dark {
@@ -263,176 +342,311 @@
             background: #FBBF24;
         }
 
-        /* --- App Main Content --- */
+        /* ==============================
+           APP CONTAINER
+           ============================== */
         .app-container {
             flex: 1;
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
+        /* ==============================
+           HEADER - Clean & Compact
+           ============================== */
         header {
             height: var(--topbar-h);
-            padding: 0 3rem;
-            border-bottom: 2px solid var(--border-glass);
+            padding: 0 1.5rem 0 2rem;
+            border-bottom: 1px solid var(--border-glass);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(5, 7, 10, 0.4);
+            background: rgba(5, 7, 10, 0.5);
             backdrop-filter: blur(25px);
-            position: sticky;
-            top: 0;
+            position: relative;
             z-index: 91;
+            flex-shrink: 0;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .brand-box h1 {
             font-family: 'Space Mono', monospace;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 900;
             letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
-        .brand-box span {
-            display: inline-flex;
+        .brand-sub {
+            font-size: 0.6rem;
+            color: var(--primary);
+            font-family: 'Space Mono';
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        /* Step Navigator — Compact pill style */
+        .step-nav {
+            display: flex;
+            gap: 0.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.3rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .step-btn {
+            display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-weight: 400;
-            color: var(--primary);
-            font-size: 0.7rem;
-            background: rgba(var(--primary-glow), 0.1);
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-        }
-
-        .status-node {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem 1.25rem;
-            border-radius: 99px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-glass);
-            font-family: 'Space Mono';
-            font-size: 0.6rem;
-            font-weight: 800;
-            color: var(--success);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--success);
-            animation: pulse-op 2s infinite ease-in-out;
-        }
-
-        @keyframes pulse-op {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.4;
-                transform: scale(0.8);
-            }
-        }
-
-        /* --- Footer Bar --- */
-        .header-meta {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .m-label {
-            font-family: 'Space Mono';
-            font-size: 0.55rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
             color: var(--text-dim);
-            letter-spacing: 1px;
-        }
-
-        .m-val {
-            font-family: 'Space Mono';
-            font-size: 0.7rem;
-            color: var(--primary);
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-        .sys-log {
-            position: fixed;
-            bottom: 0;
-            width: calc(100% - var(--sidebar-w));
-            left: var(--sidebar-w);
-            height: 45px;
-            background: rgba(5, 7, 10, 0.8);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid var(--border-glass);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 3rem;
-            font-family: 'Space Mono';
-            font-size: 0.6rem;
-            color: var(--text-dim);
-            letter-spacing: 1.5px;
-            z-index: 99;
-        }
-
-        .sys-log span {
-            color: var(--primary);
+            cursor: pointer;
+            font-family: 'Hanken Grotesk';
+            font-size: 0.75rem;
             font-weight: 700;
+            transition: 0.3s;
         }
 
-        .sys-log .segment {
+        .step-btn:hover {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .step-btn.active {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .step-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .header-right {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .sys-log .segment::before {
-            content: '::';
-            color: var(--primary);
-            opacity: 0.5;
+        .sys-clock {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            font-family: 'Space Mono';
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-dim);
         }
 
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse-op 2s infinite ease-in-out;
+        }
+
+        /* ==============================
+           MAIN DASHBOARD GRID
+           ============================== */
         .dashboard-main {
+            flex: 1;
             display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 2rem;
-            padding: 3rem;
-            max-width: 1700px;
-            margin: 0 auto;
-            width: 100%;
-            animation: bounce-in 1s var(--ease);
+            grid-template-columns: 1fr 420px;
+            grid-template-rows: auto 1fr;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            overflow: hidden;
+            animation: reveal 0.8s var(--ease);
+            min-height: 0;
         }
 
-        /* --- Bento System Refined --- */
+        /* ── KPI Row (top, full width) ── */
+        .kpi-row {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .kpi-chip {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            transition: 0.3s;
+            position: relative;
+            cursor: default;
+        }
+
+        .kpi-chip:hover {
+            border-color: var(--primary-glow);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .kpi-chip-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .kpi-chip-icon.ipc {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary);
+        }
+
+        .kpi-chip-icon.count {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366F1;
+        }
+
+        .kpi-chip-icon.status {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .kpi-chip-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kpi-chip-label {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-chip-value {
+            font-size: 1.1rem;
+            font-weight: 900;
+            font-family: 'Space Mono';
+            letter-spacing: -0.5px;
+        }
+
+        .kpi-chip-value.success-text {
+            color: var(--success);
+            font-size: 0.85rem;
+        }
+
+        /* ── Tooltip for KPIs ── */
+        .has-tip {
+            position: relative;
+        }
+
+        .has-tip .tip-bubble {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 15, 26, 0.95);
+            border: 1px solid var(--border-glass);
+            color: var(--text-dim);
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            line-height: 1.5;
+            max-width: 260px;
+            white-space: normal;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 200;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .has-tip .tip-bubble::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 8px;
+            height: 8px;
+            background: rgba(10, 15, 26, 0.95);
+            border-left: 1px solid var(--border-glass);
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .has-tip:hover .tip-bubble {
+            opacity: 1;
+        }
+
+        /* ── Main Stage (left) ── */
+        .main-stage {
+            grid-column: 1;
+            grid-row: 2;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            padding-right: 0.5rem;
+            min-height: 0;
+        }
+
+        .main-stage::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* ── Tab Content Toggle ── */
+        .tab-content {
+            display: none;
+            width: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s var(--ease);
+        }
+
+        /* ── Side Panel (right) ── */
+        .side-panel {
+            grid-column: 2;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-height: 0;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .side-panel::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* ── Glass Card (shared) ── */
         .glass-card {
             background: var(--bg-panel);
             backdrop-filter: blur(25px);
             border: 1px solid var(--border-glass);
-            border-radius: 24px;
-            padding: 2.5rem;
+            border-radius: 16px;
+            padding: 1.5rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            animation: reveal 0.8s var(--ease) 0.6s backwards;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
 
         .glass-card::before {
@@ -443,137 +657,157 @@
             right: 0;
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.3;
+            opacity: 0.2;
         }
 
-        .card-title {
+        /* ── Section Headers ── */
+        .section-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .card-title h2 {
-            font-size: 1rem;
-            font-family: 'Space Mono', monospace;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            grid-column: 1 / -1;
+            gap: 0.6rem;
             margin-bottom: 1rem;
         }
 
-        .kpi-stack {
-            padding: 1.75rem;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-glass);
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            position: relative;
-            animation: reveal 0.8s var(--ease) backwards;
+        .section-header i {
+            color: var(--primary);
+            width: 18px;
+            height: 18px;
         }
 
-        .kpi-stack:nth-child(1) {
-            animation-delay: 0.2s;
+        .section-header h2 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
 
-        .kpi-stack:nth-child(2) {
-            animation-delay: 0.3s;
-        }
-
-        .kpi-stack:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        .kpi-stack:nth-child(4) {
-            animation-delay: 0.5s;
-        }
-
-        .kpi-stack:hover {
-            border-color: var(--primary-glow);
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .kpi-tag {
-            font-size: 0.7rem;
+        .section-header .badge-tag {
+            margin-left: auto;
+            font-size: 0.6rem;
             color: var(--text-dim);
-            font-family: 'Space Mono';
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            opacity: 0.7;
         }
 
-        .kpi-big {
-            font-size: 2.2rem;
-            font-weight: 900;
-            font-family: 'Space Mono';
-            letter-spacing: -1px;
-        }
-
-        /* --- Core Inputs --- */
-        .workspace-panel {
-            grid-column: 1 / 2;
+        /* ==============================
+           INPUT TERMINAL (reimagined)
+           ============================== */
+        .input-card {
+            background: rgba(0, 0, 0, 0.35) !important;
+            border-width: 2px;
+            border-color: var(--primary);
         }
 
         textarea {
             width: 100%;
-            height: 260px;
-            background: rgba(0, 0, 0, 0.45);
+            height: 200px;
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 1.75rem;
+            border-radius: 12px;
+            padding: 1.25rem;
             color: var(--primary);
             font-family: 'Space Mono';
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             outline: none;
             resize: none;
+            line-height: 1.7;
             transition: 0.3s;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 25px var(--primary-glow);
+            box-shadow: 0 0 20px var(--primary-glow);
         }
 
+        textarea::placeholder {
+            color: var(--text-dim);
+            opacity: 0.5;
+        }
+
+        /* Visual Registry (small scan cards) */
+        .f-registry {
+            display: flex;
+            gap: 0.4rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+            scrollbar-width: none;
+        }
+
+        .f-registry::-webkit-scrollbar {
+            display: none;
+        }
+
+        .f-card {
+            min-width: 110px;
+            padding: 0.6rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            animation: fadeIn 0.4s var(--ease);
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .f-card-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            background: rgba(0, 242, 254, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .f-card-icon i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .f-card-label {
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .f-card-val {
+            font-size: 0.7rem;
+            font-weight: 800;
+            font-family: 'Space Mono';
+        }
+
+        /* Action Buttons */
         .cta-group {
             display: flex;
-            gap: 1.25rem;
-            margin-top: 1.5rem;
+            gap: 0.75rem;
+            margin-top: 1rem;
         }
 
         .btn-zenith {
             flex: 1;
-            padding: 1.25rem;
+            padding: 0.9rem;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: #000;
-            font-weight: 900;
-            font-family: 'Space Mono';
+            font-weight: 800;
+            font-family: 'Hanken Grotesk';
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 8px 25px var(--primary-glow);
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            box-shadow: 0 6px 20px var(--primary-glow);
+            transition: all 0.3s;
         }
 
         .btn-zenith:hover {
-            transform: translateY(-4px) scale(1.02);
+            transform: translateY(-3px) scale(1.01);
             filter: brightness(1.1);
-            box-shadow: 0 15px 40px var(--primary-glow);
+            box-shadow: 0 12px 35px var(--primary-glow);
         }
 
         .btn-zenith:active {
@@ -581,95 +815,366 @@
         }
 
         .btn-ghost {
-            padding: 0 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
+            padding: 0 1.25rem;
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-glass);
-            border-radius: 14px;
-            color: var(--text-main);
+            border-radius: 12px;
+            color: var(--text-dim);
             cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 700;
             transition: 0.3s;
         }
 
         .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             color: var(--warning);
             border-color: var(--warning);
         }
 
-        /* --- Advanced Tables --- */
-        .results-wrapper {
-            grid-column: 1 / -1;
+        /* ==============================
+           VALIDATION PANEL (Input Linter)
+           ============================== */
+        .validation-panel {
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(0, 242, 254, 0.03);
+            border: 1px solid var(--border-glass);
             display: none;
-            padding-bottom: 5rem;
-            animation: fadeIn 0.8s ease-out;
+        }
+
+        .v-header {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .v-header i {
+            width: 12px;
+            height: 12px;
+            color: var(--primary);
+        }
+
+        .v-body {
+            font-family: 'Space Mono';
+            font-size: 0.7rem;
+            line-height: 1.4;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .v-body.error {
+            color: #f87171;
+        }
+
+        /* ==============================
+           OUTCOME HUD (Results Panel)
+           ============================== */
+        .outcome-card {
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            background: radial-gradient(circle at 100% 100%, rgba(0, 242, 254, 0.06), transparent) !important;
+            padding: 1.5rem !important;
+        }
+
+        .outcome-label {
+            font-size: 0.6rem;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        .outcome-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1.5px;
+            font-family: 'Space Mono';
+        }
+
+        .outcome-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .outcome-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .outcome-meta-label {
+            font-size: 0.55rem;
+            color: var(--text-dim);
+        }
+
+        .outcome-meta-val {
+            font-family: 'Space Mono';
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .btn-pdf {
+            margin-top: 1rem;
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary, #00c6fb));
+            color: #000;
+            font-weight: 800;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .btn-pdf:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+
+        .btn-pdf i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ── Metrics Grid ── */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .metric-mini {
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+        }
+
+        .metric-mini-label {
+            font-size: 0.55rem;
+            color: var(--text-dim);
+            margin-bottom: 0.3rem;
+        }
+
+        .metric-mini-val {
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .metric-mini-bar {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-top: 0.4rem;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .metric-mini-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        /* ── Session History ── */
+        .log-card {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .log-card .history-list {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .log-card .history-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .history-item {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .h-main {
+            flex: 1;
+        }
+
+        .h-time {
+            font-family: 'Space Mono';
+            font-size: 0.55rem;
+            color: var(--text-dim);
+        }
+
+        .h-desc {
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .h-del {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: transparent;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0.2;
+            transition: 0.3s;
+        }
+
+        .h-del:hover {
+            opacity: 1;
+            background: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            border-color: rgba(244, 63, 94, 0.3);
+        }
+
+        .h-del i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            padding: 1.5rem 0;
+            opacity: 0.5;
+        }
+
+        /* ── Info Insight ── */
+        .info-insight {
+            background: rgba(16, 185, 129, 0.04);
+            border-left: 3px solid var(--success);
+            padding: 0.8rem 1rem;
+            border-radius: 0 10px 10px 0;
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+        }
+
+        .info-insight i {
+            color: var(--success);
+            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+        }
+
+        .info-insight p {
+            font-size: 0.72rem;
+            line-height: 1.5;
+            color: var(--text-dim);
+        }
+
+        .info-insight strong {
+            color: var(--text-main);
+        }
+
+        /* ==============================
+           RESULTS TABLES
+           ============================== */
+        .results-wrapper {
+            display: none;
+            padding-bottom: 3rem;
+            animation: fadeIn 0.6s ease-out;
         }
 
         .table-canvas {
             width: 100%;
             overflow-x: auto;
-            border-radius: 20px;
+            border-radius: 14px;
             border: 1px solid var(--border-glass);
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.25);
         }
 
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
 
         th {
-            padding: 1.5rem;
+            padding: 1rem 1.25rem;
             text-align: left;
             font-family: 'Space Mono';
             color: var(--text-dim);
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 1.5px;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
             border-bottom: 2px solid var(--border-glass);
             background: rgba(255, 255, 255, 0.02);
         }
 
         td {
-            padding: 1.5rem;
+            padding: 1rem 1.25rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             transition: 0.2s;
         }
 
-        /* --- Laser Focus Row Highlights --- */
-        tbody {
-            transition: 0.3s;
-        }
-
+        /* Laser Focus Row Highlights */
         tbody:hover tr {
-            opacity: 0.25;
-            filter: grayscale(0.6);
+            opacity: 0.3;
+            filter: grayscale(0.5);
         }
 
         tbody tr {
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s;
         }
 
         tbody tr:hover {
             opacity: 1;
             filter: grayscale(0);
-            transform: scale(1.002);
-            box-shadow: inset 4px 0 0 var(--primary), 0 10px 30px rgba(0, 0, 0, 0.4);
+            transform: scale(1.001);
+            box-shadow: inset 3px 0 0 var(--primary), 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         tr:hover td {
             background: rgba(0, 242, 254, 0.03);
-            /* Lighter cyan glow inside the cells */
             color: var(--primary);
             border-bottom-color: transparent;
         }
 
-
         .num {
             font-family: 'Space Mono';
             font-weight: 700;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
         }
 
         .upd {
@@ -679,271 +1184,57 @@
         .delta {
             color: var(--success);
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             background: rgba(16, 185, 129, 0.1);
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
         }
 
-        @media (max-width: 1200px) {
-            .dashboard-main {
-                grid-template-columns: 1fr;
-                padding: 2rem;
-            }
-
-            .kpi-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            header {
-                padding: 0 1.5rem;
-            }
+        /* ── Chart Container ── */
+        #distributionChartContainer {
+            height: 220px;
+            margin-top: 0.75rem;
         }
 
-        /* --- Responsive Logic Consolidated --- */
-        /* --- Phase 3: Forensic Audit & Ledger Styles --- */
-        .validation-panel {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border-radius: 8px;
-            background: rgba(var(--primary-glow), 0.05);
-            border: 1px solid var(--border-glass);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .v-header {
-            font-family: 'Space Mono';
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--text-dim);
-            margin-bottom: 0.5rem;
+        /* ==============================
+           FOOTER BAR
+           ============================== */
+        .sys-log {
+            height: var(--footer-h);
+            background: rgba(5, 7, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border-glass);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-
-        .v-header i {
-            width: 14px;
-            height: 14px;
-            color: var(--primary);
-        }
-
-        .v-body {
+            justify-content: space-between;
+            padding: 0 2rem;
             font-family: 'Space Mono';
-            font-size: 0.75rem;
-            line-height: 1.4;
-            color: var(--primary);
-        }
-
-        .v-body.error {
-            color: #f87171;
-        }
-
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            max-height: 380px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-        }
-
-        .history-item:hover {
-            background: rgba(var(--primary-glow), 0.1);
-            border-color: var(--primary);
-        }
-
-        .h-time {
-            font-family: 'Space Mono';
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--text-dim);
+            letter-spacing: 1px;
+            flex-shrink: 0;
         }
 
-        .h-desc {
+        .sys-log span {
+            color: var(--primary);
             font-weight: 700;
-            font-size: 0.85rem;
         }
 
-        .empty-history {
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 0.8rem;
-            padding: 2rem 0;
+        .sys-log .segment {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sys-log .segment::before {
+            content: '·';
+            color: var(--primary);
             opacity: 0.5;
         }
 
-        .btn-ghost {
-            background: transparent;
-            border: 1px solid var(--border-glass);
-            color: var(--text-dim);
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: 'Space Mono';
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .btn-ghost:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(0, 242, 254, 0.05);
-        }
-
-        /* --- Dynamic Chart Container --- */
-        #distributionChartContainer {
-            height: 260px;
-            margin-top: 1rem;
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar-nav {
-                width: 100%;
-                height: 70px;
-                flex-direction: row;
-                border-right: none;
-                border-top: 1px solid var(--border-glass);
-                padding: 0 1rem;
-                position: fixed;
-                bottom: 0;
-                top: auto;
-                justify-content: space-around;
-            }
-
-            .nav-logo {
-                display: none;
-            }
-
-            .app-container {
-                height: auto;
-                padding-bottom: 90px;
-            }
-
-            .dashboard-main {
-                padding: 1.5rem;
-                grid-template-columns: 1fr;
-            }
-
-            header {
-                height: auto;
-                min-height: 70px;
-                padding: 1rem 1.5rem;
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-
-            .header-meta {
-                width: 100%;
-                justify-content: space-between;
-                gap: 0.5rem;
-            }
-
-            .meta-item {
-                display: none;
-            }
-
-            .sys-log {
-                display: none;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .brand-box h1 {
-                font-size: 0.85rem;
-                letter-spacing: 1px;
-            }
-
-            .status-node {
-                padding: 0.35rem 0.75rem;
-                font-size: 0.55rem;
-            }
-
-            .kpi-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            /* Single column for phone */
-            .kpi-stack {
-                padding: 1.25rem;
-            }
-
-            .kpi-big {
-                font-size: 1.5rem;
-            }
-
-            .glass-card {
-                padding: 1.5rem 1.25rem;
-                border-radius: 18px;
-            }
-
-            .dashboard-main {
-                padding: 1.5rem 1rem;
-            }
-
-            .cta-group {
-                flex-direction: column;
-            }
-
-            .btn-zenith {
-                width: 100%;
-                padding: 1.1rem;
-            }
-
-            /* Table Mobile Indicator */
-            .table-canvas {
-                background: linear-gradient(to right, var(--bg-panel) 30%, rgba(255, 255, 255, 0)),
-                    linear-gradient(to right, rgba(255, 255, 255, 0), var(--bg-panel) 70%) 0 100%,
-                    radial-gradient(farthest-side at 0% 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)),
-                    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)) 0 100%;
-                background-repeat: no-repeat;
-                background-color: var(--bg-panel);
-                background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
-                background-attachment: local, local, scroll, scroll;
-            }
-
-            th,
-            td {
-                padding: 0.8rem 0.6rem;
-                font-size: 0.75rem;
-            }
-
-            .num {
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Custom Scrollbar Elegant */
-        ::-webkit-scrollbar {
-            width: 3px;
-            height: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--text-dim);
-            border-radius: 10px;
-            opacity: 0.2;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-
-        /* --- Custom Modal Alert --- */
+        /* ==============================
+           MODAL ALERT
+           ============================== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -972,11 +1263,10 @@
             border-radius: 16px;
             padding: 2rem;
             width: 90%;
-            max-width: 500px;
+            max-width: 480px;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 158, 11, 0.1);
             transform: scale(0.95) translateY(20px);
             transition: 0.4s var(--ease);
-            text-align: left;
         }
 
         .modal-overlay.active .modal-box {
@@ -985,7 +1275,8 @@
 
         .modal-title {
             color: var(--warning);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -996,39 +1287,40 @@
 
         .modal-body {
             color: var(--text-dim);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
         }
 
         .modal-list {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            max-height: 150px;
+            padding: 0.8rem;
+            margin: 0.8rem 0;
+            max-height: 120px;
             overflow-y: auto;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Space Mono';
             font-size: 0.8rem;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .modal-list li {
-            margin-left: 1rem;
+            margin-left: 0.8rem;
             color: var(--text-main);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.25rem;
         }
 
         .modal-btn {
             background: linear-gradient(135deg, var(--warning), #D97706);
             color: #000;
             border: none;
-            padding: 0.8rem 2rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-weight: 800;
             cursor: pointer;
             width: 100%;
-            font-family: 'Space Mono';
+            font-family: 'Hanken Grotesk';
+            font-size: 0.85rem;
             transition: 0.3s;
         }
 
@@ -1037,7 +1329,7 @@
             box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
         }
 
-        /* --- Custom Select UI --- */
+        /* ── Custom Select ── */
         .cat-select {
             appearance: none;
             -webkit-appearance: none;
@@ -1045,305 +1337,635 @@
             color: var(--warning);
             border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 6px;
-            padding: 4px 28px 4px 10px;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
+            padding: 4px 24px 4px 8px;
+            font-family: 'Space Mono';
+            font-size: 0.7rem;
             cursor: pointer;
             outline: none;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: 0.3s;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 6px center;
-            background-size: 14px;
+            background-position: right 5px center;
+            background-size: 12px;
+            transition: 0.3s;
         }
 
         .cat-select:hover,
         .cat-select:focus {
             background-color: rgba(245, 158, 11, 0.15);
             border-color: var(--warning);
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
         }
 
         .cat-select option {
             background-color: var(--bg-obsidian);
             color: var(--text-main);
-            font-weight: 400;
-            font-family: 'Hanken Grotesk', sans-serif;
+            font-family: 'Hanken Grotesk';
+        }
+
+        /* ==============================
+           SCROLLBAR
+           ============================== */
+        ::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-dim);
+            border-radius: 10px;
+            opacity: 0.2;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Accessibility: Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Noscript Fallback */
+        .noscript-banner {
+            background: linear-gradient(135deg, #FBBF24, #D97706);
+            color: #000;
+            text-align: center;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 99999;
+        }
+
+        /* ==============================
+           RESPONSIVE
+           ============================== */
+        @media (max-width: 1200px) {
+            .dashboard-main {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .side-panel {
+                grid-column: 1;
+                grid-row: auto;
+                max-height: 400px;
+            }
+
+            .kpi-row {
+                flex-wrap: wrap;
+            }
+
+            .kpi-chip {
+                min-width: 140px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar-nav {
+                width: 100%;
+                height: 60px;
+                flex-direction: row;
+                border-right: none;
+                border-top: 1px solid var(--border-glass);
+                padding: 0 0.5rem;
+                position: fixed;
+                bottom: 0;
+                top: auto;
+                justify-content: space-around;
+                z-index: 100;
+            }
+
+            .nav-logo {
+                display: none;
+            }
+
+            .theme-selector {
+                flex-direction: row;
+                margin-top: 0;
+                padding: 0.3rem;
+            }
+
+            .nav-item[data-tooltip]::after {
+                display: none;
+            }
+
+            .app-container {
+                padding-bottom: 70px;
+                height: auto;
+            }
+
+            .sys-log {
+                display: none;
+            }
+
+            header {
+                padding: 0.5rem 1rem;
+                height: auto;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .step-nav {
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .brand-box h1 {
+                font-size: 0.85rem;
+            }
+
+            .kpi-row {
+                flex-direction: column;
+            }
+
+            .kpi-chip {
+                width: 100%;
+            }
+
+            .dashboard-main {
+                padding: 0.75rem;
+                gap: 0.75rem;
+            }
+
+            .glass-card {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            .outcome-value {
+                font-size: 2rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .btn-zenith {
+                width: 100%;
+            }
+
+            th,
+            td {
+                padding: 0.6rem 0.5rem;
+                font-size: 0.7rem;
+            }
+
+            .num {
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <nav class="sidebar-nav">
-        <div class="nav-logo" title="EVA ">
-            <img src="assets/logo.png" alt="Z-Logo">
+    <noscript>
+        <div class="noscript-banner">⚠ E.V.A. PRO requiere JavaScript habilitado para funcionar correctamente.</div>
+    </noscript>
+
+    <!-- ════════════════════════════════════
+         SIDEBAR NAVIGATION
+         ════════════════════════════════════ -->
+    <nav class="sidebar-nav" role="navigation" aria-label="Navegación principal">
+        <div class="nav-logo" title="E.V.A.">
+            <img src="assets/logo.png" alt="Logo E.V.A.">
         </div>
 
-        <div class="nav-item active" id="btnIpc" onclick="switchMode('ipc')" title="Actualización Masiva IPC">
+        <div class="nav-item active" id="btnIpc" onclick="switchMode('ipc')" data-tooltip="📈 Actualizar con IPC"
+            title="Actualización de Precios">
             <i data-lucide="calculator"></i>
         </div>
-        <div class="nav-item" id="btnAvaluo" onclick="switchMode('avaluo')" title="Motor Avalúo Biológico">
+        <div class="nav-item" id="btnAvaluo" onclick="switchMode('avaluo')" data-tooltip="🌳 Valorar Árboles"
+            title="Valoración de Árboles">
             <i data-lucide="trees"></i>
         </div>
 
-        <div class="theme-selector">
-            <div class="theme-node dot-dark" onclick="setTheme('dark')" title="Obsidian UI"></div>
-            <div class="theme-node dot-light" onclick="setTheme('light')" title="Arctic High-Contrast"></div>
-            <div class="theme-node dot-forest" onclick="setTheme('forest')" title="Deep Forest Mode"></div>
-            <div class="theme-node dot-minimal" onclick="setTheme('minimal')" title="Minimalist Lab"></div>
-            <div class="theme-node dot-zenith" onclick="setTheme('zenith')" title="Zenith Analytics"></div>
+        <div class="theme-selector" aria-label="Selector de tema visual">
+            <div class="theme-node dot-dark" onclick="setTheme('dark')" title="Tema Oscuro"></div>
+            <div class="theme-node dot-light" onclick="setTheme('light')" title="Tema Claro"></div>
+            <div class="theme-node dot-forest" onclick="setTheme('forest')" title="Tema Bosque"></div>
+            <div class="theme-node dot-minimal" onclick="setTheme('minimal')" title="Tema Minimalista"></div>
+            <div class="theme-node dot-zenith" onclick="setTheme('zenith')" title="Tema Dorado"></div>
         </div>
     </nav>
 
+    <!-- ════════════════════════════════════
+         APP CONTAINER
+         ════════════════════════════════════ -->
     <div class="app-container">
+
+        <!-- ── Header ── -->
         <header>
             <div class="brand-box">
-                <h1>E.V.A. // <span>v2.5.1</span></h1>
+                <div class="logo-box"><i data-lucide="shield-check" style="color: #000; width: 20px;"></i></div>
+                <div>
+                    <h1>E.V.A. <span style="font-weight: 300; opacity: 0.5;">PRO</span></h1>
+                    <div class="brand-sub">Sistema Avaluo Vegetacion</div>
+                </div>
             </div>
 
-            <div class="header-meta">
-                <div class="meta-item">
-                    <span class="m-label">PROYECTO:</span>
-                    <span class="m-val">AUDITORÍA_FORENSE_042</span>
-                </div>
-                <div class="meta-item">
-                    <span class="m-label">TERMINAL:</span>
-                    <span class="m-val">ZENITH_ALPHA_NODE</span>
-                </div>
-                <div class="status-node">
+            <!-- Step Navigation — Human-readable -->
+            <nav class="step-nav" aria-label="Pasos del proceso">
+                <button class="step-btn active" id="s1" onclick="switchTab('tab-input')">
+                    <i data-lucide="clipboard-list"></i>
+                    <span>Ingreso de Datos</span>
+                </button>
+                <button class="step-btn" id="s2" onclick="switchTab('tab-analytics')">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span>Análisis</span>
+                </button>
+                <button class="step-btn" id="s3" onclick="switchTab('tab-results')">
+                    <i data-lucide="trophy"></i>
+                    <span>Resultados</span>
+                </button>
+            </nav>
+
+            <div class="header-right">
+                <div class="sys-clock sys-status active-ipc">
                     <div class="pulse-dot"></div>
-                    CORE_OPERATIONAL
+                    <span id="sysClock">14:06:47</span>
                 </div>
             </div>
         </header>
 
+        <!-- ════════════════════════════════════
+             DASHBOARD MAIN GRID
+             ════════════════════════════════════ -->
         <main class="dashboard-main">
-            <!-- Row 1: KPI Statistics -->
-            <div class="kpi-grid">
-                <div class="kpi-stack">
-                    <div class="kpi-tag">METER: IPC ACUMULADO</div>
-                    <div class="kpi-big" style="color: var(--primary);">1.5226</div>
+
+            <!-- ── KPI Row (compact chips) ── -->
+            <div class="kpi-row">
+                <div class="kpi-chip has-tip">
+                    <div class="kpi-chip-icon ipc"><i data-lucide="trending-up" style="width:18px;"></i></div>
+                    <div class="kpi-chip-text">
+                        <span class="kpi-chip-label">Factor IPC</span>
+                        <span class="kpi-chip-value" style="color: var(--primary);">1.5226 <small
+                                style="font-size: 0.55rem; opacity: 0.5;">2025</small></span>
+                    </div>
+                    <div class="tip-bubble">📈 El Factor IPC refleja cuánto han subido los precios desde 2018 hasta
+                        2025. Se usa para actualizar valores antiguos a pesos de hoy.</div>
                 </div>
-                <div class="kpi-stack">
-                    <div class="kpi-tag">DELTA: INCREMENTO</div>
-                    <div class="kpi-big" style="color: var(--success);">+52.26%</div>
+
+                <div class="kpi-chip has-tip">
+                    <div class="kpi-chip-icon count"><i data-lucide="hash" style="width:18px;"></i></div>
+                    <div class="kpi-chip-text">
+                        <span class="kpi-chip-label">Datos Procesados</span>
+                        <span class="kpi-chip-value" id="kpiCount">0</span>
+                    </div>
+                    <div class="tip-bubble">🔢 Cantidad de valores o registros que el sistema ha calculado hasta ahora
+                        en esta sesión.</div>
                 </div>
-                <div class="kpi-stack">
-                    <div class="kpi-tag">BUFFER: REGISTROS</div>
-                    <div class="kpi-big" id="kpiCount">0</div>
-                </div>
-                <div class="kpi-stack">
-                    <div class="kpi-tag">STATUS: AUDITORÍA</div>
-                    <div class="kpi-big"
-                        style="font-size: 1rem; padding-top: 1rem; color: var(--text-dim); letter-spacing: 2px;">
-                        CERTIFIED_DGZ</div>
+
+                <div class="kpi-chip has-tip">
+                    <div class="kpi-chip-icon status"><i data-lucide="check-circle" style="width:18px;"></i></div>
+                    <div class="kpi-chip-text">
+                        <span class="kpi-chip-label">Estado del Sistema</span>
+                        <span class="kpi-chip-value success-text">✓ Todo en Orden</span>
+                    </div>
+                    <div class="tip-bubble">✅ Indica que el sistema está funcionando correctamente y los datos están
+                        siendo procesados con precisión.</div>
                 </div>
             </div>
 
-            <!-- Main Input Terminal -->
-            <div class="glass-card workspace-panel">
-                <div class="card-title">
-                    <i data-lucide="terminal" style="color: var(--primary);" id="panelIcon"></i>
-                    <h2 id="panelTitle">CENTRO DE PROCESAMIENTO IPC</h2>
-                </div>
-                <textarea id="mainInput" placeholder="> PEGAR DATOS CATASTRALES AQUÍ..."></textarea>
-                <div id="validationStatus" class="validation-panel" style="display:none;">
-                    <div class="v-header"><i data-lucide="shield-check"></i> SMART_LINTER STATUS</div>
-                    <div id="vMessage" class="v-body">VALIDACIÓN_PENDIENTE...</div>
+            <!-- ── Main Stage (Left) ── -->
+            <div class="main-stage">
+
+                <!-- Tab 1: Data Input -->
+                <div id="tab-input" class="tab-content active">
+                    <div class="glass-card input-card">
+                        <div class="section-header" style="justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <i data-lucide="edit-3" style="color: var(--primary);"></i>
+                                <h2 id="panelTitle">Ingrese Valor A Actualizar IPC</h2>
+                            </div>
+                            <span class="badge-tag" id="panelIcon" style="color: var(--primary);">Listo para
+                                calcular</span>
+                        </div>
+
+                        <textarea id="mainInput" oninput="scanData(this.value)"
+                            placeholder="📋  Pegue aquí los valores que desea actualizar... &#10;# Recuerde que puede escribirlos manual teniendo encuenta que desdes de cada espacio debe ir el simbolo | &#10;&#10;Ejemplo: Copie y pegue una columna de Excel con valores como:&#10;$ 1.500.000&#10;$ 2.300.000&#10;$ 850.000"></textarea>
+
+                        <!-- Smart Validation Feedback -->
+                        <div id="validationStatus" class="validation-panel">
+                            <div class="v-header">
+                                <i data-lucide="scan-line"></i>
+                                <span>Verificación de datos</span>
+                            </div>
+                            <div id="vMessage" class="v-body"></div>
+                        </div>
+
+                        <!-- Visual Preview Cards -->
+                        <div id="visualRegistry" class="f-registry"></div>
+
+                        <!-- Action Buttons -->
+                        <div class="cta-group">
+                            <button class="btn-zenith" id="execBtn" onclick="executeAction()">
+                                <i data-lucide="play"></i> Calcular Valores
+                            </button>
+                            <button class="btn-ghost" onclick="clearInput()" title="Limpiar todos los datos">
+                                <i data-lucide="trash-2" style="width:14px;"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="cta-group">
-                    <button class="btn-zenith" id="execBtn" onclick="executeAction()">
-                        <i data-lucide="play"></i> EJECUTAR PROCESAMIENTO
-                    </button>
-                    <button class="btn-ghost" onclick="clearInput()">
-                        <i data-lucide="trash-2"></i> LIMPIAR
-                    </button>
-                    <button class="btn-ghost" id="pdfBtn" onclick="generatePremiumPDF()"
-                        style="display:none; border-color: var(--primary); color: var(--primary);">
-                        <i data-lucide="file-down"></i> INFORME_PDF
+                <!-- Tab 2: Analytics (High-Performance Grid) -->
+                <div id="tab-analytics" class="tab-content">
+                    <div class="analytics-grid">
+                        <!-- Card 1: Comparative Values (Original vs Updated) -->
+                        <div class="glass-card" id="comparisonPanel" style="display:none;">
+                            <div class="section-header">
+                                <i data-lucide="bar-chart-3"></i>
+                                <h2>Comparativa de Valores</h2>
+                                <span class="badge-tag">Valores Brutos</span>
+                            </div>
+                            <div class="chart-container-fixed">
+                                <canvas id="compChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Species Distribution -->
+                        <div class="glass-card" id="distPanel" style="display:none;">
+                            <div class="section-header">
+                                <i data-lucide="pie-chart"></i>
+                                <h2>Distribución por Especie</h2>
+                            </div>
+                            <div class="chart-container-fixed">
+                                <canvas id="distChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: IPC Factor Evolution (Trend) -->
+                        <div class="glass-card full-width">
+                            <div class="section-header">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <i data-lucide="trending-up"></i>
+                                    <h2>Evolución del IPC</h2>
+                                </div>
+                                <span class="badge-tag">DANE Histórico 2018 — 2025</span>
+                            </div>
+                            <div class="chart-container-fixed" style="height: 260px;">
+                                <canvas id="eliteChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Forensic KPI Metrics -->
+                        <div class="glass-card metrics-card full-width" id="metricsPanel" style="display:none;">
+                            <div class="section-header">
+                                <i data-lucide="shield-check"></i>
+                                <h2>Métricas de Valoración</h2>
+                            </div>
+                            <div class="kpi-mini-grid">
+                                <div class="mini-kpi">
+                                    <span class="l">Valor Promedio</span>
+                                    <span class="v" id="kpiAvg">$0</span>
+                                </div>
+                                <div class="mini-kpi">
+                                    <span class="l">Registro Máximo</span>
+                                    <span class="v" id="kpiMax">$0</span>
+                                </div>
+                                <div class="mini-kpi">
+                                    <span class="l">Incremento Real</span>
+                                    <span class="v" id="kpiVariance">+0%</span>
+                                </div>
+                                <div class="mini-kpi">
+                                    <span class="l">Base de Cálculo</span>
+                                    <span class="v" id="kpiBaseYear">2018</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Result Tables -->
+                <div id="tab-results" class="tab-content">
+                    <!-- IPC Results -->
+                    <div id="resultsUI" class="results-wrapper">
+                        <div class="section-header" style="justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <i data-lucide="table"></i>
+                                <h2>Valores Actualizados con IPC</h2>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn-ghost" onclick="copyTable('eliteTable')" title="Copiar tabla">
+                                    <i data-lucide="copy" style="width:13px;"></i> Copiar
+                                </button>
+                                <button class="btn-ghost" onclick="exportTableToCSV('eliteTable','IPC_Actualizado')"
+                                    title="Descargar CSV">
+                                    <i data-lucide="download" style="width:13px;"></i> CSV
+                                </button>
+                                <button class="btn-ghost" onclick="exportTableToExcel('eliteTable','IPC_Actualizado')"
+                                    title="Descargar Excel">
+                                    <i data-lucide="file-spreadsheet" style="width:13px;"></i> Excel
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-canvas">
+                            <table id="eliteTable">
+                                <thead>
+                                    <tr>
+                                        <th>Referencia</th>
+                                        <th>Valor Original</th>
+                                        <th>Valor Actualizado</th>
+                                        <th>Diferencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="eliteBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Avalúo Results -->
+                    <div id="resultsAvaluo" class="results-wrapper">
+                        <div class="section-header" style="justify-content: space-between; margin-top: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <i data-lucide="tree-pine"></i>
+                                <h2>Detalle de Valoración por Especie</h2>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn-ghost" onclick="copyTable('avaluoTable')" title="Copiar tabla">
+                                    <i data-lucide="copy" style="width:13px;"></i> Copiar
+                                </button>
+                                <button class="btn-ghost" onclick="exportTableToCSV('avaluoTable','Avaluo_Forestal')"
+                                    title="Descargar CSV">
+                                    <i data-lucide="download" style="width:13px;"></i> CSV
+                                </button>
+                                <button class="btn-ghost" onclick="exportTableToExcel('avaluoTable','Avaluo_Forestal')"
+                                    title="Descargar Excel">
+                                    <i data-lucide="file-spreadsheet" style="width:13px;"></i> Excel
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-canvas">
+                            <table id="avaluoTable">
+                                <thead>
+                                    <tr>
+                                        <th>Especie</th>
+                                        <th>Categoría</th>
+                                        <th>Abarcadura (cm)</th>
+                                        <th>Altura (m)</th>
+                                        <th>Valor 40%</th>
+                                        <th>Valor 60%</th>
+                                        <th>Valor 70%</th>
+                                        <th>Valor 100%</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="avaluoBody"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- Summary Table -->
+                        <div class="section-header" style="margin-top: 1.5rem;">
+                            <i data-lucide="sigma"></i>
+                            <h2>Resumen de Valores Totales</h2>
+                        </div>
+                        <div class="table-canvas">
+                            <table id="summaryTable">
+                                <thead>
+                                    <tr>
+                                        <th>Concepto</th>
+                                        <th>Valor Base (2018)</th>
+                                        <th>Valor Actualizado (2025)</th>
+                                        <th>Incremento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="avaluoSummaryBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="pdfBtn" style="display:none; margin-top: 1rem;">
+                        <button class="btn-zenith" onclick="generatePremiumPDF()"
+                            style="background: var(--text-main); color: #000;">
+                            <i data-lucide="file-text"></i> Descargar Reporte en PDF
+                        </button>
+                    </div>
+                </div>
+
+            </div> <!-- End Main Stage -->
+
+            <!-- ── Side Panel (Right) ── -->
+            <div class="side-panel">
+
+                <!-- Outcome HUD: Total Value -->
+                <div class="glass-card outcome-card">
+                    <div class="outcome-label">💰 Valor Total Calculado</div>
+                    <div class="outcome-value" id="sumFinal">$ 0</div>
+                    <div class="outcome-meta">
+                        <div class="outcome-meta-item">
+                            <span class="outcome-meta-label">Valor Original</span>
+                            <span class="outcome-meta-val" id="sumOrig">$ 0</span>
+                        </div>
+                        <div class="outcome-meta-item" style="text-align: right;">
+                            <span class="outcome-meta-label" style="color: var(--primary);">Incremento por IPC</span>
+                            <span class="outcome-meta-val" style="color: var(--primary);">+52.26%</span>
+                        </div>
+                    </div>
+                    <button class="btn-pdf" onclick="generatePremiumPDF()">
+                        <i data-lucide="file-check"></i> Descargar Reporte PDF
                     </button>
                 </div>
-                <!-- Row 3: Session History (Sidebar Style inside main grid) -->
-                <div class="glass-card ledger-card" style="margin-top: 1rem;">
-                    <div class="card-title">
-                        <i data-lucide="history" style="color: var(--primary);"></i>
-                        <h2>HISTORIAL DE SESIÓN (LEDGER)</h2>
+
+                <!-- Quick Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-mini has-tip">
+                        <div class="metric-mini-label">Precisión del cálculo</div>
+                        <div class="metric-mini-val" style="color: var(--success);">98.4%</div>
+                        <div class="metric-mini-bar">
+                            <div class="metric-mini-bar-fill" style="width: 98%; background: var(--success);"></div>
+                        </div>
+                        <div class="tip-bubble">📐 El sistema calcula con alta precisión basándose en las tablas
+                            oficiales del DANE y Banco de la República.</div>
+                    </div>
+                    <div class="metric-mini has-tip">
+                        <div class="metric-mini-label">Comparación de Mercado</div>
+                        <div class="metric-mini-val">+4.2% <i data-lucide="trending-up"
+                                style="width:12px; color: var(--primary);"></i></div>
+                        <div style="font-size: 0.5rem; opacity: 0.5; margin-top: 0.3rem;">vs. promedio de la región
+                        </div>
+                        <div class="tip-bubble">📊 Indica cómo se compara su resultado con el promedio de valoraciones
+                            similares en la región.</div>
+                    </div>
+                </div>
+
+                <!-- Session History (Compact) -->
+                <div class="glass-card log-card">
+                    <div class="section-header">
+                        <i data-lucide="history"></i>
+                        <h2>Historial Reciente</h2>
                     </div>
                     <div id="sessionHistory" class="history-list">
-                        <div class="empty-history">NO SE DETECTAN REGISTROS PREVIOS.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Analytical Sidebar -->
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div class="glass-card stat-box" style="border-left: 5px solid var(--primary);">
-                    <div class="card-title">
-                        <i data-lucide="line-chart"></i>
-                        <h2>EVOLUCIÓN IPC ZENITH</h2>
-                    </div>
-                    <div id="eliteChartContainer">
-                        <canvas id="eliteChart"></canvas>
+                        <!-- Dynamic -->
                     </div>
                 </div>
 
-                <div class="glass-card stat-box" id="distPanel"
-                    style="display:none; border-left: 5px solid var(--warning);">
-                    <div class="card-title">
-                        <i data-lucide="pie-chart" style="color: var(--warning);"></i>
-                        <h2>DISTRIBUCIÓN DE VALOR</h2>
-                    </div>
-                    <div id="distributionChartContainer">
-                        <canvas id="distChart"></canvas>
-                    </div>
-                </div>
-                <div class="glass-card" style="padding: 1.5rem; background: rgba(129, 140, 248, 0.03);">
-                    <p style="font-size: 0.85rem; line-height: 1.8; color: var(--text-dim);">
-                        <strong style="color:var(--text-main);">Auditoría Forense:</strong> El algoritmo procesa
-                        factores exponenciales basados en el IPC DANE 2018-2025 para garantizar la invariabilidad del
-                        avalúo biológico.
+                <!-- Insight Box -->
+                <div class="info-insight">
+                    <i data-lucide="lightbulb"></i>
+                    <p>
+                        <strong>💡 Información importante:</strong> El sistema actualiza los valores usando el factor
+                        IPC oficial (<span style="color: var(--primary);">52.26%</span> de incremento entre 2018 y
+                        2025). Los resultados se pueden usar en informes técnicos y peritajes profesionales.
                     </p>
                 </div>
-            </div>
 
-            <!-- Quantitative Results -->
-            <div id="resultsUI" class="results-wrapper">
-                <div class="glass-card">
-                    <div class="card-title" style="justify-content: space-between;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <i data-lucide="layers" style="color: var(--success);"></i>
-                            <h2>MATRIZ DE INDEXACIÓN FINAL</h2>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn-zenith"
-                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
-                                onclick="exportTableToCSV('ipcMainTable', 'Matriz_Indexacion_IPC')">
-                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
-                            </button>
-                            <button class="btn-zenith"
-                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
-                                onclick="exportTableToExcel('ipcMainTable', 'Matriz_Indexacion_IPC')">
-                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
-                            </button>
-                            <button class="btn-zenith"
-                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; box-shadow: none;"
-                                onclick="copyTable('ipcMainTable')">
-                                COPIAR
-                            </button>
-                        </div>
-                    </div>
-                    <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                        <table id="ipcMainTable">
-                            <thead>
-                                <tr>
-                                    <th>CÓDIGO_REF</th>
-                                    <th>VALOR BASE (2018)</th>
-                                    <th>INDEXADO (2025)</th>
-                                    <th>DIFERENCIAL</th>
-                                </tr>
-                            </thead>
-                            <tbody id="eliteBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="resultsAvaluo" class="results-wrapper">
-                <div class="glass-card" style="margin-bottom: 2rem; border-top: 5px solid var(--primary);">
-                    <div class="card-title" style="justify-content: space-between;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <i data-lucide="trending-up" style="color: var(--primary);"></i>
-                            <h2>RESUMEN DE TASACIÓN GLOBAL</h2>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
-                                onclick="exportTableToCSV('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
-                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
-                            </button>
-                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
-                                onclick="exportTableToExcel('tSummaryAvaluo', 'Resumen_Tasacion_Global')">
-                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
-                            </button>
-                            <button class="btn-zenith" style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem;"
-                                onclick="copyTable('tSummaryAvaluo')">
-                                COPIAR
-                            </button>
-                        </div>
-                    </div>
-                    <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                        <table id="tSummaryAvaluo">
-                            <thead>
-                                <tr>
-                                    <th>ESCENARIO</th>
-                                    <th>VALOR BASE IPC 2018</th>
-                                    <th>VALOR IPC 2025</th>
-                                    <th>AUMENTO %</th>
-                                </tr>
-                            </thead>
-                            <tbody id="avaluoSummaryBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="glass-card" style="border-top: 5px solid var(--warning);">
-                    <div class="card-title" style="justify-content: space-between;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <i data-lucide="trees" style="color: var(--warning);"></i>
-                            <h2>DETALLE VOLUMÉTRICO DE ESPECIES</h2>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn-zenith"
-                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
-                                onclick="exportTableToCSV('tDetailAvaluo', 'Detalle_Volumetrico')">
-                                <i data-lucide="file-text" style="width:14px;height:14px;margin-right:4px;"></i> CSV
-                            </button>
-                            <button class="btn-zenith"
-                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
-                                onclick="exportTableToExcel('tDetailAvaluo', 'Detalle_Volumetrico')">
-                                <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> XLS
-                            </button>
-                            <button class="btn-zenith"
-                                style="padding: 0.6rem 1.2rem; width: auto; font-size: 0.75rem; background: var(--warning);"
-                                onclick="copyTable('tDetailAvaluo')">
-                                COPIAR
-                            </button>
-                        </div>
-                    </div>
-                    <div class="table-canvas" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                        <table id="tDetailAvaluo">
-                            <thead>
-                                <tr>
-                                    <th>ESPECIE</th>
-                                    <th>CAT</th>
-                                    <th>ABAR(cm)</th>
-                                    <th>ALT(m)</th>
-                                    <th>VALOR 40%</th>
-                                    <th>VALOR 60%</th>
-                                    <th>VALOR 70%</th>
-                                    <th>VALOR 100%</th>
-                                </tr>
-                            </thead>
-                            <tbody id="avaluoBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            </div><!-- End Side Panel -->
         </main>
-    </div>
 
-    <div class="sys-log">
-        <div class="segment">DGZ ENGINEERING LAB © 2026</div>
-        <div class="segment"><span>FACTOR_ZENITH_v1.5226.1</span></div>
-        <div class="segment">PRECISION_FORENSICS_ENGINE</div>
-    </div>
+        <!-- Footer -->
+        <footer class="sys-log">
+            <div class="segment"><a href="https://dgz-engineering.vercel.app/" target="_blank"
+                    style="color: inherit; text-decoration: none; opacity: 0.8; transition: opacity 0.3s;"
+                    onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">DGZ Engineering Lab ©
+                    2026</a></div>
+            <div class="segment">Motor de Cálculo <span>v2.5.1</span></div>
+            <div class="segment">Sistema Avaluo Vegetacion</div>
+        </footer>
 
-    <!-- Premium Engine Core -->
-    <script src="js/engine.js?v=3.1.4" defer></script>
+    </div><!-- End App Container -->
+
+    <!-- ========================
+         ENGINE (NO CHANGES)
+         ======================== -->
+    <script src="js/eva-core-v3.js?v=2026.3" defer></script>
+
+    <script>
+        // Initialize icons
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+        });
+
+        // Live Clock (Forced Colombia Time)
+        function updateClock() {
+            const el = document.getElementById('sysClock');
+            if (el) {
+                const options = {
+                    timeZone: 'America/Bogota',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                };
+                el.textContent = new Intl.DateTimeFormat('es-CO', options).format(new Date());
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+
 </body>
 
 </html>

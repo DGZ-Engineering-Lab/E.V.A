@@ -1,7 +1,8 @@
 {
-    "name": "E.V.A. PRO",
+    "id": "eva-pro-dgz",
+    "name": "E.V.A. PRO — Experto en Valoración de Activos",
     "short_name": "E.V.A. PRO",
-    "description": "Motor forense de valoración de activos biológicos e indexación IPC para Colombia",
+    "description": "Suite forense profesional para valoración de activos biológicos e indexación IPC masiva en Colombia",
     "start_url": "./index.html",
     "scope": "./",
     "display": "standalone",

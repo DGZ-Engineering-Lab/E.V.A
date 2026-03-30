@@ -5,6 +5,8 @@
     --bg-panel: rgba(27, 77, 46, 0.8);
     --primary: #2ECC71;
     --primary-glow: rgba(46, 204, 113, 0.4);
+    --primary-dim: rgba(46, 204, 113, 0.15);
+    --primary-light: #52E394;
     --secondary: #52E394;
     --success: #27AE60;
     --warning: #F39C12;
@@ -12,6 +14,9 @@
     --text-main: #ECF0F1;
     --text-dim: #BDC3C7;
     --border-glass: rgba(46, 204, 113, 0.2);
+    --border: rgba(46, 204, 113, 0.2);
+    --bg-main: #0F2818;
+    --glow: 0 0 25px rgba(46, 204, 113, 0.25);
 }
 
 body {

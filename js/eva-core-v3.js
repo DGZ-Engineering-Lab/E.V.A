@@ -31,6 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     let currentMode = 'ipc';
     let actParsedAvaluo = [];
+    let compChart = null;
+    let distChart = null;
+
+    const compPanel = document.getElementById('comparisonPanel');
+    const distPanel = document.getElementById('distPanel');
+    const metricsPanel = document.getElementById('metricsPanel');
 
     // --- Initialization: Persistence (Auto-Save) ---
     if (localStorage.getItem('evaInputData')) {
@@ -59,16 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentMode === 'avaluo') {
                 const p = line.split(/\t|\||;/).map(x => x.trim()).filter(x => x !== '');
                 if (p.length === 0) return; // Ignorar líneas totalmente vacías
-                if (p.length < 3) errors.push(`Línea ${i+1}: Faltan datos (Especie | D | H)`);
-                else if (isNaN(parseFloat(p[1].replace(',', '.')))) errors.push(`Línea ${i+1}: Diámetro inválido`);
+                if (p.length < 3) errors.push(`Línea ${i+1}: Faltan datos (necesita: Especie, Diámetro, Altura)`);
+                else if (isNaN(parseFloat(p[1].replace(',', '.')))) errors.push(`Línea ${i+1}: El diámetro no parece ser un número válido`);
             }
         });
 
         if (errors.length > 0) {
-            validationMessage.innerHTML = `<i data-lucide="alert-circle" style="width:14px;"></i> ${errors[0]}`;
+            validationMessage.innerHTML = `<i data-lucide="alert-circle" style="width:14px;"></i> ⚠ ${errors[0]}`;
             validationMessage.className = 'v-body error';
         } else {
-            validationMessage.innerHTML = `<i data-lucide="shield-check" style="width:14px;"></i> SINTAXIS_VÁLIDA (${lines.length} registros detectados)`;
+            validationMessage.innerHTML = `<i data-lucide="shield-check" style="width:14px;"></i> ✓ Datos correctos (${lines.length} registros encontrados)`;
             validationMessage.className = 'v-body';
         }
         lucide.createIcons();
@@ -92,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderLedger() {
         const container = document.getElementById('sessionHistory');
         if (sessionLedger.length === 0) {
-            container.innerHTML = '<div class="empty-history">NO SE DETECTAN REGISTROS PREVIOS.</div>';
+            container.innerHTML = '<div class="empty-history">Aún no hay cálculos guardados</div>';
             return;
         }
         container.innerHTML = sessionLedger.map(item => `
@@ -113,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionLedger = sessionLedger.filter(i => i.id !== id);
         localStorage.setItem('evaLedger', JSON.stringify(sessionLedger));
         renderLedger();
-        EVA.toast('ELIMINADO_DEL_HISTORIAL', 'warning');
+        EVA.toast('Registro eliminado del historial', 'warning');
     };
 
     window.loadFromLedger = function(id) {
@@ -122,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sysInputArea.value = item.data;
             switchMode(item.mode);
             executeAction();
-            EVA.toast('SESIÓN_RESTABLECIDA', 'info');
+            EVA.toast('Datos restaurados correctamente', 'info');
         }
     };
     renderLedger(); // Initial load
@@ -159,24 +165,114 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseFloat(cleaned) || 0;
     };
 
+    window.switchTab = function(tabId) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // Sync Forensic Stepper
+        document.querySelectorAll('.step-btn').forEach(s => s.classList.remove('active'));
+        const stepMap = { 'tab-input': 's1', 'tab-analytics': 's2', 'tab-results': 's3' };
+        const step = document.getElementById(stepMap[tabId]);
+        if (step) step.classList.add('active');
+
+        const activeTab = document.getElementById(tabId);
+        if (activeTab) activeTab.classList.add('active');
+        
+        // Expert Detail Expansion
+        if (tabId === 'tab-results' || tabId === 'tab-analytics') {
+            document.querySelector('.main-stage').classList.add('expanded');
+        } else {
+            document.querySelector('.main-stage').classList.remove('expanded');
+        }
+
+        // --- FIXED: Switch correct results block within tab-results ---
+        if (tabId === 'tab-results') {
+            if (currentMode === 'ipc') {
+                resultsUI.style.display = 'block';
+                resultsAvaluo.style.display = 'none';
+            } else {
+                resultsUI.style.display = 'none';
+                resultsAvaluo.style.display = 'block';
+            }
+        }
+
+        if (window.lucide) lucide.createIcons();
+    };
+
+    window.scanData = function(val) {
+        const registry = document.getElementById('visualRegistry');
+        if (!val.trim()) { registry.innerHTML = ''; return; }
+
+        const lines = val.trim().split('\n').filter(l => l.length > 5);
+        registry.innerHTML = '';
+        
+        // Render up to 5 visual cards for preview
+        lines.slice(0, 5).forEach((line, i) => {
+            const card = document.createElement('div');
+            card.className = 'f-card';
+            const parts = line.split(/[|\t\s]{2,}/);
+            const name = parts[0]?.substring(0, 15) || 'Sin nombre';
+            const val = parts[1] || '---';
+
+            card.innerHTML = `
+                <div class="f-card-icon"><i data-lucide="${line.includes('|') ? 'tree-pine' : 'hash'}"></i></div>
+                <div class="f-card-label">${line.includes('|') ? 'Especie' : 'Valor'}</div>
+                <div class="f-card-val">${name.toUpperCase()}</div>
+                <div style="font-size:0.5rem; opacity:0.5;">Registro ${i+1}</div>
+            `;
+            registry.appendChild(card);
+        });
+
+        if (lines.length > 5) {
+            const more = document.createElement('div');
+            more.style = "display:flex; align-items:center; padding:1rem; color:var(--primary); font-size:0.6rem; font-weight:800;";
+            more.innerText = `+ ${lines.length - 5} registros más...`;
+            registry.appendChild(more);
+        }
+
+        if (window.lucide) lucide.createIcons();
+    };
+
+    window.animateValue = function(id, end) {
+        const obj = document.getElementById(id);
+        let start = 0;
+        const duration = 1200;
+        const startTime = performance.now();
+
+        function step(timestamp) {
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            const current = Math.floor(progress * (end - start) + start);
+            obj.innerText = `$ ${current.toLocaleString()}`;
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                obj.innerText = `$ ${end.toLocaleString()}`;
+            }
+        }
+        window.requestAnimationFrame(step);
+    };
+
+    window.showHelp = function() {
+        EVA.toast('1. Pegue sus datos en el área de texto', 'info', 4000);
+        setTimeout(() => EVA.toast('2. El sistema detectará los datos automáticamente', 'info', 4000), 1000);
+        setTimeout(() => EVA.toast('3. Presione "Calcular Valores" para ver los resultados', 'info', 4000), 2000);
+    };
+
     window.switchMode = function(mode) {
         currentMode = mode;
         if (mode === 'ipc') {
             bIpc.classList.add('active'); bAva.classList.remove('active');
-            bExec.innerHTML = '<i data-lucide="play"></i> EJECUTAR PROCESAMIENTO';
+            bExec.innerHTML = '<i data-lucide="play"></i> Calcular Valores';
             bExec.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
-            pTitle.innerText = 'CENTRO DE PROCESAMIENTO IPC';
-            pIcon.style.color = 'var(--primary)';
-            sysInputArea.placeholder = "> PEGAR VALORES PARA INDEXACIÓN...";
-            resultsAvaluo.style.display = 'none';
+            if(pTitle) pTitle.innerText = 'Ingrese sus datos aquí';
+            if(pIcon) pIcon.innerText = 'Listo para calcular';
+            sysInputArea.placeholder = "📋  Pegue aquí los valores que desea actualizar...\n\nEjemplo: Copie y pegue una columna de Excel con valores como:\n1.500.000\n2.300.000\n850.000";
         } else {
             bAva.classList.add('active'); bIpc.classList.remove('active');
-            bExec.innerHTML = '<i data-lucide="zap"></i> CALCULAR AVALÚO GLOBAL';
+            bExec.innerHTML = '<i data-lucide="zap"></i> Calcular Valoración';
             bExec.style.background = 'linear-gradient(135deg, var(--warning), #D97706)';
-            pTitle.innerText = 'MOTOR DE VALORACIÓN BIOLÓGICA';
-            pIcon.style.color = 'var(--warning)';
-            sysInputArea.placeholder = "> PEGAR: ESPECIE | ABARC(cm) | ALT(m)...";
-            resultsUI.style.display = 'none';
+            if(pTitle) pTitle.innerText = 'Valoración de Árboles y Especies';
+            if(pIcon) { pIcon.innerText = 'Listo para calcular'; pIcon.style.color = 'var(--warning)'; }
+            sysInputArea.placeholder = "🌳  Pegue aquí los datos de los árboles...\n\nFormato: Especie | Diámetro(cm) | Altura(m)\nEjemplo:\nCedro | 35 | 12\nRoble | 40 | 15";
         }
         if (window.lucide) lucide.createIcons();
     };
@@ -188,6 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (currentMode === 'ipc') executeZenith();
         else executeAvaluo();
+        
+        // Auto-switch to Results tab
+        setTimeout(() => switchTab('tab-results'), 300);
     };
 
     window.clearInput = function() {
@@ -207,21 +306,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(hudPool);
 
     window.EVA = {
-        toast: function(msg, type = 'success', duration = 3000) {
+        toast: function(msg, type = 'success', duration = 4000) {
             const entry = document.createElement('div');
             entry.className = `eva-mono-entry ${type}`;
             
+            const icon = type === 'success' ? 'check-circle' : type === 'warning' ? 'alert-circle' : 'info';
+            
             entry.innerHTML = `
-                <div class="mono-blur"></div>
                 <div class="mono-bar"></div>
                 <div class="mono-content">
-                    <span class="mono-tag">[LOG_${type.toUpperCase().slice(0,3)}]</span>
-                    <span class="mono-msg">${msg.toUpperCase()}</span>
+                    <span class="mono-tag"><i data-lucide="${icon}" style="width:12px;height:12px;"></i> ${type.toUpperCase()}</span>
+                    <span class="mono-msg">${msg}</span>
                 </div>
             `;
+            
             hudPool.appendChild(entry);
+            if (window.lucide) lucide.createIcons();
 
             setTimeout(() => entry.classList.add('phase-in'), 10);
+            
             setTimeout(() => {
                 entry.classList.remove('phase-in');
                 setTimeout(() => entry.remove(), 800);
@@ -231,8 +334,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
+    window.copyText = async function(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            EVA.toast('✓ Copiado al portapapeles');
+        } catch (e) {
+            EVA.toast('Error al copiar', 'warning');
+        }
+    };
 
     window.copyTable = async function(id) {
         const el = document.getElementById(id);
@@ -244,10 +353,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const plainText = new Blob([el.innerText], { type: 'text/plain' });
                 const data = [new ClipboardItem({ 'text/html': blob, 'text/plain': plainText })];
                 await navigator.clipboard.write(data);
-                EVA.toast('Matriz copiada con formato (Excel compatible)');
+                EVA.toast('✓ Datos copiados — listos para pegar en Excel');
             } catch (err) {
                 // Fallback for some browsers
                 copyLegacy(el);
+                EVA.toast('✓ Copiado al portapapeles');
             }
         } else {
             copyLegacy(el);
@@ -261,12 +371,37 @@ document.addEventListener('DOMContentLoaded', () => {
         selection.removeAllRanges(); selection.addRange(range);
         try {
             document.execCommand('copy');
-            EVA.toast('Matriz copiada al portapapeles');
+            EVA.toast('✓ Tabla copiada al portapapeles');
         } catch (err) {
-            EVA.toast('Error al copiar', 'warning');
+            EVA.toast('No se pudo copiar. Intente de nuevo.', 'warning');
         }
         selection.removeAllRanges();
     }
+
+    window.exportTableToExcel = function(tableID, filename = '') {
+        const table = document.getElementById(tableID);
+        if (!table) return;
+        
+        let html = table.outerHTML;
+        // Basic Excel XML-Like Template
+        const template = `
+            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>EVA Report</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>
+            <body>${html}</body></html>`;
+            
+        const blob = new Blob(['\ufeff', template], {
+            type: 'application/vnd.ms-excel'
+        });
+        
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = (filename || 'EVA_Report') + '.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        EVA.toast('✓ Reporte Excel generado');
+    };
 
     window.exportTableToCSV = function(tableId, filename) {
         const table = document.getElementById(tableId);
@@ -296,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        EVA.toast('Archivo CSV generado con éxito');
+        EVA.toast('✓ Archivo CSV descargado correctamente');
     };
 
     window.exportTableToExcel = function(tableId, filename) {
@@ -326,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        EVA.toast('Exportando XLS... Verifique advertencia de Office', 'warning');
+        EVA.toast('Descargando archivo Excel... puede aparecer una advertencia de Office', 'warning');
     };
 
     function executeZenith() {
@@ -335,6 +470,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const lines = txt.split('\n');
         const tbody = document.getElementById('eliteBody');
         tbody.innerHTML = ''; let count = 0;
+        let totalOrig = 0;
+        let totalNew = 0;
 
         lines.forEach((line) => {
             const parts = line.split(/\t|\s{2,}/).filter(p => p.trim().length > 0);
@@ -346,6 +483,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     count++;
                     const updated = Math.round(val * ZENITH_FACTOR);
                     const delta = updated - val;
+                    totalOrig += val;
+                    totalNew += updated;
                     const tag = tags[idx] || '';
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -361,12 +500,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (count > 0) {
             resultsUI.style.display = 'block';
+            resultsAvaluo.style.display = 'none';
             document.getElementById('pdfBtn').style.display = 'block';
             kpiCount.textContent = count;
+            
+            // Expert HUD Update with animation
+            animateValue('sumFinal', totalNew);
+            document.getElementById('sumOrig').innerText = `$ ${totalOrig.toLocaleString()}`;
+
             if (window.lucide) lucide.createIcons();
-            window.scrollTo({ top: resultsUI.offsetTop - 100, behavior: 'smooth' });
-            EVA.toast(`${count} registros procesados`);
-            saveToLedger(`${count} registros IPC`);
+            EVA.toast(`✓ ${count} valores actualizados correctamente`);
+            saveToLedger(`${count} valores actualizados con IPC`);
+
+            const maxVal = Math.max(...lines.map(l => cleanVal(l))) || 0;
+            updateLiveAnalytics({
+                original: totalOrig,
+                updated: totalNew,
+                max: maxVal,
+                items: count,
+                species: { 'Proyección IPC': count }
+            });
         }
     }
 
@@ -377,16 +530,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const html = `
             <div class="modal-box">
                 <div class="modal-title">
-                    <i data-lucide="triangle-alert"></i> SIN REGISTRO EN BASE DE DATOS
+                    <i data-lucide="alert-circle"></i> ⚠ Especies no encontradas
                 </div>
                 <div class="modal-body">
-                    Se detectaron <strong>${speciesArray.length}</strong> especie(s) ajena(s) a la matriz central. Se les ha asignado la categoría "Tercera" por defecto para no frenar la liquidación.
+                    Se encontraron <strong>${speciesArray.length}</strong> especie(s) que no están en nuestra base de datos. Se les asignó la categoría "Tercera" automáticamente para poder continuar con el cálculo.
                     <ul class="modal-list">
                         ${speciesArray.map(s => `<li>${s}</li>`).join('')}
                     </ul>
-                    💡 TIP: Puedes actualizar la categoría exacta de estas especies usando el selector desplegable <span style="color:var(--warning);">amarillo</span> directamente en la tabla de detalles. La inteligencia financiera se recalculará automáticamente.
+                    💡 <strong>Consejo:</strong> Puede cambiar la categoría correcta de cada especie usando el menú desplegable <span style="color:var(--warning);">amarillo</span> que aparece en la tabla de resultados. Los valores se recalcularán automáticamente.
                 </div>
-                <button class="modal-btn" onclick="this.closest('.modal-overlay').remove()">ENTENDIDO · CONTINUAR</button>
+                <button class="modal-btn" onclick="this.closest('.modal-overlay').remove()">Entendido, continuar</button>
             </div>
         `;
         
@@ -402,7 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rowIdx > -1) {
             actParsedAvaluo[rowIdx].typeNorm = newCat;
             renderAvaluoBoard(false);
-            EVA.toast(`Categoría actualizada a ${newCat}`);
+            EVA.toast(`✓ Categoría cambiada a "${newCat}" — valores recalculados`);
         }
     };
 
@@ -448,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ SIN_REGISTRO</span>' : ''}</td>
+                <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}</td>
                 ${catHTML}
                 <td class="num">${ab}</td>
                 <td class="num">${alt}</td>
@@ -467,35 +620,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (count > 0) {
             const speciesData = {};
+            let localMaxBase = 0;
             const sums = [{ l: "Valor Base (40%)", b: s40 }, { l: "Valor al 60%", b: s60 }, { l: "Valor al 70%", b: s70 }, { l: "Valor al 100%", b: s100 }];
             
             // Collect analytics
             actParsedAvaluo.forEach(item => {
                 speciesData[item.esp] = (speciesData[item.esp] || 0) + 1;
+                const t = AVALUO_DB[item.typeNorm === 'Selección' ? 'Primera' : item.typeNorm] || AVALUO_DB.Tercera;
+                const abM = item.ab / 100;
+                let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
+                let rI = t.Rows.findIndex(r => r >= item.alt); if (rI === -1) rI = t.Rows.length - 1;
+                let base = t.Data[rI][cI] || 0;
+                if (item.typeNorm === 'Selección') base = Math.round(base * 1.2);
+                const v100 = (base * 100) / 40;
+                if (v100 > localMaxBase) localMaxBase = v100;
             });
 
             sums.forEach(s => {
                 const proyectado = Math.round(s.b * ZENITH_FACTOR);
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td style="font-weight:900;">${s.l.toUpperCase()}</td>
-                    <td class="num">${fmtElite.format(s.b)}</td>
+                    <td style="font-weight:700;">${s.l}</td>
+                    <td class="num">${fmtElite.format(Math.round(s.b))}</td>
                     <td class="num upd">${fmtElite.format(proyectado)}</td>
-                    <td class="num"><span class="delta">+ ${fmtElite.format(proyectado - s.b)}</span></td>
+                    <td class="num"><span class="delta">+ ${Math.round(((proyectado/s.b)-1)*100)}%</span></td>
                 `;
                 tbodySum.appendChild(row);
             });
-            resultsAvaluo.style.display = 'block';
-            document.getElementById('pdfBtn').style.display = 'block';
-            kpiCount.textContent = count;
-            if (window.lucide) lucide.createIcons();
 
-            updateLiveAnalytics(speciesData);
+            // Expert HUD Update (Forest)
+            const overallFinal = Math.round(s100 * ZENITH_FACTOR);
+            animateValue('sumFinal', overallFinal);
+            document.getElementById('sumOrig').innerText = `$ ${Math.round(s100).toLocaleString()}`;
+            kpiCount.textContent = count;
+
+            updateLiveAnalytics({
+                original: Math.round(s100),
+                updated: overallFinal,
+                species: speciesData,
+                max: localMaxBase,
+                items: count
+            });
 
             if (showAlerts) {
-                window.scrollTo({ top: resultsAvaluo.offsetTop - 100, behavior: 'smooth' });
-                EVA.toast(`Avalúo completado: ${count} individuos`);
-                saveToLedger(`${count} árboles tasados`);
+                kpiCount.textContent = count;
+                resultsAvaluo.style.display = 'block';
+                resultsUI.style.display = 'none';
+                EVA.toast(`✓ Valoración completada: ${count} árboles calculados`);
+                saveToLedger(`Valoración: ${count} árboles`);
             }
         }
     }
@@ -505,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!txt.trim()) return;
         const lines = txt.split('\n');
 
-        if (typeof AVALUO_DB === 'undefined') { EVA.toast('Error: Base de datos no cargada', 'warning'); return; }
+        if (typeof AVALUO_DB === 'undefined') { EVA.toast('Error: La base de datos de especies no se cargó correctamente', 'warning'); return; }
 
         actParsedAvaluo = []; // reset state
         let rowIdCounter = 0;
@@ -554,37 +726,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Phase 3: Live Analytics Dashboard ---
-    let distChart = null;
-    const distPanel = document.getElementById('distPanel');
-
-    window.updateLiveAnalytics = function(data, type = 'pie') {
-        distPanel.style.display = 'block';
-        const ctx = document.getElementById('distChart').getContext('2d');
+    window.updateLiveAnalytics = function(payload) {
+        compPanel.style.display = 'block';
+        metricsPanel.style.display = 'block';
         
-        if (distChart) distChart.destroy();
-        
-        const labels = Object.keys(data);
-        const values = Object.values(data);
-
-        distChart = new Chart(ctx, {
-            type: type,
+        // 1. COMPARISON BAR CHART
+        const ctxComp = document.getElementById('compChart').getContext('2d');
+        if (compChart) compChart.destroy();
+        compChart = new Chart(ctxComp, {
+            type: 'bar',
+            plugins: [ChartDataLabels],
             data: {
-                labels: labels,
+                labels: ['Valor Original', 'Valor Actualizado'],
                 datasets: [{
-                    data: values,
-                    backgroundColor: [
-                        '#00F2FE', '#FBBF24', '#10B981', '#6366F1', '#EC4899', '#F43F5E'
-                    ],
-                    borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)'
+                    label: 'Masa Monetaria',
+                    data: [payload.original, payload.updated],
+                    backgroundColor: ['rgba(100, 116, 139, 0.5)', 'rgba(0, 242, 254, 0.5)'],
+                    borderColor: ['#64748B', '#00F2FE'],
+                    borderWidth: 2,
+                    borderRadius: 6
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { 
-                    legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } } 
+                    legend: { display: false },
+                    datalabels: {
+                        color: '#fff', anchor: 'end', align: 'top',
+                        formatter: (val) => fmtElite.format(val),
+                        font: { family: 'Space Mono', size: 10, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#64748B', font: { family: 'Space Mono', size: 9 }, callback: v => '$' + v.toLocaleString() }
+                    },
+                    x: { ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } }
                 }
             }
         });
+
+        // 2. DISTRIBUTION PIE CHART
+        if (payload.species) {
+            distPanel.style.display = 'block';
+            const ctxDist = document.getElementById('distChart').getContext('2d');
+            if (distChart) distChart.destroy();
+            distChart = new Chart(ctxDist, {
+                type: 'pie',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: Object.keys(payload.species),
+                    datasets: [{
+                        data: Object.values(payload.species),
+                        backgroundColor: ['#00F2FE', '#FBBF24', '#10B981', '#6366F1', '#EC4899', '#F43F5E'],
+                        borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } },
+                        datalabels: {
+                            color: '#fff', font: { weight: 'bold', size: 10, family: 'Space Mono' },
+                            formatter: (val, ctx) => {
+                                const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                return ((val/sum)*100).toFixed(0) + '%';
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Ensure all panels are shown
+        compPanel.style.display = 'block';
+        metricsPanel.style.display = 'block';
+
+        // 3. FORENSIC KPI METRICS
+        const avg = payload.updated / payload.items;
+        const variance = ((payload.updated / payload.original) - 1) * 100;
+        
+        document.getElementById('kpiAvg').innerText = fmtElite.format(avg);
+        document.getElementById('kpiMax').innerText = fmtElite.format(payload.max * (payload.updated/payload.original));
+        document.getElementById('kpiVariance').innerText = `+${variance.toFixed(2)}%`;
+        document.getElementById('kpiBaseYear').innerText = currentMode === 'ipc' ? '2018' : 'Valor Base';
     };
 
     window.generatePremiumPDF = async function() {
@@ -592,21 +819,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const doc = new jsPDF('p', 'mm', 'a4');
         const resultsEl = currentMode === 'ipc' ? resultsUI : resultsAvaluo;
         
-        EVA.toast('Generando reporte forense...', 'info');
+        EVA.toast('Generando reporte PDF... por favor espere', 'info');
+        
+        // --- FIXED: Temporary visibility for html2canvas ---
+        const originalStyle = resultsEl.style.display;
+        resultsEl.style.display = 'block';
+        
+        // Wait 100ms for browser to reflow/render
+        await new Promise(r => setTimeout(r, 150));
         
         const canvas = await html2canvas(resultsEl, {
             backgroundColor: '#020408',
-            scale: 2
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: false
         });
         
-        const imgData = canvas.toDataURL('image/png');
-        const imgProps = doc.getImageProperties(imgData);
-        const pdfWidth = doc.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        resultsEl.style.display = originalStyle; // Revert
         
-        doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        doc.save(`REPORTE_FORENSE_EVA_${Date.now()}.pdf`);
-        EVA.toast('PDF generado con éxito');
+        const imgData = canvas.toDataURL('image/png');
+        
+        if (!imgData || imgData.length < 1000 || !imgData.startsWith('data:image/')) {
+            EVA.toast('Error crítico: El motor de captura no pudo procesar la tabla.', 'error');
+            return;
+        }
+        
+        try {
+            const imgProps = doc.getImageProperties(imgData);
+            const pdfWidth = doc.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            
+            doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+            doc.save(`Reporte_EVA_${new Date().toISOString().slice(0, 10)}.pdf`);
+            EVA.toast('✓ Reporte PDF descargado correctamente');
+        } catch (err) {
+            console.error("PDF-Error: ", err);
+            EVA.toast('Error al procesar el PDF: ' + err.message, 'error');
+        }
     };
 
     // --- Chart Initialization ---
