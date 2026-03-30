@@ -197,18 +197,46 @@ document.addEventListener('DOMContentLoaded', () => {
         toast: function(msg, type = 'success', duration = 4000) {
             const toast = document.createElement('div');
             toast.className = `eva-toast ${type}`;
-            const icon = type === 'success' ? 'check-circle' : (type === 'warning' ? 'alert-triangle' : 'info');
-            toast.innerHTML = `<i data-lucide="${icon}"></i> <span>${msg}</span>`;
+            
+            // Icon mapping
+            const iconMap = {
+                'success': 'check-circle',
+                'warning': 'alert-triangle',
+                'error': 'shield-alert',
+                'info': 'info'
+            };
+            const icon = iconMap[type] || 'bell';
+            
+            toast.innerHTML = `
+                <i data-lucide="${icon}"></i> 
+                <div class="toast-content">
+                    <div style="font-weight:900; font-size:0.65rem; opacity:0.5; margin-bottom:4px; letter-spacing:1px;">SYSTEM_NOTICE // ${type.toUpperCase()}</div>
+                    <span>${msg}</span>
+                </div>
+                <div class="toast-progress"></div>
+            `;
             toastContainer.appendChild(toast);
             lucide.createIcons();
 
-            setTimeout(() => toast.classList.add('active'), 10);
+            // Animate progress bar
+            const progressBar = toast.querySelector('.toast-progress');
+            progressBar.style.transition = `transform ${duration}ms linear`;
+            progressBar.style.transform = 'scaleX(1)';
+
+            setTimeout(() => {
+                toast.classList.add('active');
+                setTimeout(() => {
+                    progressBar.style.transform = 'scaleX(0)';
+                }, 50);
+            }, 10);
+
             setTimeout(() => {
                 toast.classList.remove('active');
-                setTimeout(() => toast.remove(), 500);
+                setTimeout(() => toast.remove(), 600);
             }, duration);
         }
     };
+
 
     window.copyTable = async function(id) {
         const el = document.getElementById(id);

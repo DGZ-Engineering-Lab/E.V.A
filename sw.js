@@ -6,7 +6,7 @@
  * where internet connectivity is unreliable.
  */
 
-const CACHE_NAME = 'eva-pro-v3.1.2-alpha';
+const CACHE_NAME = 'eva-pro-v3.1.3-beta';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
