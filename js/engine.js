@@ -36,9 +36,83 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('evaInputData')) {
         sysInputArea.value = localStorage.getItem('evaInputData');
     }
+    // --- Phase 3: Forensic Ledger & State ---
+    let sessionLedger = JSON.parse(localStorage.getItem('evaLedger')) || [];
+    const validationPanel = document.getElementById('validationStatus');
+    const validationMessage = document.getElementById('vMessage');
+
     sysInputArea.addEventListener('input', (e) => {
         localStorage.setItem('evaInputData', e.target.value);
+        validateInput(e.target.value);
     });
+
+    function validateInput(val) {
+        if (!val.trim()) {
+            validationPanel.style.display = 'none';
+            return;
+        }
+        validationPanel.style.display = 'block';
+        const lines = val.split('\n').filter(l => l.trim());
+        let errors = [];
+
+        lines.forEach((line, i) => {
+            if (currentMode === 'avaluo') {
+                const p = line.split(/\t|\||;/).map(x => x.trim()).filter(x => x !== '');
+                if (p.length === 0) return; // Ignorar líneas totalmente vacías
+                if (p.length < 3) errors.push(`Línea ${i+1}: Faltan datos (Especie | D | H)`);
+                else if (isNaN(parseFloat(p[1].replace(',', '.')))) errors.push(`Línea ${i+1}: Diámetro inválido`);
+            }
+        });
+
+        if (errors.length > 0) {
+            validationMessage.innerHTML = `<i data-lucide="alert-circle" style="width:14px;"></i> ${errors[0]}`;
+            validationMessage.className = 'v-body error';
+        } else {
+            validationMessage.innerHTML = `<i data-lucide="shield-check" style="width:14px;"></i> SINTAXIS_VÁLIDA (${lines.length} registros detectados)`;
+            validationMessage.className = 'v-body';
+        }
+        lucide.createIcons();
+    }
+
+    window.saveToLedger = function(summary) {
+        const entry = {
+            id: Date.now(),
+            time: new Date().toLocaleTimeString(),
+            date: new Date().toLocaleDateString(),
+            mode: currentMode,
+            data: sysInputArea.value,
+            summary: summary
+        };
+        sessionLedger.unshift(entry);
+        if (sessionLedger.length > 10) sessionLedger.pop();
+        localStorage.setItem('evaLedger', JSON.stringify(sessionLedger));
+        renderLedger();
+    };
+
+    function renderLedger() {
+        const container = document.getElementById('sessionHistory');
+        if (sessionLedger.length === 0) {
+            container.innerHTML = '<div class="empty-history">NO SE DETECTAN REGISTROS PREVIOS.</div>';
+            return;
+        }
+        container.innerHTML = sessionLedger.map(item => `
+            <div class="history-item" onclick="loadFromLedger(${item.id})">
+                <div class="h-time">${item.date} ${item.time}</div>
+                <div class="h-desc">${item.mode.toUpperCase()}: ${item.summary}</div>
+            </div>
+        `).join('');
+    }
+
+    window.loadFromLedger = function(id) {
+        const item = sessionLedger.find(i => i.id === id);
+        if (item) {
+            sysInputArea.value = item.data;
+            switchMode(item.mode);
+            executeAction();
+            EVA.toast('Sesión recuperada del Ledger');
+        }
+    };
+    renderLedger(); // Initial load
 
     // --- Core Logic functions (Exported to window for legacy support if needed, 
     // but preferred via listeners) ---
@@ -107,6 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sysInputArea.value = '';
         resultsUI.style.display = 'none';
         resultsAvaluo.style.display = 'none';
+        validationPanel.style.display = 'none';
+        document.getElementById('pdfBtn').style.display = 'none';
+        distPanel.style.display = 'none';
         kpiCount.textContent = '0';
         localStorage.removeItem('evaInputData');
     };
@@ -260,10 +337,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (count > 0) {
             resultsUI.style.display = 'block';
+            document.getElementById('pdfBtn').style.display = 'block';
             kpiCount.textContent = count;
             if (window.lucide) lucide.createIcons();
             window.scrollTo({ top: resultsUI.offsetTop - 100, behavior: 'smooth' });
             EVA.toast(`${count} registros procesados`);
+            saveToLedger(`${count} registros IPC`);
         }
     }
 
@@ -365,7 +444,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (count > 0) {
+            const speciesData = {};
             const sums = [{ l: "Valor Base (40%)", b: s40 }, { l: "Valor al 60%", b: s60 }, { l: "Valor al 70%", b: s70 }, { l: "Valor al 100%", b: s100 }];
+            
+            // Collect analytics
+            actParsedAvaluo.forEach(item => {
+                speciesData[item.esp] = (speciesData[item.esp] || 0) + 1;
+            });
+
             sums.forEach(s => {
                 const proyectado = Math.round(s.b * ZENITH_FACTOR);
                 const row = document.createElement('tr');
@@ -378,12 +464,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 tbodySum.appendChild(row);
             });
             resultsAvaluo.style.display = 'block';
+            document.getElementById('pdfBtn').style.display = 'block';
             kpiCount.textContent = count;
             if (window.lucide) lucide.createIcons();
+
+            updateLiveAnalytics(speciesData);
 
             if (showAlerts) {
                 window.scrollTo({ top: resultsAvaluo.offsetTop - 100, behavior: 'smooth' });
                 EVA.toast(`Avalúo completado: ${count} individuos`);
+                saveToLedger(`${count} árboles tasados`);
             }
         }
     }
@@ -487,6 +577,62 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // --- Phase 3: Live Analytics Dashboard ---
+    let distChart = null;
+    const distPanel = document.getElementById('distPanel');
+
+    window.updateLiveAnalytics = function(data, type = 'pie') {
+        distPanel.style.display = 'block';
+        const ctx = document.getElementById('distChart').getContext('2d');
+        
+        if (distChart) distChart.destroy();
+        
+        const labels = Object.keys(data);
+        const values = Object.values(data);
+
+        distChart = new Chart(ctx, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: [
+                        '#00F2FE', '#FBBF24', '#10B981', '#6366F1', '#EC4899', '#F43F5E'
+                    ],
+                    borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)'
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { 
+                    legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } } 
+                }
+            }
+        });
+    };
+
+    window.generatePremiumPDF = async function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const resultsEl = currentMode === 'ipc' ? resultsUI : resultsAvaluo;
+        
+        EVA.toast('Generando reporte forense...', 'info');
+        
+        const canvas = await html2canvas(resultsEl, {
+            backgroundColor: '#020408',
+            scale: 2
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = doc.getImageProperties(imgData);
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        
+        doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        doc.save(`REPORTE_FORENSE_EVA_${Date.now()}.pdf`);
+        EVA.toast('PDF generado con éxito');
+    };
 
     // --- Chart Initialization ---
     if (eliteChartEl) {

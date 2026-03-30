@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E.V.A. PRO — Motor de Valoración Forestal e Indexación IPC | DGZ Engineering Lab</title>
-    <meta name="description" content="E.V.A. es una suite forense de grado profesional para la valoración de activos biológicos y la indexación IPC masiva en Colombia. Automatice peritajes catastrales y forestales con precisión superior.">
-    <meta name="keywords" content="avalúo forestal, IPC Colombia, indexación catastral, peritaje ambiental, valoración de activos, DANE, IGAC, E.V.A.">
+    <title>E.V.A. — Motor de Valoración Forestal e Indexación IPC | DGZ Engineering Lab</title>
+    <meta name="description"
+        content="E.V.A. es una suite forense de grado profesional para la valoración de activos biológicos y la indexación IPC masiva en Colombia. Automatice peritajes catastrales y forestales con precisión superior.">
+    <meta name="keywords"
+        content="avalúo forestal, IPC Colombia, indexación catastral, peritaje ambiental, valoración de activos, DANE, IGAC, E.V.A.">
     <meta name="author" content="DGZ Engineering Lab">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://dgz-engineering-lab.github.io/E.V.A/">
@@ -15,7 +17,8 @@
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="E.V.A. PRO — Motor de Valoración Forestal e Indexación IPC">
-    <meta property="og:description" content="Suite forense profesional para valoración de activos biológicos e indexación IPC masiva en Colombia.">
+    <meta property="og:description"
+        content="Suite forense profesional para valoración de activos biológicos e indexación IPC masiva en Colombia.">
     <meta property="og:image" content="assets/logo.png">
     <meta property="og:locale" content="es_CO">
 
@@ -36,7 +39,9 @@
     <!-- Preload Critical Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Theme System -->
@@ -50,107 +55,303 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hanken Grotesk', sans-serif; }
-        *, *::before, *::after { transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease; }
-        :root { --ease: cubic-bezier(0.23, 1, 0.32, 1); }
-
-        /* Accessibility: Focus States */
-        :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 4px; }
-        .skip-link { position: absolute; top: -100%; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 0.8rem 2rem; border-radius: 0 0 8px 8px; font-weight: 900; font-family:'Space Mono'; z-index: 9999; font-size: 0.75rem; text-decoration: none; transition: top 0.3s; }
-        .skip-link:focus { top: 0; }
-
-        
-        body { 
-            background-color: var(--bg-obsidian); color: var(--text-main); 
-            min-height: 100vh; overflow: hidden; display: flex; flex-direction: column;
-            position: relative; animation: pageIn 1.2s var(--ease);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hanken Grotesk', sans-serif;
         }
 
-        @keyframes pageIn { from { opacity: 0; filter: blur(10px); transform: scale(1.02); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        *,
+        *::before,
+        *::after {
+            transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease;
+        }
+
+        :root {
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Accessibility: Focus States */
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: #000;
+            padding: 0.8rem 2rem;
+            border-radius: 0 0 8px 8px;
+            font-weight: 900;
+            font-family: 'Space Mono';
+            z-index: 9999;
+            font-size: 0.75rem;
+            text-decoration: none;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            animation: pageIn 1.2s var(--ease);
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                filter: blur(10px);
+                transform: scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                filter: blur(0);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* --- Exceptional Background Layer --- */
         .cyber-grid {
-            position: absolute; inset: 0; z-index: -2;
+            position: absolute;
+            inset: 0;
+            z-index: -2;
             background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
-            background-size: 60px 60px; opacity: 0.5;
+                linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.5;
             mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
             pointer-events: none;
         }
 
         .zenith-bloom {
-            position: absolute; width: 1000px; height: 1000px;
+            position: absolute;
+            width: 1000px;
+            height: 1000px;
             background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
-            top: -300px; left: -300px; opacity: 0.3; z-index: -1; animation: orbit 25s infinite linear;
+            top: -300px;
+            left: -300px;
+            opacity: 0.3;
+            z-index: -1;
+            animation: orbit 25s infinite linear;
             pointer-events: none;
         }
 
-        @keyframes orbit { from { transform: translate(0,0) rotate(0deg); } to { transform: translate(150px, 150px) rotate(360deg); } }
+        @keyframes orbit {
+            from {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            to {
+                transform: translate(150px, 150px) rotate(360deg);
+            }
+        }
 
         .navbar {
-            margin: 1.5rem auto; width: calc(100% - 4rem); max-width: 1300px;
-            padding: 0.75rem 2.5rem; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(30px); 
-            border: 1px solid var(--border-glass); border-radius: 99px;
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            margin: 1.5rem auto;
+            width: calc(100% - 4rem);
+            max-width: 1300px;
+            padding: 0.75rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border-glass);
+            border-radius: 99px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             animation: fadeUp 0.8s var(--ease) 0.2s backwards;
         }
 
-        .brand { display: flex; align-items: center; gap: 1rem; }
-        .logo { width: 44px; height: 44px; border-radius: 12px; overflow: hidden; box-shadow: 0 0 25px var(--primary-glow); }
-        .logo img { width: 100%; height: 100%; object-fit: cover; }
-        .brand-name { font-family: 'Space Mono', monospace; font-weight: 900; font-size: 1.1rem; letter-spacing: 2px; }
-        .brand-name span { color: var(--primary); font-weight: 300; opacity: 0.6; }
-
-        .tech-stack { display: flex; gap: 1rem; }
-        .tech-pill {
-            padding: 0.6rem 1.2rem; border-radius: 99px; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-glass); font-size: 0.65rem; color: var(--text-dim);
-            font-family: 'Space Mono'; text-transform: uppercase; letter-spacing: 2px;
-            display: flex; align-items: center; gap: 0.6rem; transition: 0.3s;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        .tech-pill:hover { border-color: var(--primary); background: rgba(var(--primary-glow), 0.1); color: var(--text-main); transform: translateY(-3px); }
-        .tech-pill i { color: var(--primary); }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-name {
+            font-family: 'Space Mono', monospace;
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        .brand-name span {
+            color: var(--primary);
+            font-weight: 300;
+            opacity: 0.6;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .tech-pill {
+            padding: 0.6rem 1.2rem;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-family: 'Space Mono';
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: 0.3s;
+        }
+
+        .tech-pill:hover {
+            border-color: var(--primary);
+            background: rgba(var(--primary-glow), 0.1);
+            color: var(--text-main);
+            transform: translateY(-3px);
+        }
+
+        .tech-pill i {
+            color: var(--primary);
+        }
 
         .hero {
-            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; padding: 6rem 2rem 4rem; position: relative; z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
         }
 
         .badge {
-            background: rgba(var(--primary-glow), 0.05); border: 1px solid var(--primary-glow); padding: 0.7rem 1.5rem;
-            border-radius: 99px; font-size: 0.75rem; font-family: 'Space Mono'; color: var(--primary);
-            letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3rem; 
+            background: rgba(var(--primary-glow), 0.05);
+            border: 1px solid var(--primary-glow);
+            padding: 0.7rem 1.5rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-family: 'Space Mono';
+            color: var(--primary);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
             animation: fadeUp 1s var(--ease) 0.4s backwards;
-            display: flex; align-items: center; gap: 0.8rem; box-shadow: 0 0 20px var(--primary-glow);
-            transition: 0.4s; cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 0 20px var(--primary-glow);
+            transition: 0.4s;
+            cursor: pointer;
         }
-        .badge:hover { transform: scale(1.05); box-shadow: 0 0 35px var(--primary-glow); }
 
-        h1 { font-size: clamp(2.8rem, 9vw, 5.5rem); font-weight: 900; line-height: 1; margin-bottom: 2.5rem; animation: fadeUp 1s var(--ease) 0.6s backwards; letter-spacing: -2px; }
-        .typing-container { color: var(--primary); text-shadow: 0 0 30px var(--primary-glow); }
+        .badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px var(--primary-glow);
+        }
+
+        h1 {
+            font-size: clamp(2.8rem, 9vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 2.5rem;
+            animation: fadeUp 1s var(--ease) 0.6s backwards;
+            letter-spacing: -2px;
+        }
+
+        .typing-container {
+            color: var(--primary);
+            text-shadow: 0 0 30px var(--primary-glow);
+        }
 
         .subtitle {
-            max-width: 750px; font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--text-dim); line-height: 1.8;
-            margin-bottom: 3.5rem; animation: fadeUp 1s var(--ease) 0.8s backwards;
+            max-width: 750px;
+            font-size: clamp(1rem, 1.5vw, 1.15rem);
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 3.5rem;
+            animation: fadeUp 1s var(--ease) 0.8s backwards;
         }
 
         .cta {
-            display: inline-flex; align-items: center; gap: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000; padding: 1.25rem 2.8rem; border-radius: 20px; text-decoration: none;
-            font-weight: 900; font-family: 'Space Mono'; letter-spacing: 3px; font-size: 1.1rem;
-            box-shadow: 0 10px 40px var(--primary-glow); transition: transform 0.6s var(--ease), filter 0.3s;
-            animation: fadeUp 1s var(--ease) 1s backwards; position: relative; overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.3); will-change: transform;
+            color: #000;
+            padding: 1.25rem 2.8rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 900;
+            font-family: 'Space Mono';
+            letter-spacing: 3px;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 40px var(--primary-glow);
+            transition: transform 0.6s var(--ease), filter 0.3s;
+            animation: fadeUp 1s var(--ease) 1s backwards;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            will-change: transform;
         }
 
         .cta-icon {
-            width: 50px; height: 50px; background: rgba(0, 0, 0, 0.15); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         /* Mobile Responsiveness */
@@ -193,19 +394,23 @@
             <div class="brand-name">E.V.A. <span> CAT-IPC</span></div>
         </div>
         <div class="tech-stack">
-            <div class="tech-pill"><i data-lucide="shield" style="width:14px;" aria-hidden="true"></i> Forensic Grade</div>
-            <div class="tech-pill"><i data-lucide="database" style="width:14px;" aria-hidden="true"></i> No-DB required</div>
+            <div class="tech-pill"><i data-lucide="shield" style="width:14px;" aria-hidden="true"></i> Forensic Grade
+            </div>
+            <div class="tech-pill"><i data-lucide="database" style="width:14px;" aria-hidden="true"></i> No-DB required
+            </div>
             <div class="tech-pill"><i data-lucide="zap" style="width:14px;" aria-hidden="true"></i> Z-Factor v2.5</div>
         </div>
     </nav>
 
     <main id="main-content">
         <section class="hero" aria-label="Hero Section">
-            <div class="badge"><i data-lucide="globe" aria-hidden="true"></i> DGZ Engineering Lab // Enterprise Edition</div>
+            <div class="badge"><i data-lucide="globe" aria-hidden="true"></i> DGZ Engineering Lab // Enterprise Edition
+            </div>
             <h1>Inteligencia Forense para<br><span class="typing-container" id="typewriter"></span></h1>
             <p class="subtitle">La plataforma de vanguardia para firmas forestales y catastrales en Colombia. Automatice
                 cálculos biológicos, proyecte indexación oficial IPC y audite resultados de alta precisión.</p>
-            <a href="app.html" class="cta" id="cta-main" aria-label="Inicializar la consola de procesamiento E.V.A. PRO">
+            <a href="app.html" class="cta" id="cta-main"
+                aria-label="Inicializar la consola de procesamiento E.V.A. PRO">
                 <span class="cta-icon">
                     <i data-lucide="cpu" style="width: 28px; height: 28px;" aria-hidden="true"></i>
                 </span>
@@ -219,51 +424,114 @@
                 <div class="card-bg-glow" aria-hidden="true"></div>
                 <i data-lucide="calculator" class="m-icon" aria-hidden="true"></i>
                 <h2>Indexación Dinámica IPC</h2>
-                <p>Automatice el cálculo masivo de avalúos según las variaciones oficiales del DANE y el Banco de la República. Algoritmos de precisión con trazabilidad forense.</p>
+                <p>Automatice el cálculo masivo de avalúos según las variaciones oficiales del DANE y el Banco de la
+                    República. Algoritmos de precisión con trazabilidad forense.</p>
                 <div class="m-status">OPERATIONAL_v2.5</div>
             </article>
 
             <article class="module-card">
-                <div class="card-bg-glow" style="background: radial-gradient(circle, var(--success) 0%, transparent 70%); opacity: 0.1;" aria-hidden="true"></div>
+                <div class="card-bg-glow"
+                    style="background: radial-gradient(circle, var(--success) 0%, transparent 70%); opacity: 0.1;"
+                    aria-hidden="true"></div>
                 <i data-lucide="trees" class="m-icon" style="color: var(--success);" aria-hidden="true"></i>
                 <h2>Biometría Forestal</h2>
-                <p>Modelado avanzado de crecimiento y valoración biológica para activos maderables y ornamentales bajo normativa nacional.</p>
+                <p>Modelado avanzado de crecimiento y valoración biológica para activos maderables y ornamentales bajo
+                    normativa nacional.</p>
             </article>
 
             <article class="module-card">
-                <div class="card-bg-glow" style="background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.1;" aria-hidden="true"></div>
+                <div class="card-bg-glow"
+                    style="background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.1;"
+                    aria-hidden="true"></div>
                 <i data-lucide="shield-check" class="m-icon" style="color: var(--accent);" aria-hidden="true"></i>
                 <h2>Auditoría Jurídica</h2>
-                <p>Gestión de bitácoras de auditoría para peritajes judiciales. Cumplimiento total con el Código General del Proceso Colombiano.</p>
+                <p>Gestión de bitácoras de auditoría para peritajes judiciales. Cumplimiento total con el Código General
+                    del Proceso Colombiano.</p>
             </article>
         </section>
     </main>
 
-    <footer style="text-align:center; padding:2rem; font-family:'Space Mono'; font-size:0.65rem; color:var(--text-dim); letter-spacing:2px; opacity:0.6;">
+    <footer
+        style="text-align:center; padding:2rem; font-family:'Space Mono'; font-size:0.65rem; color:var(--text-dim); letter-spacing:2px; opacity:0.6;">
         DGZ ENGINEERING LAB © 2026 — MIT LICENSE — PRECISION FORENSICS ENGINE v2.5.1
     </footer>
 
     <style>
         .modules-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
-            max-width: 1400px; margin: 0 auto 8rem; padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto 8rem;
+            padding: 0 2rem;
             animation: fadeUp 1.2s var(--ease) 1.2s backwards;
         }
-        .module-card {
-            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass);
-            padding: 3rem; border-radius: 32px; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; gap: 1.5rem; transition: 0.6s var(--ease);
-            backdrop-filter: blur(20px); will-change: transform; transform: translateZ(0);
-        }
-        .module-card:hover { transform: translateY(-15px) scale(1.02); background: rgba(255, 255, 255, 0.04); border-color: var(--primary); }
-        .card-bg-glow { position: absolute; inset: 0; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity: 0.05; z-index: -1; pointer-events: none; }
-        
-        .m-icon { width: 44px; height: 44px; color: var(--primary); }
-        .module-card h2 { font-family: 'Space Mono'; font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; }
-        .module-card p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; }
-        .m-status { font-family: 'Space Mono'; font-size: 0.65rem; color: var(--primary); background: rgba(var(--primary-glow), 0.1); padding: 0.4rem 0.8rem; border-radius: 4px; align-self: flex-start; }
 
-        @media (max-width: 1024px) { .modules-grid { grid-template-columns: 1fr; } }
+        .module-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            padding: 3rem;
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: 0.6s var(--ease);
+            backdrop-filter: blur(20px);
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .module-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--primary);
+        }
+
+        .card-bg-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.05;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .m-icon {
+            width: 44px;
+            height: 44px;
+            color: var(--primary);
+        }
+
+        .module-card h2 {
+            font-family: 'Space Mono';
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .module-card p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        .m-status {
+            font-family: 'Space Mono';
+            font-size: 0.65rem;
+            color: var(--primary);
+            background: rgba(var(--primary-glow), 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+
+        @media (max-width: 1024px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 
     <script>
@@ -281,7 +549,7 @@
                 p.className = 'zenith-particle';
                 p.style.cssText = `position: absolute; width: 3px; height: 3px; background: var(--primary); border-radius: 50%; opacity: 0.3; pointer-events: none; z-index: -1;`;
                 container.appendChild(p);
-                particles.push({ el: p, x: Math.random() * 100, y: Math.random() * 100, vx: (Math.random()-0.5)*0.1, vy: (Math.random()-0.5)*0.1 });
+                particles.push({ el: p, x: Math.random() * 100, y: Math.random() * 100, vx: (Math.random() - 0.5) * 0.1, vy: (Math.random() - 0.5) * 0.1 });
             }
         }
 
@@ -299,20 +567,20 @@
             const bloom = document.querySelector('.zenith-bloom');
             const dx = (mouseX - window.innerWidth / 2) * 0.01;
             const dy = (mouseY - window.innerHeight / 2) * 0.01;
-            
-            if(grid) grid.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
-            if(bloom) bloom.style.transform = `translate3d(${dx*2}px, ${dy*2}px, 0)`;
+
+            if (grid) grid.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+            if (bloom) bloom.style.transform = `translate3d(${dx * 2}px, ${dy * 2}px, 0)`;
 
             // Update Particles
             particles.forEach(p => {
                 p.x += p.vx; p.y += p.vy;
-                if(p.x < 0 || p.x > 100) p.vx *= -1;
-                if(p.y < 0 || p.y > 100) p.vy *= -1;
-                
+                if (p.x < 0 || p.x > 100) p.vx *= -1;
+                if (p.y < 0 || p.y > 100) p.vy *= -1;
+
                 const pDist = Math.hypot(mouseX - (p.x * window.innerWidth / 100), mouseY - (p.y * window.innerHeight / 100));
                 let scale = 1;
                 if (pDist < 150) scale = 2 - (pDist / 150);
-                
+
                 p.el.style.transform = `translate3d(${p.x}vw, ${p.y}vh, 0) scale(${scale})`;
             });
 
@@ -324,7 +592,7 @@
                 const cY = rect.top + rect.height / 2;
                 const dist = Math.hypot(mouseX - cX, mouseY - cY);
                 if (dist < 200) {
-                    cta.style.transform = `translate3d(${(mouseX - cX) * 0.2}px, ${(mouseY - cY) * 0.2}px, 0) scale(1.05) rotate(${ (mouseX-cX)*0.01 }deg)`;
+                    cta.style.transform = `translate3d(${(mouseX - cX) * 0.2}px, ${(mouseY - cY) * 0.2}px, 0) scale(1.05) rotate(${(mouseX - cX) * 0.01}deg)`;
                 } else {
                     cta.style.transform = `translate3d(0,0,0)`;
                 }
@@ -341,7 +609,7 @@
         let sIdx = 0, charIdx = 0, isDel = false;
         function type() {
             const target = document.getElementById("typewriter");
-            if(!target) return;
+            if (!target) return;
             const fullText = textSnippets[sIdx];
             target.innerText = isDel ? fullText.substring(0, charIdx--) : fullText.substring(0, charIdx++);
             if (!isDel && charIdx > fullText.length) { isDel = true; setTimeout(type, 2000); }
