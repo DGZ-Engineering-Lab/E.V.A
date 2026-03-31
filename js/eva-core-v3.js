@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let actParsedAvaluo = [];
     let compChart = null;
     let distChart = null;
+    let catChart = null;
 
     const compPanel = document.getElementById('comparisonPanel');
     const distPanel = document.getElementById('distPanel');
@@ -609,12 +610,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (count > 0) {
             const speciesData = {};
+            const categoryData = { "Selección": 0, "Primera": 0, "Segunda": 0, "Tercera": 0 };
             let localMaxBase = 0;
             const sums = [{ l: "Valor Base (40%)", b: s40 }, { l: "Valor al 60%", b: s60 }, { l: "Valor al 70%", b: s70 }, { l: "Valor al 100%", b: s100 }];
             
             // Collect analytics
             actParsedAvaluo.forEach(item => {
                 speciesData[item.esp] = (speciesData[item.esp] || 0) + 1;
+                categoryData[item.typeNorm] = (categoryData[item.typeNorm] || 0) + 1;
+                
                 const t = AVALUO_DB[item.typeNorm === 'Selección' ? 'Primera' : item.typeNorm] || AVALUO_DB.Tercera;
                 const abM = item.ab / 100;
                 let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
@@ -647,6 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 original: Math.round(s100),
                 updated: overallFinal,
                 species: speciesData,
+                categories: categoryData,
                 max: localMaxBase,
                 items: count
             });
@@ -788,6 +793,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+
+        // 2b. BIOLOGICAL CATEGORY DOUGHNUT CHART (NEW)
+        if (payload.categories) {
+            const categoryPanel = document.getElementById('categoryPanel');
+            if (categoryPanel) categoryPanel.style.display = 'block';
+            
+            const ctxCat = document.getElementById('catChart').getContext('2d');
+            if (catChart) catChart.destroy();
+            catChart = new Chart(ctxCat, {
+                type: 'doughnut',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: Object.keys(payload.categories),
+                    datasets: [{
+                        data: Object.values(payload.categories),
+                        backgroundColor: ['#FBBF24', '#10B981', '#6366F1', '#64748B'], // Gold, Green, Indigo, Slate
+                        borderWidth: 2, borderColor: 'rgba(5, 7, 10, 0.8)',
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 }, padding: 15 } },
+                        datalabels: {
+                            color: '#fff', font: { weight: 'bold', size: 11, family: 'Space Mono' },
+                            formatter: (val, ctx) => {
+                                const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                if (val === 0) return '';
+                                return ((val/sum)*100).toFixed(0) + '%';
+                            }
+                        }
+                    }
+                }
+            });
+        }
         
         // Ensure all panels are shown
         compPanel.style.display = 'block';
@@ -853,6 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = eliteChartEl.getContext('2d');
         new Chart(ctx, {
             type: 'line',
+            plugins: [ChartDataLabels],
             data: {
                 labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
                 datasets: [{
@@ -865,7 +908,17 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: { 
+                    legend: { display: false },
+                    datalabels: {
+                        color: 'rgba(0, 242, 254, 0.8)',
+                        anchor: 'end',
+                        align: 'top',
+                        offset: 4,
+                        font: { family: 'Space Mono', size: 9, weight: 'bold' },
+                        formatter: (val) => val.toFixed(3)
+                    }
+                },
                 scales: {
                     x: { grid: { display: false }, ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } },
                     y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } }
