@@ -35,7 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let compChart = null;
     let distChart = null;
     let catChart = null;
+    let auditorActive = false;
 
+    const combinedPanel = document.getElementById('combinedAnalyticsPanel');
     const compPanel = document.getElementById('comparisonPanel');
     const distPanel = document.getElementById('distPanel');
     const metricsPanel = document.getElementById('metricsPanel');
@@ -376,6 +378,82 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // --- [E.V.A. V5] FORENSIC TOOLS (PERSISTENCE, SEARCH, AUDITOR) ---
+
+    window.saveSessionFile = function() {
+        const data = {
+            version: CURRENT_VERSION,
+            timestamp: new Date().toISOString(),
+            input: sysInputArea.value,
+            ledger: sessionLedger,
+            mode: currentMode,
+            theme: localStorage.getItem('evaTheme') || 'dark'
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const date = new Date().toISOString().slice(0,10);
+        a.href = url;
+        a.download = `Proyecto_EVA_${date}.eva`;
+        a.click();
+        EVA.toast('✓ Proyecto exportado (.eva) correctamente');
+    };
+
+    window.loadSessionFile = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                sysInputArea.value = data.input || '';
+                sessionLedger = (data.ledger && Array.isArray(data.ledger)) ? data.ledger : [];
+                localStorage.setItem('evaLedger', JSON.stringify(sessionLedger));
+                if (data.mode) switchMode(data.mode);
+                renderLedger();
+                EVA.toast('✓ Proyecto cargado con éxito', 'success');
+                executeAction(); // Auto-calculate on load
+            } catch (err) {
+                console.error(err);
+                EVA.toast('Error: El archivo .eva no es válido', 'error');
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    window.filterTable = function(bodyId, query) {
+        const q = query.toLowerCase();
+        const rows = document.getElementById(bodyId).querySelectorAll('tr');
+        rows.forEach(row => {
+            const txt = row.innerText.toLowerCase();
+            row.style.display = txt.includes(q) ? '' : 'none';
+        });
+    };
+
+    window.toggleAuditorMode = function() {
+        auditorActive = document.getElementById('auditorMode').checked;
+        if (currentMode === 'ipc') executeZenith();
+        else renderAvaluoBoard();
+        
+        if (auditorActive) {
+            EVA.toast('🛡️ Modo Auditor Activado: Analizando anomalías...', 'warning');
+        }
+    };
+
+    function auditRow(data, type) {
+        if (!auditorActive) return '';
+        if (type === 'ipc') {
+            const val = cleanVal(data.toString());
+            return (val > 1000000000) ? 'auditor-flag' : ''; // Flag > 1B COP
+        } else {
+            // Forest Auditor rules
+            const { ab, h } = data;
+            const d = parseFloat(ab);
+            const alt = parseFloat(h);
+            if (alt > 45 || d > 180 || d < 5) return 'auditor-flag'; // Biometry anomaly
+            return '';
+        }
+    }
 
     window.copyText = async function (text) {
         try {
@@ -527,7 +605,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                      `• Operación: ${val.toLocaleString()} * 1.5226 (Factor Acumulado)\\n` +
                                      `• Resultado Final: ${fmtElite.format(updated)}`;
 
+                    const auditClass = auditRow(val, 'ipc');
                     const row = document.createElement('tr');
+                    if (auditClass) row.className = auditClass;
                     row.innerHTML = `
                         <td class="num">
                             <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática">
@@ -667,9 +747,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 </select>
             </td>`;
 
+            const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
+                             `• Especie: ${esp}\\n` +
+                             `• Categoría: ${typeNorm}\\n` +
+                             `• Diámetro: ${ab}cm | Altura: ${alt}m\\n` +
+                             `• Valor Base (40%): ${fmtElite.format(v40)}\\n` +
+                             `• Valor Final (100%): ${fmtElite.format(v100)}`;
+
+            const auditClass = auditRow({ ab: ab, h: alt }, 'avaluo');
             const row = document.createElement('tr');
+            if (auditClass) row.className = auditClass;
             row.innerHTML = `
-                <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}</td>
+                <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">
+                    <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática" style="cursor:pointer; color:var(--primary); margin-right:5px;">
+                        <i data-lucide="info" style="width:12px;height:12px;"></i>
+                    </span>
+                    ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
+                </td>
                 ${catHTML}
                 <td class="num">${ab}</td>
                 <td class="num">${alt}</td>
@@ -799,8 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Phase 3: Live Analytics Dashboard ---
     window.updateLiveAnalytics = function (payload) {
-        compPanel.style.display = 'block';
-        metricsPanel.style.display = 'block';
+        if (combinedPanel) combinedPanel.style.display = 'block';
 
         // 1. COMPARISON BAR CHART
         const ctxComp = document.getElementById('compChart').getContext('2d');
@@ -872,11 +965,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // 2b. BIOLOGICAL CATEGORY DOUGHNUT CHART (NEW)
+        // 2. CATEGORY DONUT CHART (BIOLOGICAL QUALITY)
         if (payload.categories) {
-            const categoryPanel = document.getElementById('categoryPanel');
-            if (categoryPanel) categoryPanel.style.display = 'block';
-
             const ctxCat = document.getElementById('catChart').getContext('2d');
             if (catChart) catChart.destroy();
             catChart = new Chart(ctxCat, {
