@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fmtElite = new Intl.NumberFormat('es-CO', {
         style: 'currency', currency: 'COP', maximumFractionDigits: 0
     });
-    const CURRENT_VERSION = "2.5.2"; 
+    const CURRENT_VERSION = "3.1.0";
     let currentMode = 'ipc';
     let actParsedAvaluo = [];
     let compChart = null;
@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentMode === 'avaluo') {
                 const p = line.split(/\t|\||;/).map(x => x.trim()).filter(x => x !== '');
                 if (p.length === 0) return; // Ignorar líneas totalmente vacías
-                if (p.length < 3) errors.push(`Línea ${i+1}: Faltan datos (necesita: Especie, Diámetro, Altura)`);
-                else if (isNaN(parseFloat(p[1].replace(',', '.')))) errors.push(`Línea ${i+1}: El diámetro no parece ser un número válido`);
+                if (p.length < 3) errors.push(`Línea ${i + 1}: Faltan datos (necesita: Especie, Diámetro, Altura)`);
+                else if (isNaN(parseFloat(p[1].replace(',', '.')))) errors.push(`Línea ${i + 1}: El diámetro no parece ser un número válido`);
             }
         });
 
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     }
 
-    window.saveToLedger = function(summary) {
+    window.saveToLedger = function (summary) {
         const entry = {
             id: Date.now(),
             time: new Date().toLocaleTimeString(),
@@ -117,14 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.lucide) lucide.createIcons();
     }
 
-    window.deleteFromLedger = function(id) {
+    window.deleteFromLedger = function (id) {
         sessionLedger = sessionLedger.filter(i => i.id !== id);
         localStorage.setItem('evaLedger', JSON.stringify(sessionLedger));
         renderLedger();
         EVA.toast('Registro eliminado del historial', 'warning');
     };
 
-    window.loadFromLedger = function(id) {
+    window.loadFromLedger = function (id) {
         const item = sessionLedger.find(i => i.id === id);
         if (item) {
             sysInputArea.value = item.data;
@@ -138,12 +138,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Core Logic functions (Exported to window for legacy support if needed, 
     // but preferred via listeners) ---
 
-    window.sanitizeText = function(str) {
+    window.sanitizeText = function (str) {
         if (!str) return '';
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     };
 
-    window.cleanVal = function(str) {
+    window.cleanVal = function (str) {
         const cleaned = str.replace(/[^\d,.-]/g, '');
         if (!cleaned) return 0;
         if (cleaned.includes(',') && cleaned.includes('.')) {
@@ -167,9 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseFloat(cleaned) || 0;
     };
 
-    window.switchTab = function(tabId) {
+    window.switchTab = function (tabId) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
+
         // Sync Forensic Stepper
         document.querySelectorAll('.step-btn').forEach(s => s.classList.remove('active'));
         const stepMap = { 'tab-input': 's1', 'tab-analytics': 's2', 'tab-results': 's3' };
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const activeTab = document.getElementById(tabId);
         if (activeTab) activeTab.classList.add('active');
-        
+
         // Expert Detail Expansion
         if (tabId === 'tab-results' || tabId === 'tab-analytics') {
             document.querySelector('.main-stage').classList.add('expanded');
@@ -200,13 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.lucide) lucide.createIcons();
     };
 
-    window.scanData = function(val) {
+    window.scanData = function (val) {
         const registry = document.getElementById('visualRegistry');
         if (!val.trim()) { registry.innerHTML = ''; return; }
 
         const lines = val.trim().split('\n').filter(l => l.length > 5);
         registry.innerHTML = '';
-        
+
         // Render up to 5 visual cards for preview
         lines.slice(0, 5).forEach((line, i) => {
             const card = document.createElement('div');
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="f-card-icon"><i data-lucide="${line.includes('|') ? 'tree-pine' : 'hash'}"></i></div>
                 <div class="f-card-label">${line.includes('|') ? 'Especie' : 'Valor'}</div>
                 <div class="f-card-val">${name.toUpperCase()}</div>
-                <div style="font-size:0.5rem; opacity:0.5;">Registro ${i+1}</div>
+                <div style="font-size:0.5rem; opacity:0.5;">Registro ${i + 1}</div>
             `;
             registry.appendChild(card);
         });
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.lucide) lucide.createIcons();
     };
 
-    window.animateValue = function(id, end) {
+    window.animateValue = function (id, end) {
         const obj = document.getElementById(id);
         let start = 0;
         const duration = 1200;
@@ -253,45 +253,45 @@ document.addEventListener('DOMContentLoaded', () => {
         window.requestAnimationFrame(step);
     };
 
-    window.showHelp = function() {
+    window.showHelp = function () {
         EVA.toast('1. Pegue sus datos en el área de texto', 'info', 4000);
         setTimeout(() => EVA.toast('2. El sistema detectará los datos automáticamente', 'info', 4000), 1000);
         setTimeout(() => EVA.toast('3. Presione "Calcular Valores" para ver los resultados', 'info', 4000), 2000);
     };
 
-    window.switchMode = function(mode) {
+    window.switchMode = function (mode) {
         currentMode = mode;
         if (mode === 'ipc') {
             bIpc.classList.add('active'); bAva.classList.remove('active');
             bExec.innerHTML = '<i data-lucide="play"></i> Calcular Valores';
             bExec.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
-            if(pTitle) pTitle.innerText = 'Ingrese sus datos aquí';
-            if(pIcon) pIcon.innerText = 'Listo para calcular';
+            if (pTitle) pTitle.innerText = 'Ingrese sus datos aquí';
+            if (pIcon) pIcon.innerText = 'Listo para calcular';
             sysInputArea.placeholder = "📋  Pegue aquí los valores que desea actualizar...\n\nEjemplo: Copie y pegue una columna de Excel con valores como:\n1.500.000\n2.300.000\n850.000";
         } else {
             bAva.classList.add('active'); bIpc.classList.remove('active');
             bExec.innerHTML = '<i data-lucide="zap"></i> Calcular Valoración';
             bExec.style.background = 'linear-gradient(135deg, var(--warning), #D97706)';
-            if(pTitle) pTitle.innerText = 'Valoración de Árboles y Especies';
-            if(pIcon) { pIcon.innerText = 'Listo para calcular'; pIcon.style.color = 'var(--warning)'; }
-            sysInputArea.placeholder = "🌳  Pegue aquí los datos de los árboles...\n\nFormato: Especie | Diámetro(cm) | Altura(m)\nEjemplo:\nCedro | 35 | 12\nRoble | 40 | 15";
+            if (pTitle) pTitle.innerText = 'Valoración de Árboles y Especies';
+            if (pIcon) { pIcon.innerText = 'Listo para calcular'; pIcon.style.color = 'var(--warning)'; }
+            sysInputArea.placeholder = "🌳  Pegue aquí los datos de los árboles...\n# Recuerde que puede escribir los valores manualmente teniendo encuenta que desdes de cada espacio debe ir el simbolo | \n\nFormato: Especie | Diámetro(cm) | Altura(m)\nEjemplo:\nCedro | 35 | 12\nRoble | 40 | 15";
         }
         if (window.lucide) lucide.createIcons();
     };
 
-    window.executeAction = function() {
+    window.executeAction = function () {
         // Visual feedback on execution
         document.body.style.filter = 'brightness(1.1) contrast(1.1)';
         setTimeout(() => document.body.style.filter = 'none', 150);
 
         if (currentMode === 'ipc') executeZenith();
         else executeAvaluo();
-        
+
         // Auto-switch to Results tab
         setTimeout(() => switchTab('tab-results'), 300);
     };
 
-    window.clearInput = function() {
+    window.clearInput = function () {
         sysInputArea.value = '';
         resultsUI.style.display = 'none';
         resultsAvaluo.style.display = 'none';
@@ -308,12 +308,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(hudPool);
 
     window.EVA = {
-        toast: function(msg, type = 'success', duration = 4000) {
+        toast: function (msg, type = 'success', duration = 4000) {
             const entry = document.createElement('div');
             entry.className = `eva-mono-entry ${type}`;
-            
+
             const icon = type === 'success' ? 'check-circle' : type === 'warning' ? 'alert-circle' : 'info';
-            
+
             entry.innerHTML = `
                 <div class="mono-bar"></div>
                 <div class="mono-content">
@@ -321,12 +321,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="mono-msg">${msg}</span>
                 </div>
             `;
-            
+
             hudPool.appendChild(entry);
             if (window.lucide) lucide.createIcons();
 
             setTimeout(() => entry.classList.add('phase-in'), 10);
-            
+
             if (duration > 0) {
                 setTimeout(() => {
                     entry.classList.remove('phase-in');
@@ -342,10 +342,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(`./version.json?t=${Date.now()}`, { cache: 'no-store' });
             const serverData = await response.json();
-            
+
             if (serverData.version !== CURRENT_VERSION) {
                 console.log(`[E.V.A.] Update detected: ${CURRENT_VERSION} -> ${serverData.version}`);
-                
+
                 const updateMsg = `Sincronizando nueva versión (${serverData.version}). El sistema se reiniciará en 5 segundos...`;
                 const toast = EVA.toast(updateMsg, 'warning', 0); // Persistent toast
 
@@ -368,8 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check on startup and every 10 minutes
     checkSystemUpdates();
-    setInterval(checkSystemUpdates, 10 * 60 * 1000); 
-    
+    setInterval(checkSystemUpdates, 10 * 60 * 1000);
+
     // Check when user returns to the tab
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') checkSystemUpdates();
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    window.copyText = async function(text) {
+    window.copyText = async function (text) {
         try {
             await navigator.clipboard.writeText(text);
             EVA.toast('✓ Copiado al portapapeles');
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.copyTable = async function(ids) {
+    window.copyTable = async function (ids) {
         const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let combinedHTML = '';
         let combinedText = '';
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 combinedText += el.innerText + '\n\n';
             }
         });
-        
+
         if (navigator.clipboard && window.ClipboardItem) {
             try {
                 const blob = new Blob([combinedHTML], { type: 'text/html' });
@@ -428,14 +428,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(textArea);
     }
 
-    window.exportTableToCSV = function(ids, filename) {
+    window.exportTableToCSV = function (ids, filename) {
         const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let fullCsv = [];
-        
+
         idArray.forEach(id => {
             const table = document.getElementById(id);
             if (!table) return;
-            
+
             const rows = table.querySelectorAll('tr');
             for (let i = 0; i < rows.length; i++) {
                 const row = [], cols = rows[i].querySelectorAll('td, th');
@@ -461,17 +461,17 @@ document.addEventListener('DOMContentLoaded', () => {
         EVA.toast('✓ CSV generado con todas las tablas');
     };
 
-    window.exportTableToExcel = function(ids, filename) {
+    window.exportTableToExcel = function (ids, filename) {
         const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let combinedHTML = '';
-        
+
         idArray.forEach(id => {
             const table = document.getElementById(id);
             if (table) {
                 const cloneTable = table.cloneNode(true);
                 const originalSelects = table.querySelectorAll('select');
                 const clonedSelects = cloneTable.querySelectorAll('select');
-                for(let i = 0; i < originalSelects.length; i++) {
+                for (let i = 0; i < originalSelects.length; i++) {
                     clonedSelects[i].parentNode.innerText = originalSelects[i].value;
                 }
                 combinedHTML += `<table border="1">${cloneTable.innerHTML}</table><br>`;
@@ -535,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsAvaluo.style.display = 'none';
             document.getElementById('pdfBtn').style.display = 'block';
             kpiCount.textContent = count;
-            
+
             // Expert HUD Update with animation
             animateValue('sumFinal', totalNew);
             document.getElementById('sumOrig').innerText = `$ ${totalOrig.toLocaleString()}`;
@@ -555,10 +555,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.showCustomAlert = function(speciesArray) {
+    window.showCustomAlert = function (speciesArray) {
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
-        
+
         const html = `
             <div class="modal-box">
                 <div class="modal-title">
@@ -574,15 +574,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button class="modal-btn" onclick="this.closest('.modal-overlay').remove()">Entendido, continuar</button>
             </div>
         `;
-        
+
         overlay.innerHTML = html;
         document.body.appendChild(overlay);
-        if (window.lucide) lucide.createIcons(); 
-        
+        if (window.lucide) lucide.createIcons();
+
         setTimeout(() => overlay.classList.add('active'), 10);
     };
 
-    window.updateRowCat = function(id, newCat) {
+    window.updateRowCat = function (id, newCat) {
         const rowIdx = actParsedAvaluo.findIndex(r => r.id === id);
         if (rowIdx > -1) {
             actParsedAvaluo[rowIdx].typeNorm = newCat;
@@ -655,12 +655,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const categoryData = { "Selección": 0, "Primera": 0, "Segunda": 0, "Tercera": 0 };
             let localMaxBase = 0;
             const sums = [{ l: "Valor Base (40%)", b: s40 }, { l: "Valor al 60%", b: s60 }, { l: "Valor al 70%", b: s70 }, { l: "Valor al 100%", b: s100 }];
-            
+
             // Collect analytics
             actParsedAvaluo.forEach(item => {
                 speciesData[item.esp] = (speciesData[item.esp] || 0) + 1;
                 categoryData[item.typeNorm] = (categoryData[item.typeNorm] || 0) + 1;
-                
+
                 const t = AVALUO_DB[item.typeNorm === 'Selección' ? 'Primera' : item.typeNorm] || AVALUO_DB.Tercera;
                 const abM = item.ab / 100;
                 let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
@@ -678,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td style="font-weight:700;">${s.l}</td>
                     <td class="num">${fmtElite.format(Math.round(s.b))}</td>
                     <td class="num upd">${fmtElite.format(proyectado)}</td>
-                    <td class="num"><span class="delta">+ ${Math.round(((proyectado/s.b)-1)*100)}%</span></td>
+                    <td class="num"><span class="delta">+ ${Math.round(((proyectado / s.b) - 1) * 100)}%</span></td>
                 `;
                 tbodySum.appendChild(row);
             });
@@ -744,7 +744,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!type) {
                     isUnknown = true;
-                    type = "Tercera"; 
+                    type = "Tercera";
                 }
 
                 const typeNorm = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
@@ -762,10 +762,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Phase 3: Live Analytics Dashboard ---
-    window.updateLiveAnalytics = function(payload) {
+    window.updateLiveAnalytics = function (payload) {
         compPanel.style.display = 'block';
         metricsPanel.style.display = 'block';
-        
+
         // 1. COMPARISON BAR CHART
         const ctxComp = document.getElementById('compChart').getContext('2d');
         if (compChart) compChart.destroy();
@@ -785,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                plugins: { 
+                plugins: {
                     legend: { display: false },
                     datalabels: {
                         color: '#fff', anchor: 'end', align: 'top',
@@ -794,8 +794,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 },
                 scales: {
-                    y: { 
-                        beginAtZero: true, 
+                    y: {
+                        beginAtZero: true,
                         grid: { color: 'rgba(255,255,255,0.05)' },
                         ticks: { color: '#64748B', font: { family: 'Space Mono', size: 9 }, callback: v => '$' + v.toLocaleString() }
                     },
@@ -822,13 +822,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { 
+                    plugins: {
                         legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } },
                         datalabels: {
                             color: '#fff', font: { weight: 'bold', size: 10, family: 'Space Mono' },
                             formatter: (val, ctx) => {
                                 const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                return ((val/sum)*100).toFixed(0) + '%';
+                                return ((val / sum) * 100).toFixed(0) + '%';
                             }
                         }
                     }
@@ -840,7 +840,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (payload.categories) {
             const categoryPanel = document.getElementById('categoryPanel');
             if (categoryPanel) categoryPanel.style.display = 'block';
-            
+
             const ctxCat = document.getElementById('catChart').getContext('2d');
             if (catChart) catChart.destroy();
             catChart = new Chart(ctxCat, {
@@ -858,21 +858,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     cutout: '65%',
-                    plugins: { 
+                    plugins: {
                         legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 }, padding: 15 } },
                         datalabels: {
                             color: '#fff', font: { weight: 'bold', size: 11, family: 'Space Mono' },
                             formatter: (val, ctx) => {
                                 const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                 if (val === 0) return '';
-                                return ((val/sum)*100).toFixed(0) + '%';
+                                return ((val / sum) * 100).toFixed(0) + '%';
                             }
                         }
                     }
                 }
             });
         }
-        
+
         // Ensure all panels are shown
         compPanel.style.display = 'block';
         metricsPanel.style.display = 'block';
@@ -880,27 +880,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. FORENSIC KPI METRICS
         const avg = payload.updated / payload.items;
         const variance = ((payload.updated / payload.original) - 1) * 100;
-        
+
         document.getElementById('kpiAvg').innerText = fmtElite.format(avg);
-        document.getElementById('kpiMax').innerText = fmtElite.format(payload.max * (payload.updated/payload.original));
+        document.getElementById('kpiMax').innerText = fmtElite.format(payload.max * (payload.updated / payload.original));
         document.getElementById('kpiVariance').innerText = `+${variance.toFixed(2)}%`;
         document.getElementById('kpiBaseYear').innerText = currentMode === 'ipc' ? '2018' : 'Valor Base';
     };
 
-    window.generatePremiumPDF = async function() {
+    window.generatePremiumPDF = async function () {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('p', 'mm', 'a4');
         const resultsEl = currentMode === 'ipc' ? resultsUI : resultsAvaluo;
-        
+
         EVA.toast('Generando reporte PDF... por favor espere', 'info');
-        
+
         // --- FIXED: Temporary visibility for html2canvas ---
         const originalStyle = resultsEl.style.display;
         resultsEl.style.display = 'block';
-        
+
         // Wait 100ms for browser to reflow/render
         await new Promise(r => setTimeout(r, 150));
-        
+
         const canvas = await html2canvas(resultsEl, {
             backgroundColor: '#020408',
             scale: 2,
@@ -908,21 +908,21 @@ document.addEventListener('DOMContentLoaded', () => {
             allowTaint: true,
             logging: false
         });
-        
+
         resultsEl.style.display = originalStyle; // Revert
-        
+
         const imgData = canvas.toDataURL('image/png');
-        
+
         if (!imgData || imgData.length < 1000 || !imgData.startsWith('data:image/')) {
             EVA.toast('Error crítico: El motor de captura no pudo procesar la tabla.', 'error');
             return;
         }
-        
+
         try {
             const imgProps = doc.getImageProperties(imgData);
             const pdfWidth = doc.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            
+
             doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
             doc.save(`Reporte_EVA_${new Date().toISOString().slice(0, 10)}.pdf`);
             EVA.toast('✓ Reporte PDF descargado correctamente');
@@ -950,7 +950,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                plugins: { 
+                plugins: {
                     legend: { display: false },
                     datalabels: {
                         color: 'rgba(0, 242, 254, 0.8)',
@@ -976,7 +976,7 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
             .then(reg => {
                 console.log('[E.V.A. APP] SW registered:', reg.scope);
-                
+
                 // Handle version changes immediately
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;

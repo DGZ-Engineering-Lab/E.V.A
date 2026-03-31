@@ -1,158 +1,100 @@
 <p align="center">
-  <img src="assets/logo.png" alt="E.V.A. Logo" width="80" style="border-radius: 16px;" />
+  <img src="assets/logo.png" alt="E.V.A. Logo" width="100" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(0,242,254,0.3);" />
 </p>
 
-<h1 align="center">E.V.A. — Experto en Valoración de Activos</h1>
+<h1 align="center">E.V.A. — Biological Asset Intelligence</h1>
 
 <p align="center">
-  <strong>Forensic-Grade Appraisal Engine for Colombian Land & Forest Assets</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Version-2.5.1-00F2FE.svg?style=flat-square&logo=appveyor" alt="Version" />
-  <img src="https://img.shields.io/badge/Status-Production_Ready-059669.svg?style=flat-square&logo=checkmarx" alt="Status" />
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License" />
-  <img src="https://img.shields.io/badge/Engine-Z--Factor_v1.5226-FBBF24.svg?style=flat-square" alt="Z-Factor" />
+  <strong>Motor Forense de Valoración de Activos Biológicos e Indexación Monetaria (Colombia)</strong>
 </p>
 
 <p align="center">
-  <em>Built by <a href="https://github.com/DGZ-Engineering-Lab">DGZ Engineering Lab</a> · Medellin, Colombia</em>
+  <img src="https://img.shields.io/badge/Release-v2.5.2-00F2FE?style=for-the-badge&logo=github" alt="Latest Release" />
+  <img src="https://img.shields.io/badge/IPC_Factor-1.5226-FBBF24?style=for-the-badge&logo=databricks" alt="IPC Factor" />
+  <img src="https://img.shields.io/badge/License-MIT-059669?style=for-the-badge" alt="License" />
+  <img src="https://img.shields.io/badge/Deployment-Live-blue?style=for-the-badge&logo=github-pages" alt="Deployment" />
+</p>
+
+<p align="center">
+  <em>Desarrollado por <a href="https://github.com/Daga21Gz">Daga21Gz</a> / <strong>DGZ Engineering Lab</strong> · Medellín, Colombia</em>
 </p>
 
 ---
 
-## 📋 Overview
+## 💎 Propuesta de Valor Forense
 
-**E.V.A.** is a zero-dependency, serverless web application engineered for Colombian appraisal professionals (**peritos avaluadores**). It automates two mission-critical workflows:
+**E.V.A. (Experto en Valoración de Activos)** es una suite de ingeniería *serverless* diseñada para peritos avaluadores, ingenieros forestales y peritos judiciales. Automatiza la complejidad de la actualización monetaria y la biometría forestal bajo estándares colombianos oficiales.
 
-| Module | Description |
-|---|---|
-| **IPC Indexation Engine** | Bulk-processes monetary values from historical appraisals (e.g., 2018) to present value using the official DANE Consumer Price Index accumulation factor (`Zenith Factor = 1.5226`). |
-| **Forest Biometry Engine** | Calculates biological asset valuations for 70+ Colombian tree species using the IGAC/CAR volumetric matrix, cross-referencing trunk girth (DAP) and commercial height against categorized pricing tables. |
+### 🚀 Capacidades Principales
+- **Motor Zenith (IPC):** Sincronización masiva de valores históricos (2018-2025) usando el factor acumulado oficial del DANE (`1.5226`).
+- **Biometría Forestal:** Cálculo volumétrico y valoración comercial de más de 70 especies protegidas y comerciales.
+- **Analítica de Grado Pericial:** Generación automática de gráficos de distribución, calidad biológica y comparativas de mercado.
+- **Actualización en Tiempo Real:** Sistema centralizado vía GitHub que sincroniza cambios a todos los usuarios activos de forma automática.
 
-## 🏗️ Architecture
+---
 
-```
-ACT-IPC/
-├── index.html                  # Landing page — project overview & module showcase
-├── app.html                    # Core processing console (dual-mode: IPC + Avalúo)
-├── assets/
-│   └── logo.png                # Brand identity
-├── css/
-│   ├── base.css                # Shared design tokens & component styles
-│   └── themes/
-│       ├── dark.css            # Obsidian Night (default)
-│       ├── light.css           # Arctic Engineering
-│       ├── zenith.css          # Zenith High-Contrast
-│       ├── forest.css          # Nature Green
-│       └── minimal.css         # Pure Minimal
-├── js/
-│   ├── avaluo_db.js            # Species database & volumetric pricing matrix
-│   └── theme-switcher.js       # Persistent theme engine with Chart.js sync
-├── data/
-│   └── act_ipc_data.json       # Raw volumetric vector data
-├── docs/
-│   ├── AVALUO_2026.XLSX        # Source spreadsheet (algorithmic audit trail)
-│   └── formulas_*.txt          # INDEX/MATCH formula traceability logs
-├── ARCHITECTURE.md             # Technical architecture documentation
-├── CHANGELOG.md                # Version history
-├── CONTRIBUTING.md             # Contribution guidelines
-├── SECURITY.md                 # Security policy
-└── LICENSE                     # MIT License
+## 🏗️ Ficha Técnica y Arquitectura
+
+El sistema opera bajo una arquitectura **Zero-Infrastructure**, garantizando privacidad total (los datos no salen del navegador) y operatividad sin conexión.
+
+```mermaid
+graph TD
+    A[Entrada de Datos Manual/Excel] --> B{Motor E.V.A.}
+    B --> C[Indexación IPC Zenith]
+    B --> D[Matriz Volumétrica IGAC]
+    C --> E[HUD de Resultados]
+    D --> E
+    E --> F[Reporte PDF Forense]
+    E --> G[Exportación Excel/CSV]
+    E --> H[Insight Dashboards]
 ```
 
-## 🚀 Quick Start
+### Stack Tecnológico
+*   **Engine:** Vanilla JavaScript (ES2023)
+*   **UI/UX:** Glassmorphism Design System (CSS3 Custom Properties)
+*   **Charts:** Chart.js High-Performance Suite
+*   **Deployment:** GitHub Pages CI/CD
+*   **PWA:** Service Worker con estrategia de actualización inmediata
 
-```bash
-# Clone the repository
-git clone https://github.com/DGZ-Engineering-Lab/E.V.A.git
+---
 
-# Open directly — no build step, no server, no dependencies
-start index.html          # Windows
-open index.html           # macOS
-xdg-open index.html       # Linux
-```
+## 📊 El Factor Zenith (`1.5226`)
 
-> **Zero-Server Architecture**: E.V.A. runs 100% client-side. No Node.js, no npm, no database. Open the HTML file and operate.
+La precisión es nuestra prioridad. El **Factor Zenith** es el acumulador compuesto de inflación oficial en Colombia:
 
-## 🔧 Usage
+$$Z = \prod_{year=2018}^{2025} (1 + IPC_{year})$$
 
-### IPC Indexation Mode
-1. Navigate to `app.html` → Select **Calculator** icon (IPC mode)
-2. Paste monetary values — supports single values or tab-separated rows:
-   ```
-   $ 668.800,00    $ 1.003.200,00    $ 1.170.400,00    $ 1.672.000,00
-   ```
-3. Click **EJECUTAR PROCESAMIENTO** → Indexed values appear instantly
-4. **COPIAR MATRIZ** to export to Excel/Word
+| Año | IPC Dec. | Acumulado |
+| :--- | :--- | :--- |
+| **2018** | Base | 1.0000 |
+| **2021** | 5.62% | 1.1318 |
+| **2023** | 9.28% | 1.3920 |
+| **2025 (Proj)** | 5.45% | **1.5226** |
 
-### Forest Appraisal Mode
-1. Switch to **Trees** icon (Avalúo mode)
-2. Paste species data (tab-separated): `Species | Girth(cm) | Height(m)`
-3. Click **CALCULAR AVALÚO GLOBAL** → Dual output: detail matrix + IPC projection
+---
 
-## ⚙️ Tech Stack
+## 🛠️ Instalación y Uso
 
-| Layer | Technology |
-|---|---|
-| **Core** | Vanilla JS (ES6+), HTML5 Semantic, CSS3 Custom Properties |
-| **Typography** | Hanken Grotesk (UI) + Space Mono (Data/Technical) |
-| **Icons** | Lucide Icons (tree-shakeable SVG) |
-| **Charts** | Chart.js (IPC historical tracking) |
-| **Themes** | 5 persistent themes with CSS custom properties |
-| **Performance** | GPU-accelerated animations, `requestAnimationFrame` loop, `will-change` hints |
+No requiere instalación. E.V.A. es una herramienta portátil y lista para campo.
 
-## 📊 The Zenith Factor
+1.  Acceda a la [Plataforma Live](https://daga21gz.github.io/ACT-IPC/app.html) (GitHub Pages).
+2.  **Modo IPC:** Pegue valores desde Excel y ejecute.
+3.  **Modo Avalúo:** Pegue datos biométricos (`Especie | DAP | Altura`) y obtenga la valoración total instantánea.
 
-The **Z-Factor (`1.5226`)** is the compound inflation accumulator:
+---
 
-```
-Z = Π(1 + IPC_year) for years 2018→2025
-Z = 1.038 × 1.0357 × 1.053 × 1.0551 × 1.1318 × 1.0928 × 1.0545
-Z = 1.5226
-```
+## 📜 Marco Legal y Cumplimiento
 
-Source: [DANE — Índice de Precios al Consumidor](https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc)
+E.V.A. está diseñado para soportar procesos de debida diligencia y peritajes judiciales en Colombia:
+- **IGAC:** Metodologías de valoración catastral y comercial (Res. 620/2008).
+- **DANE:** Índice de Precios al Consumidor oficial.
+- **MinAmbiente:** Clasificación de especies y vedas forestales.
 
-## 📊 Phase 4: Forensic Analytics & Reporting (New!)
+---
 
-E.V.A. now features a high-performance **Analytica Grid** to provide deep insights for peritaje reports:
+## 📝 Licencia y Contribución
 
-*   **Comparative Values**: Side-by-side bar chart showing **Original vs. Updated** book value.
-*   **Species Distribution**: Automated pie chart with percentage labels for stand composition.
-*   **Forensic KPI Metrics**: Real-time mean value, max-peak individual value, and overall variance tracking.
-*   **Export Pro**: 
-    - **PDF**: High-DPI professional report capture with layout-safety rendering.
-    - **Excel (XLS)**: Office-compatible spreadsheet export with UTF-8 support.
-    - **CSV**: Standard data exchange format.
-
-## ⚙️ Judicial Features
-
-1.  **Bogota Time Sinc**: The system clock is forced to `America/Bogota` (UTC-5) 24h format for official time-stamping of appraisals.
-2.  **Premium Notifications**: "Glass-Floating" toast system with staggered animations and Lucide iconography.
-3.  **Audit Trail**: Session ledger for tracking real-time data input and processing milestones.
-
-## 🎨 Themes
-
-| Theme | Description | Use Case |
-|---|---|---|
-| **Obsidian Night** | Deep black with cyan accents | Extended sessions, low-light environments |
-| **Arctic Engineering** | High-contrast light mode | Print-ready reports, daylight use |
-| **Zenith High-Contrast** | Black + amber accents | Presentation mode, accessibility |
-| **Forest Nature** | Deep green palette | Forestry-focused sessions |
-| **Minimal Chrome** | Monochrome B&W | Document-grade output |
-
-## 📜 Legal Framework
-
-E.V.A. is built to comply with Colombian regulatory standards:
-- **IGAC** — Instituto Geográfico Agustín Codazzi (cadastral valuation)
-- **DANE** — Departamento Administrativo Nacional de Estadística (IPC data)
-- **Código General del Proceso** — Judicial appraisal requirements
-- **Resolución 620/2008** — IGAC valuation methodology
-
-## 📝 License
-
-This project is licensed under the [MIT License](LICENSE).
+Este proyecto está bajo la Licencia **MIT**. Las contribuciones deben seguir el protocolo de ingeniería definido en [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 

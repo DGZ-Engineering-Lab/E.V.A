@@ -5,6 +5,15 @@ All notable changes to **E.V.A.** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] — 2026-03-31
+
+### Added
+- **Auto-Update HUD**: Real-time version polling with GitHub Pages synchronization and safe-reload backup.
+- **Biological Quality Matrix**: New doughnut chart in analytics for tree category distribution.
+- **Combined Multi-Table Export**: Simultaneous export/copy of detail and summary tables with maintained formatting.
+- **Enhanced Data Labels**: Visual data points added to the IPC Evolution (eliteChart) for forensic precision.
+- **Enterprise Documentation**: Professional README overhaul with technical architecture and dynamic badges.
+
 ## [3.0.0] — 2026-03-30
 
 ### Added
