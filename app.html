@@ -73,8 +73,10 @@
 
     <style>
         :root {
-            --sidebar-w: clamp(60px, 5vw, 72px); /* Flexible Sidebar */
-            --topbar-h: clamp(48px, 6vh, 56px); /* Adaptive Header Height */
+            --sidebar-w: clamp(60px, 5vw, 72px);
+            /* Flexible Sidebar */
+            --topbar-h: clamp(48px, 6vh, 56px);
+            /* Adaptive Header Height */
             --footer-h: clamp(28px, 4vh, 36px);
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -115,7 +117,8 @@
                 radial-gradient(circle at 0% 0%, var(--primary-glow) 0%, transparent 40%),
                 radial-gradient(circle at 100% 100%, var(--primary-glow) 0%, transparent 40%);
             animation: pageIn 1s var(--ease);
-            font-size: clamp(14px, 1.2vw, 16px); /* Intelligent Base Sizing */
+            font-size: clamp(14px, 1.2vw, 16px);
+            /* Intelligent Base Sizing */
         }
 
         @keyframes pageIn {
@@ -369,7 +372,8 @@
             backdrop-filter: blur(25px);
             position: relative;
             z-index: 91;
-            flex-shrink: 0; /* NO SHRINK */
+            flex-shrink: 0;
+            /* NO SHRINK */
         }
 
         .brand-box {
@@ -470,9 +474,11 @@
         .dashboard-main {
             flex: 1;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); /* Smart adaptive columns */
+            grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+            /* Smart adaptive columns */
             grid-template-rows: auto 1fr;
-            gap: clamp(0.5rem, 1.5vw, 1.25rem); /* Intelligent Gaps */
+            gap: clamp(0.5rem, 1.5vw, 1.25rem);
+            /* Intelligent Gaps */
             padding: clamp(0.75rem, 2vw, 1.25rem);
             overflow: hidden;
             animation: reveal 0.8s var(--ease);
@@ -497,7 +503,8 @@
             grid-column: 1 / -1;
             display: flex;
             gap: 1rem;
-            flex-shrink: 0; /* NO SHRINK */
+            flex-shrink: 0;
+            /* NO SHRINK */
         }
 
         .kpi-chip {
@@ -615,10 +622,12 @@
         .main-stage {
             grid-column: 1;
             grid-row: 2;
-            overflow: hidden; /* ABSOLUTE NO GLOBAL SCROLL */
+            overflow: hidden;
+            /* ABSOLUTE NO GLOBAL SCROLL */
             display: flex;
             flex-direction: column;
-            min-height: 0; /* CRITICAL FOR FLEX SCROLL */
+            min-height: 0;
+            /* CRITICAL FOR FLEX SCROLL */
             position: relative;
         }
 
@@ -629,13 +638,17 @@
         /* ── Tab Content Toggle ── */
         .tab-content {
             display: none;
-            flex: 1; /* FILL STAGE */
+            flex: 1;
+            /* FILL STAGE */
             min-height: 0;
-            overflow-y: auto; /* Fallback for input tab */
+            overflow-y: auto;
+            /* Fallback for input tab */
             scrollbar-width: none;
         }
 
-        .tab-content::-webkit-scrollbar { display: none; }
+        .tab-content::-webkit-scrollbar {
+            display: none;
+        }
 
         .tab-content.active {
             display: flex;
@@ -644,7 +657,7 @@
 
         /* Results tab specific: Rigid structure for dual table view */
         #tab-results.active {
-            overflow: hidden; 
+            overflow: hidden;
             padding-bottom: 0;
         }
 
@@ -654,14 +667,11 @@
             grid-row: 2;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: clamp(0.5rem, 1.5vh, 0.8rem);
             min-height: 0;
             overflow-y: auto;
-            scrollbar-width: none;
-        }
-
-        .side-panel::-webkit-scrollbar {
-            display: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
         }
 
         /* ── Glass Card (shared) ── */
@@ -670,10 +680,11 @@
             backdrop-filter: blur(25px);
             border: 1px solid var(--border-glass);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: clamp(0.75rem, 2.5vh, 1.25rem);
             position: relative;
             overflow: hidden;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
         }
 
         .glass-card::before {
@@ -1104,6 +1115,27 @@
             opacity: 0.5;
         }
 
+        .history-pool {
+            height: clamp(120px, 20vh, 180px);
+            /* Smart fixed aesthetic height */
+            overflow-y: auto;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            scrollbar-width: thin;
+            margin-top: 0;
+        }
+
+        .history-pool:empty::after {
+            content: 'Sin registros recientes';
+            display: block;
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            opacity: 0.5;
+        }
+
         /* ── Info Insight ── */
         .info-insight {
             background: rgba(16, 185, 129, 0.04);
@@ -1133,6 +1165,50 @@
             color: var(--text-main);
         }
 
+        /* ── Collapsible Logic ── */
+        .collapsible-card {
+            transition: all 0.4s var(--ease);
+        }
+
+        .collapsible-card.collapsed {
+            flex: none !important;
+            height: auto !important;
+            min-height: 0 !important;
+        }
+
+        .collapsible-card.collapsed .table-canvas,
+        .collapsible-card.collapsed .forensic-tool-row,
+        .collapsible-card.collapsed .history-pool,
+        .collapsible-card.collapsed .kpi-mini-grid,
+        .collapsible-card.collapsed .outcome-meta,
+        .collapsible-card.collapsed .search-wrapper,
+        .collapsible-card.collapsed .btn-ghost {
+            display: none !important;
+        }
+
+        .toggle-card-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-dim);
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .toggle-card-btn:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .collapsed .toggle-card-btn {
+            transform: rotate(-180deg);
+        }
+
         /* ==============================
            RESULTS TABLES
            ============================== */
@@ -1140,9 +1216,11 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            height: 100%; /* Fill Tab Content */
+            height: 100%;
+            /* Fill Tab Content */
             min-height: 0;
-            overflow: hidden; /* NO GLOBAL SCROLL */
+            overflow: hidden;
+            /* NO GLOBAL SCROLL */
             animation: reveal 0.6s var(--ease);
             padding: 0.5rem 0;
         }
@@ -1150,31 +1228,62 @@
         .table-panel {
             display: flex;
             flex-direction: column;
-            min-height: 0; /* Critical to respect flex-grow/shrink */
+            min-height: 0;
+            /* Critical to respect flex-grow/shrink */
             background: var(--bg-panel);
             border: 1px solid var(--border-glass);
             border-radius: 16px;
             padding: 1rem;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-            overflow: hidden; /* Ensure headers don't push out */
+            overflow: hidden;
+            /* Ensure headers don't push out */
         }
 
-        /* HARD-SPLIT ARCHITECTURE: 60% - 40% distribution */
-        .table-panel.detailed-results { 
-            flex: 6.5; 
+        /* ADVANCED SPLIT: Detailed uses flexible space, Summary is fixed/complete */
+        .table-panel.detailed-results {
+            flex: 1;
+            min-height: 200px;
         }
-        
-        .table-panel.summary-results { 
-            flex: 3.5; 
+
+        .table-panel.summary-results {
+            flex: none;
+            /* ENSURE COMPLETE VIEW */
+            height: auto;
+            border-left: 3px solid var(--primary);
+            background: rgba(var(--primary-rgb), 0.03);
+        }
+
+        /* Fluid Typography for Luxury Adaptation */
+        .table-panel table {
+            font-size: clamp(0.75rem, 1.5vh, 0.85rem);
+        }
+
+        .summary-results th,
+        .summary-results td {
+            padding: clamp(0.4rem, 1vh, 0.8rem);
+            /* Compact columns */
+        }
+
+        /* Essential Fix for Visibility in Auto-Height Panels */
+        .summary-results .table-canvas {
+            height: auto !important;
+            flex-grow: 0 !important;
+            overflow: visible !important;
+        }
+
+        .detailed-results .table-canvas {
+            height: 0;
+            /* Keeps internal scroll for the big table */
+            flex-grow: 1;
         }
 
         .table-canvas {
             width: 100%;
-            height: 0; /* Let flex-grow manage the height */
-            flex-grow: 1;
-            overflow: auto; /* INTERNAL SCROLL ONLY */
+            /* default behavior overwritten above specifically for detailed/summary */
+            overflow: auto;
+            /* INTERNAL SCROLL ONLY */
             border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             background: rgba(0, 0, 0, 0.2);
             scrollbar-width: thin;
         }
@@ -1182,6 +1291,7 @@
         .table-canvas::-webkit-scrollbar {
             width: 5px;
         }
+
         .table-canvas::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 10px;
@@ -1204,7 +1314,8 @@
             letter-spacing: 1px;
             border-bottom: 1px solid var(--border-glass);
             background: rgba(10, 15, 26, 0.9);
-            position: sticky; /* Sticky Headers */
+            position: sticky;
+            /* Sticky Headers */
             top: 0;
             z-index: 10;
             backdrop-filter: blur(10px);
@@ -1485,7 +1596,10 @@
                 gap: 1.5rem;
                 padding: 1.5rem 2rem;
             }
-            body { font-size: 16px; }
+
+            body {
+                font-size: 16px;
+            }
         }
 
         /* 2. Standard Laptops (1280px - 1440px) */
@@ -1502,13 +1616,37 @@
                 --topbar-h: 46px;
                 --sidebar-w: 60px;
             }
-            .kpi-row { gap: 0.5rem; }
-            .kpi-chip { padding: 0.4rem 0.8rem; }
-            .glass-card { padding: 1rem; }
-            .outcome-value { font-size: 1.8rem; }
-            textarea { height: clamp(120px, 25vh, 180px); }
-            .section-header { margin-bottom: 0.5rem; }
-            #eliteChart, #compChart, #distChart, #catChart { height: 160px !important; }
+
+            .kpi-row {
+                gap: 0.5rem;
+            }
+
+            .kpi-chip {
+                padding: 0.4rem 0.8rem;
+            }
+
+            .glass-card {
+                padding: 1rem;
+            }
+
+            .outcome-value {
+                font-size: 1.8rem;
+            }
+
+            textarea {
+                height: clamp(120px, 25vh, 180px);
+            }
+
+            .section-header {
+                margin-bottom: 0.5rem;
+            }
+
+            #eliteChart,
+            #compChart,
+            #distChart,
+            #catChart {
+                height: 160px !important;
+            }
         }
 
         /* 4. Small Laptops / Tablets (Sub 1100px) */
@@ -1518,12 +1656,35 @@
                 overflow-y: auto;
                 height: auto;
             }
-            .side-panel { grid-column: 1; grid-row: auto; max-height: none; overflow: visible; }
-            .main-stage { overflow: visible; }
-            .kpi-row { flex-wrap: wrap; }
-            .kpi-chip { flex: 1 1 140px; }
-            .app-container { height: auto; overflow: visible; }
-            body { overflow-y: auto; height: auto; }
+
+            .side-panel {
+                grid-column: 1;
+                grid-row: auto;
+                max-height: none;
+                overflow: visible;
+            }
+
+            .main-stage {
+                overflow: visible;
+            }
+
+            .kpi-row {
+                flex-wrap: wrap;
+            }
+
+            .kpi-chip {
+                flex: 1 1 140px;
+            }
+
+            .app-container {
+                height: auto;
+                overflow: visible;
+            }
+
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
         }
 
         /* 5. Mobile Infrastructure (Sub 768px) */
@@ -1541,10 +1702,120 @@
                 justify-content: space-around;
                 z-index: 100;
             }
-            .nav-logo, .theme-selector, .sys-log { display: none; }
-            .app-container { padding-bottom: 60px; height: auto; }
-            header { padding: 0.5rem 1rem; height: auto; flex-wrap: wrap; gap: 0.5rem; }
-            .step-nav { overflow-x: auto; }
+
+            .nav-logo,
+            .theme-selector,
+            .sys-log {
+                display: none;
+            }
+
+            .app-container {
+                padding-bottom: 60px;
+                height: auto;
+            }
+
+            header {
+                padding: 0.5rem 1rem;
+                height: auto;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .step-nav {
+                overflow-x: auto;
+            }
+        }
+
+        /* 6. Intelligence: Height-Aware Adaptation */
+        @media (max-height: 900px) {
+            .side-panel {
+                gap: 0.5rem;
+            }
+
+            .glass-card {
+                padding: 0.8rem 1rem;
+            }
+
+            .kpi-row {
+                grid-template-columns: repeat(3, 1fr);
+                padding-top: 0.5rem;
+            }
+
+            .history-pool {
+                max-height: 120px;
+            }
+
+            .outcome-value {
+                font-size: clamp(1.2rem, 3.5vh, 1.8rem);
+            }
+        }
+
+        @media (max-height: 800px) {
+
+            .info-insight,
+            .sys-log {
+                display: none;
+            }
+
+            .side-panel {
+                gap: 0.4rem;
+            }
+
+            .metrics-grid {
+                display: none;
+            }
+
+            header {
+                height: 50px;
+            }
+
+            .brand-box span {
+                display: none;
+            }
+
+            .main-stage {
+                overflow-y: auto;
+            }
+
+            /* Allow scroll if extreme compression */
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-main {
+                grid-template-columns: 1fr;
+                overflow-y: auto;
+                height: auto;
+            }
+
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .sidebar-nav {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                height: 60px;
+                flex-direction: row;
+                z-index: 1000;
+            }
+
+            .side-panel {
+                width: 100%;
+                height: auto;
+                overflow: visible;
+            }
+
+            #tab-results.active {
+                overflow: visible;
+                height: auto;
+            }
+
+            .table-canvas {
+                height: auto;
+                max-height: 500px;
+            }
         }
 
         @media (max-width: 600px) {
@@ -1835,13 +2106,17 @@
                 <div id="tab-results" class="tab-content">
                     <!-- IPC Results Matrix -->
                     <div id="resultsUI" class="results-wrapper" style="display: none;">
-                        <div class="glass-card table-panel detailed-results">
+                        <div class="glass-card table-panel detailed-results collapsible-card" id="cardDetailedIPC">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <button class="toggle-card-btn" onclick="toggleCard('cardDetailedIPC')"
+                                        title="Colapsar/Expandir">
+                                        <i data-lucide="chevron-down"></i>
+                                    </button>
                                     <i data-lucide="table-2"></i>
                                     <h2>Matriz de Resultados IPC</h2>
                                 </div>
-                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div style="display: flex; gap: 0.5rem; align-items: center;" class="ignore-print">
                                     <div class="search-wrapper">
                                         <input type="text" placeholder="Filtrar resultados..." class="eva-search"
                                             onkeyup="filterTable('eliteBody', this.value)">
@@ -1877,17 +2152,48 @@
                                 </table>
                             </div>
                         </div>
+
+                        <!-- Summary Table IPC -->
+                        <div class="glass-card table-panel summary-results collapsible-card" id="cardSummaryIPC">
+                            <div class="section-header">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <button class="toggle-card-btn" onclick="toggleCard('cardSummaryIPC')"
+                                        title="Colapsar/Expandir">
+                                        <i data-lucide="chevron-down"></i>
+                                    </button>
+                                    <i data-lucide="sigma"></i>
+                                    <h2>Resumen de Valores IPC</h2>
+                                </div>
+                            </div>
+                            <div class="table-canvas">
+                                <table id="summaryTableIPC">
+                                    <thead>
+                                        <tr>
+                                            <th>Concepto</th>
+                                            <th>Valor Base IPC 2018</th>
+                                            <th>Valor IPC 2025</th>
+                                            <th>Diferencia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="eliteSummaryBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Avalúo Forestal Matrix -->
                     <div id="resultsAvaluo" class="results-wrapper" style="display: none;">
-                        <div class="glass-card table-panel detailed-results">
+                        <div class="glass-card table-panel detailed-results collapsible-card" id="cardDetailedAvaluo">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
-                                    <i data-lucide="tree-pine"></i>
+                                    <button class="toggle-card-btn" onclick="toggleCard('cardDetailedAvaluo')"
+                                        title="Colapsar/Expandir">
+                                        <i data-lucide="chevron-down"></i>
+                                    </button>
+                                    <i data-lucide="trees"></i>
                                     <h2>Detalle de Valoración Forestal</h2>
                                 </div>
-                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div style="display: flex; gap: 0.5rem; align-items: center;" class="ignore-print">
                                     <div class="search-wrapper">
                                         <input type="text" placeholder="Filtrar especies..." class="eva-search"
                                             onkeyup="filterTable('avaluoBody', this.value)">
@@ -1916,7 +2222,7 @@
                                         <tr>
                                             <th>Especie</th>
                                             <th>Categoría</th>
-                                            <th>DAP (cm)</th>
+                                            <th>Abarcadura (cm)</th>
                                             <th>Altura (m)</th>
                                             <th>Val 40%</th>
                                             <th>Val 60%</th>
@@ -1929,20 +2235,26 @@
                             </div>
                         </div>
 
-                        <!-- Summary Table -->
-                        <div class="glass-card table-panel summary-results">
+                        <!-- Summary Table AVALUO -->
+                        <div class="glass-card table-panel summary-results collapsible-card" id="cardSummaryAvaluo">
                             <div class="section-header">
-                                <i data-lucide="sigma"></i>
-                                <h2>Resumen Gerencial de Valores</h2>
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <button class="toggle-card-btn" onclick="toggleCard('cardSummaryAvaluo')"
+                                        title="Colapsar/Expandir">
+                                        <i data-lucide="chevron-down"></i>
+                                    </button>
+                                    <i data-lucide="sigma"></i>
+                                    <h2>Resumen General de Valores</h2>
+                                </div>
                             </div>
                             <div class="table-canvas">
                                 <table id="summaryTable">
                                     <thead>
                                         <tr>
                                             <th>Concepto</th>
-                                            <th>Base</th>
-                                            <th>Actualizado</th>
-                                            <th>Incremento</th>
+                                            <th>Valor Base IPC 2018</th>
+                                            <th>Valor IPC 2025</th>
+                                            <th>Incremento %</th>
                                         </tr>
                                     </thead>
                                     <tbody id="avaluoSummaryBody"></tbody>
@@ -1979,10 +2291,10 @@
                 </button>
 
                 <!-- System Reset Button -->
-                <button class="btn-ghost" onclick="clearInput()" 
+                <button class="btn-ghost" onclick="clearInput()"
                     style="width: 100%; padding: 0.75rem; border-radius: 10px; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.6rem; border-color: rgba(244, 63, 94, 0.4); color: #f43f5e; background: rgba(244, 63, 94, 0.05);">
-                    <i data-lucide="refresh-cw" style="width:14px;"></i> 
-                    <strong>Reiniciar Para Nuevo Cálculo</strong>
+                    <i data-lucide="refresh-cw" style="width:14px;"></i>
+                    <strong>Reiniciar Sistema</strong>
                 </button>
 
                 <!-- Quick Metrics Grid -->

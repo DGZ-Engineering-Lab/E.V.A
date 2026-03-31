@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bAva.classList.add('active'); bIpc.classList.remove('active');
             bExec.innerHTML = '<i data-lucide="zap"></i> Calcular Valoración';
             bExec.style.background = 'linear-gradient(135deg, var(--warning), #D97706)';
-            if (pTitle) pTitle.innerText = 'Valoración de Árboles y Especies';
+            if (pTitle) pTitle.innerText = 'Calculadora de Valoración de Árboles y Especies';
             if (pIcon) { pIcon.innerText = 'Listo para calcular'; pIcon.style.color = 'var(--warning)'; }
             sysInputArea.placeholder = "🌳  Pegue aquí los datos de los árboles...\n# Recuerde que puede escribir los valores manualmente teniendo encuenta que desdes de cada espacio debe ir el simbolo | \n\nFormato: Especie | Diámetro(cm) | Altura(m)\nEjemplo:\nCedro | 35 | 12\nRoble | 40 | 15";
         }
@@ -303,17 +303,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (distPanel) distPanel.style.display = 'none';
         if (combinedPanel) combinedPanel.style.display = 'none';
         if (metricsPanel) metricsPanel.style.display = 'none';
-        
+
         // Reset HUD
         document.getElementById('sumFinal').innerText = '$ 0';
         document.getElementById('sumOrig').innerText = '$ 0';
         kpiCount.textContent = '0';
-        
+
         // Clear Table Bodies
         document.getElementById('eliteBody').innerHTML = '';
         document.getElementById('avaluoBody').innerHTML = '';
         document.getElementById('avaluoSummaryBody').innerHTML = '';
-        
+
         localStorage.removeItem('evaInputData');
         EVA.toast('✓ Sistema reiniciado — Listo para nueva valoración', 'info');
     };
@@ -523,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let filename = prompt("Ingrese el nombre del archivo para exportar (CSV):", defaultFilename || "Reporte_EVA");
         if (!filename) return; // User cancelled
         if (!filename.endsWith('.csv')) filename += '.csv';
-        
+
         let idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let fullCsv = [];
 
@@ -642,6 +642,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+        // Populate IPC Summary
+        const tbodySum = document.getElementById('eliteSummaryBody');
+        if (tbodySum) {
+            tbodySum.innerHTML = '';
+            const summaryRow = document.createElement('tr');
+            summaryRow.innerHTML = `
+                <td style="font-weight:700;">VALOR TOTAL CONSOLIDADO IPC</td>
+                <td class="num">${fmtElite.format(totalOrig)}</td>
+                <td class="num upd">${fmtElite.format(totalNew)}</td>
+                <td class="num"><span class="delta">+ ${fmtElite.format(totalNew - totalOrig)}</span></td>
+            `;
+            tbodySum.appendChild(summaryRow);
+        }
 
         if (count > 0) {
             resultsUI.style.display = 'flex';
@@ -1148,3 +1162,11 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.warn('[E.V.A. APP] SW failed:', err));
     });
 }
+
+window.toggleCard = function (id) {
+    const card = document.getElementById(id);
+    if (card) {
+        card.classList.toggle('collapsed');
+        if (window.lucide) lucide.createIcons();
+    }
+};
