@@ -343,106 +343,97 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.copyTable = async function(id) {
-        const el = document.getElementById(id);
-        
-        // Use modern clipboard API if available
-        if (navigator.clipboard && window.ClipboardItem) {
-            try {
-                const blob = new Blob([el.outerHTML], { type: 'text/html' });
-                const plainText = new Blob([el.innerText], { type: 'text/plain' });
-                const data = [new ClipboardItem({ 'text/html': blob, 'text/plain': plainText })];
-                await navigator.clipboard.write(data);
-                EVA.toast('✓ Datos copiados — listos para pegar en Excel');
-            } catch (err) {
-                // Fallback for some browsers
-                copyLegacy(el);
-                EVA.toast('✓ Copiado al portapapeles');
+    window.copyTable = async function(ids) {
+        const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
+        let combinedHTML = '';
+        let combinedText = '';
+
+        idArray.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                combinedHTML += el.outerHTML + '<br><br>';
+                combinedText += el.innerText + '\n\n';
             }
-        } else {
-            copyLegacy(el);
-        }
-    };
-
-    function copyLegacy(el) {
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        const selection = window.getSelection();
-        selection.removeAllRanges(); selection.addRange(range);
-        try {
-            document.execCommand('copy');
-            EVA.toast('✓ Tabla copiada al portapapeles');
-        } catch (err) {
-            EVA.toast('No se pudo copiar. Intente de nuevo.', 'warning');
-        }
-        selection.removeAllRanges();
-    }
-
-    window.exportTableToExcel = function(tableID, filename = '') {
-        const table = document.getElementById(tableID);
-        if (!table) return;
-        
-        let html = table.outerHTML;
-        // Basic Excel XML-Like Template
-        const template = `
-            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>EVA Report</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>
-            <body>${html}</body></html>`;
-            
-        const blob = new Blob(['\ufeff', template], {
-            type: 'application/vnd.ms-excel'
         });
         
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = (filename || 'EVA_Report') + '.xls';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        EVA.toast('✓ Reporte Excel generado');
+        if (navigator.clipboard && window.ClipboardItem) {
+            try {
+                const blob = new Blob([combinedHTML], { type: 'text/html' });
+                const plainText = new Blob([combinedText], { type: 'text/plain' });
+                const data = [new ClipboardItem({ 'text/html': blob, 'text/plain': plainText })];
+                await navigator.clipboard.write(data);
+                EVA.toast('✓ Tablas copiadas — listas para pegar en Excel');
+            } catch (err) {
+                copyLegacyText(combinedText);
+            }
+        } else {
+            copyLegacyText(combinedText);
+        }
     };
 
-    window.exportTableToCSV = function(tableId, filename) {
-        const table = document.getElementById(tableId);
-        let csv = [];
-        const rows = table.querySelectorAll('tr');
-        
-        for (let i = 0; i < rows.length; i++) {
-            const row = [], cols = rows[i].querySelectorAll('td, th');
-            for (let j = 0; j < cols.length; j++) {
-                let text = cols[j].innerText;
-                // Clean currency and special chars for CSV
-                if (cols[j].classList.contains('num')) {
-                    text = text.replace(/[$. ]/g, '').replace(',', '.');
-                }
-                row.push('"' + text.replace(/"/g, '""') + '"');
-            }
-            csv.push(row.join(';')); // semicolon for better Excel/South America compatibility
+    function copyLegacyText(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            EVA.toast('✓ Datos copiados (Texto plano)');
+        } catch (err) {
+            EVA.toast('Error al copiar', 'warning');
         }
+        document.body.removeChild(textArea);
+    }
 
-        const csvContent = "\uFEFF" + csv.join('\n'); // UTF-8 BOM
+    window.exportTableToCSV = function(ids, filename) {
+        const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
+        let fullCsv = [];
+        
+        idArray.forEach(id => {
+            const table = document.getElementById(id);
+            if (!table) return;
+            
+            const rows = table.querySelectorAll('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const row = [], cols = rows[i].querySelectorAll('td, th');
+                for (let j = 0; j < cols.length; j++) {
+                    let text = cols[j].innerText;
+                    if (cols[j].classList.contains('num')) {
+                        text = text.replace(/[$. ]/g, '').replace(',', '.');
+                    }
+                    row.push('"' + text.replace(/"/g, '""') + '"');
+                }
+                fullCsv.push(row.join(';'));
+            }
+            fullCsv.push(""); // Spacing between tables
+        });
+
+        const csvContent = "\uFEFF" + fullCsv.join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
         link.setAttribute("href", url);
         link.setAttribute("download", filename + ".csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
-        EVA.toast('✓ Archivo CSV descargado correctamente');
+        EVA.toast('✓ CSV generado con todas las tablas');
     };
 
-    window.exportTableToExcel = function(tableId, filename) {
-        // Keeping legacy XLS for specific formatting needs but recommending CSV
-        const table = document.getElementById(tableId);
-        const cloneTable = table.cloneNode(true);
-        const originalSelects = table.querySelectorAll('select');
-        const clonedSelects = cloneTable.querySelectorAll('select');
-        for(let i = 0; i < originalSelects.length; i++) {
-            clonedSelects[i].parentNode.innerText = originalSelects[i].value;
-        }
+    window.exportTableToExcel = function(ids, filename) {
+        const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
+        let combinedHTML = '';
+        
+        idArray.forEach(id => {
+            const table = document.getElementById(id);
+            if (table) {
+                const cloneTable = table.cloneNode(true);
+                const originalSelects = table.querySelectorAll('select');
+                const clonedSelects = cloneTable.querySelectorAll('select');
+                for(let i = 0; i < originalSelects.length; i++) {
+                    clonedSelects[i].parentNode.innerText = originalSelects[i].value;
+                }
+                combinedHTML += `<table border="1">${cloneTable.innerHTML}</table><br>`;
+            }
+        });
 
         const html = `
             <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
@@ -450,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${filename}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
             <style>td { mso-number-format:"\\@"; }</style>
             </head>
-            <body><table border="1">${cloneTable.innerHTML}</table></body>
+            <body>${combinedHTML}</body>
             </html>
         `;
 
@@ -458,10 +449,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.setAttribute("download", filename + ".xls");
-        document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
-        EVA.toast('Descargando archivo Excel... puede aparecer una advertencia de Office', 'warning');
+        EVA.toast('✓ Excel generado (incluye todas las tablas)', 'warning');
     };
 
     function executeZenith() {

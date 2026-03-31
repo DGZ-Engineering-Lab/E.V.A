@@ -1796,14 +1796,14 @@
                                 <h2>Detalle de Valoración por Especie</h2>
                             </div>
                             <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn-ghost" onclick="copyTable('avaluoTable')" title="Copiar tabla">
+                                <button class="btn-ghost" onclick="copyTable('avaluoTable,summaryTable')" title="Copiar tablas">
                                     <i data-lucide="copy" style="width:13px;"></i> Copiar
                                 </button>
-                                <button class="btn-ghost" onclick="exportTableToCSV('avaluoTable','Avaluo_Forestal')"
+                                <button class="btn-ghost" onclick="exportTableToCSV('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
                                     title="Descargar CSV">
                                     <i data-lucide="download" style="width:13px;"></i> CSV
                                 </button>
-                                <button class="btn-ghost" onclick="exportTableToExcel('avaluoTable','Avaluo_Forestal')"
+                                <button class="btn-ghost" onclick="exportTableToExcel('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
                                     title="Descargar Excel">
                                     <i data-lucide="file-spreadsheet" style="width:13px;"></i> Excel
                                 </button>
