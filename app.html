@@ -1565,6 +1565,10 @@
             title="Valoración de Árboles">
             <i data-lucide="trees"></i>
         </div>
+        <div class="nav-item" onclick="clearInput()" data-tooltip="🔄 Nuevo Proceso"
+            title="Reiniciar Sistema">
+            <i data-lucide="refresh-cw"></i>
+        </div>
 
         <div class="theme-selector" aria-label="Selector de tema visual">
             <div class="theme-node dot-dark" onclick="setTheme('dark')" title="Tema Oscuro"></div>
@@ -1803,6 +1807,12 @@
                                         <i data-lucide="file-spreadsheet" style="width:13px;"></i>
                                         CSV
                                     </button>
+                                    <button class="btn-ghost"
+                                        onclick="exportTableToExcel(['eliteTable'],'Resultados_IPC')"
+                                        title="Descargar Excel">
+                                        <i data-lucide="file-bar-chart" style="width:13px;"></i>
+                                        EXCEL
+                                    </button>
                                 </div>
                             </div>
                             <div class="table-canvas">
@@ -1836,13 +1846,19 @@
                                     </div>
                                     <button class="btn-ghost" onclick="copyTable(['avaluoTable','summaryTable'])"
                                         title="Copiar tablas">
-                                        <i data-lucide="copy" style="width:1px;"></i> Copiar Todo
+                                        <i data-lucide="copy" style="width:13px;"></i> Copiar Todo
                                     </button>
                                     <button class="btn-ghost"
                                         onclick="exportTableToCSV(['avaluoTable','summaryTable'],'Avaluo_Forestal')"
                                         title="Descargar CSV">
                                         <i data-lucide="file-spreadsheet" style="width:13px;"></i>
                                         CSV
+                                    </button>
+                                    <button class="btn-ghost"
+                                        onclick="exportTableToExcel(['avaluoTable','summaryTable'],'Avaluo_Forestal')"
+                                        title="Descargar Excel">
+                                        <i data-lucide="file-bar-chart" style="width:13px;"></i>
+                                        EXCEL
                                     </button>
                                 </div>
                             </div>

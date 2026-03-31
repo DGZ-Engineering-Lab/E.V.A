@@ -301,8 +301,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const pdfBtn = document.getElementById('pdfBtn');
         if (pdfBtn) pdfBtn.style.display = 'none';
         if (distPanel) distPanel.style.display = 'none';
+        if (combinedPanel) combinedPanel.style.display = 'none';
+        if (metricsPanel) metricsPanel.style.display = 'none';
+        
+        // Reset HUD
+        document.getElementById('sumFinal').innerText = '$ 0';
+        document.getElementById('sumOrig').innerText = '$ 0';
         kpiCount.textContent = '0';
+        
+        // Clear Table Bodies
+        document.getElementById('eliteBody').innerHTML = '';
+        document.getElementById('avaluoBody').innerHTML = '';
+        document.getElementById('avaluoSummaryBody').innerHTML = '';
+        
         localStorage.removeItem('evaInputData');
+        EVA.toast('✓ Sistema reiniciado — Listo para nueva valoración', 'info');
     };
 
     // --- Advanced Forensic Notification Protocol ---
