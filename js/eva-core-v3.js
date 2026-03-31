@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const combinedPanel = document.getElementById('combinedAnalyticsPanel');
     const compPanel = document.getElementById('comparisonPanel');
-    const distPanel = document.getElementById('distPanel');
+    const distPanel = document.getElementById('combinedAnalyticsPanel');
     const metricsPanel = document.getElementById('metricsPanel');
 
     // --- Initialization: Persistence (Auto-Save) ---
@@ -298,8 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsUI.style.display = 'none';
         resultsAvaluo.style.display = 'none';
         validationPanel.style.display = 'none';
-        document.getElementById('pdfBtn').style.display = 'none';
-        distPanel.style.display = 'none';
+        const pdfBtn = document.getElementById('pdfBtn');
+        if (pdfBtn) pdfBtn.style.display = 'none';
+        if (distPanel) distPanel.style.display = 'none';
         kpiCount.textContent = '0';
         localStorage.removeItem('evaInputData');
     };
@@ -626,7 +627,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (count > 0) {
             resultsUI.style.display = 'block';
             resultsAvaluo.style.display = 'none';
-            document.getElementById('pdfBtn').style.display = 'block';
+            const pdfBtn = document.getElementById('pdfBtn');
+            if (pdfBtn) pdfBtn.style.display = 'block';
             kpiCount.textContent = count;
 
             // Expert HUD Update with animation
@@ -723,36 +725,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const unknownSpecies = [];
 
         actParsedAvaluo.forEach(item => {
-            const { id, esp, ab, alt, isUnknown, typeNorm } = item;
-            const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
-
-            const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
-            const abM = ab / 100;
-            let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
-            let rI = t.Rows.findIndex(r => r >= alt); if (rI === -1) rI = t.Rows.length - 1;
-            let base = t.Data[rI][cI] || 0;
-
-            if (typeNorm === 'Selección') base = Math.round(base * 1.2);
-
-            const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
-            s40 += v40; s60 += v60; s70 += v70; s100 += v100;
-            count++;
-
-            if (isUnknown && showAlerts) unknownSpecies.push(esp);
-
-            const sel1 = typeNorm === 'Primera' ? 'selected' : '';
-            const sel2 = typeNorm === 'Segunda' ? 'selected' : '';
-            const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
-            const selS = typeNorm === 'Selección' ? 'selected' : '';
-
-            let catHTML = `<td>
-                <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría" ${!isUnknown ? 'style="border-color:rgba(255,255,255,0.1); color:var(--text-dim); background:transparent;"' : ''}>
-                    <option value="Primera" ${sel1}>Primera</option>
-                    <option value="Segunda" ${sel2}>Segunda</option>
-                    <option value="Tercera" ${sel3}>Tercera</option>
-                    <option value="Selección" ${selS}>Selección</option>
-                </select>
-            </td>`;
             try {
                 const { id, esp, ab, alt, isUnknown, typeNorm } = item;
                 const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
@@ -977,7 +949,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. DISTRIBUTION PIE CHART
         if (payload.species) {
-            distPanel.style.display = 'block';
+            if (distPanel) distPanel.style.display = 'block';
             const ctxDist = document.getElementById('distChart').getContext('2d');
             if (distChart) distChart.destroy();
             distChart = new Chart(ctxDist, {
@@ -1042,7 +1014,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Ensure all panels are shown
-        compPanel.style.display = 'block';
+        if (compPanel) compPanel.style.display = 'block';
         metricsPanel.style.display = 'block';
 
         // 3. FORENSIC KPI METRICS

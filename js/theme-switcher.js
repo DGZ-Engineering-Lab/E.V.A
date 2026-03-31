@@ -14,7 +14,8 @@ function setTheme(theme) {
         themeLink.href = `css/themes/${theme}.css?v=2026.3`;
         localStorage.setItem('eva-theme', theme);
         
-        // Add a class to body for specific CSS tweaks if needed
+        // Sync theme class on both html and body elements
+        document.documentElement.className = `eva-theme-${theme}`;
         document.body.className = `eva-theme-${theme}`;
         
         // Update any UI elements that need theme-specific updates (e.g., Chart.js colors)
