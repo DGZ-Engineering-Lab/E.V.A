@@ -73,9 +73,9 @@
 
     <style>
         :root {
-            --sidebar-w: 72px;
-            --topbar-h: 56px;
-            --footer-h: 36px;
+            --sidebar-w: clamp(60px, 5vw, 72px); /* Flexible Sidebar */
+            --topbar-h: clamp(48px, 6vh, 56px); /* Adaptive Header Height */
+            --footer-h: clamp(28px, 4vh, 36px);
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -108,12 +108,14 @@
             background-color: var(--bg-obsidian);
             color: var(--text-main);
             height: 100vh;
+            width: 100vw;
             display: flex;
             overflow: hidden;
             background-image:
                 radial-gradient(circle at 0% 0%, var(--primary-glow) 0%, transparent 40%),
                 radial-gradient(circle at 100% 100%, var(--primary-glow) 0%, transparent 40%);
             animation: pageIn 1s var(--ease);
+            font-size: clamp(14px, 1.2vw, 16px); /* Intelligent Base Sizing */
         }
 
         @keyframes pageIn {
@@ -367,7 +369,7 @@
             backdrop-filter: blur(25px);
             position: relative;
             z-index: 91;
-            flex-shrink: 0;
+            flex-shrink: 0; /* NO SHRINK */
         }
 
         .brand-box {
@@ -468,10 +470,10 @@
         .dashboard-main {
             flex: 1;
             display: grid;
-            grid-template-columns: 1fr 420px;
+            grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); /* Smart adaptive columns */
             grid-template-rows: auto 1fr;
-            gap: 1rem;
-            padding: 1rem 1.5rem;
+            gap: clamp(0.5rem, 1.5vw, 1.25rem); /* Intelligent Gaps */
+            padding: clamp(0.75rem, 2vw, 1.25rem);
             overflow: hidden;
             animation: reveal 0.8s var(--ease);
             min-height: 0;
@@ -495,6 +497,7 @@
             grid-column: 1 / -1;
             display: flex;
             gap: 1rem;
+            flex-shrink: 0; /* NO SHRINK */
         }
 
         .kpi-chip {
@@ -612,11 +615,11 @@
         .main-stage {
             grid-column: 1;
             grid-row: 2;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scrollbar-width: none;
-            padding-right: 0.5rem;
-            min-height: 0;
+            overflow: hidden; /* ABSOLUTE NO GLOBAL SCROLL */
+            display: flex;
+            flex-direction: column;
+            min-height: 0; /* CRITICAL FOR FLEX SCROLL */
+            position: relative;
         }
 
         .main-stage::-webkit-scrollbar {
@@ -626,12 +629,23 @@
         /* ── Tab Content Toggle ── */
         .tab-content {
             display: none;
-            width: 100%;
+            flex: 1; /* FILL STAGE */
+            min-height: 0;
+            overflow-y: auto; /* Fallback for input tab */
+            scrollbar-width: none;
         }
 
+        .tab-content::-webkit-scrollbar { display: none; }
+
         .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s var(--ease);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Results tab specific: Rigid structure for dual table view */
+        #tab-results.active {
+            overflow: hidden; 
+            padding-bottom: 0;
         }
 
         /* ── Side Panel (right) ── */
@@ -1123,17 +1137,54 @@
            RESULTS TABLES
            ============================== */
         .results-wrapper {
-            display: none;
-            padding-bottom: 3rem;
-            animation: fadeIn 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%; /* Fill Tab Content */
+            min-height: 0;
+            overflow: hidden; /* NO GLOBAL SCROLL */
+            animation: reveal 0.6s var(--ease);
+            padding: 0.5rem 0;
+        }
+
+        .table-panel {
+            display: flex;
+            flex-direction: column;
+            min-height: 0; /* Critical to respect flex-grow/shrink */
+            background: var(--bg-panel);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden; /* Ensure headers don't push out */
+        }
+
+        /* HARD-SPLIT ARCHITECTURE: 60% - 40% distribution */
+        .table-panel.detailed-results { 
+            flex: 6.5; 
+        }
+        
+        .table-panel.summary-results { 
+            flex: 3.5; 
         }
 
         .table-canvas {
             width: 100%;
-            overflow-x: auto;
-            border-radius: 14px;
-            border: 1px solid var(--border-glass);
-            background: rgba(0, 0, 0, 0.25);
+            height: 0; /* Let flex-grow manage the height */
+            flex-grow: 1;
+            overflow: auto; /* INTERNAL SCROLL ONLY */
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0, 0, 0, 0.2);
+            scrollbar-width: thin;
+        }
+
+        .table-canvas::-webkit-scrollbar {
+            width: 5px;
+        }
+        .table-canvas::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
         }
 
         table {
@@ -1146,13 +1197,17 @@
         th {
             padding: 1rem 1.25rem;
             text-align: left;
-            font-family: 'Space Mono';
+            font-weight: 800;
             color: var(--text-dim);
             text-transform: uppercase;
             font-size: 0.65rem;
             letter-spacing: 1px;
-            border-bottom: 2px solid var(--border-glass);
-            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-glass);
+            background: rgba(10, 15, 26, 0.9);
+            position: sticky; /* Sticky Headers */
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
         }
 
         td {
@@ -1421,78 +1476,75 @@
             z-index: 99999;
         }
 
-        /* ==============================
-           RESPONSIVE
-           ============================== */
-        @media (max-width: 1200px) {
+        /* --- UNIVERSAL VERSATILITY ENGINE --- */
+
+        /* 1. Ultra-Wide / High-End Monitors (1440px+) */
+        @media (min-width: 1441px) {
             .dashboard-main {
-                grid-template-columns: 1fr;
-                padding: 1rem;
+                grid-template-columns: minmax(0, 1fr) 440px;
+                gap: 1.5rem;
+                padding: 1.5rem 2rem;
             }
+            body { font-size: 16px; }
+        }
 
-            .side-panel {
-                grid-column: 1;
-                grid-row: auto;
-                max-height: 400px;
-            }
-
-            .kpi-row {
-                flex-wrap: wrap;
-            }
-
-            .kpi-chip {
-                min-width: 140px;
+        /* 2. Standard Laptops (1280px - 1440px) */
+        @media (max-width: 1440px) {
+            .dashboard-main {
+                grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+                gap: 1rem;
             }
         }
 
-        @media (max-width: 1024px) {
+        /* 3. Height-Aware Compact Mode (Critical for 768px screens) */
+        @media (max-height: 820px) {
+            :root {
+                --topbar-h: 46px;
+                --sidebar-w: 60px;
+            }
+            .kpi-row { gap: 0.5rem; }
+            .kpi-chip { padding: 0.4rem 0.8rem; }
+            .glass-card { padding: 1rem; }
+            .outcome-value { font-size: 1.8rem; }
+            textarea { height: clamp(120px, 25vh, 180px); }
+            .section-header { margin-bottom: 0.5rem; }
+            #eliteChart, #compChart, #distChart, #catChart { height: 160px !important; }
+        }
+
+        /* 4. Small Laptops / Tablets (Sub 1100px) */
+        @media (max-width: 1100px) {
+            .dashboard-main {
+                grid-template-columns: 1fr;
+                overflow-y: auto;
+                height: auto;
+            }
+            .side-panel { grid-column: 1; grid-row: auto; max-height: none; overflow: visible; }
+            .main-stage { overflow: visible; }
+            .kpi-row { flex-wrap: wrap; }
+            .kpi-chip { flex: 1 1 140px; }
+            .app-container { height: auto; overflow: visible; }
+            body { overflow-y: auto; height: auto; }
+        }
+
+        /* 5. Mobile Infrastructure (Sub 768px) */
+        @media (max-width: 768px) {
             .sidebar-nav {
                 width: 100%;
                 height: 60px;
                 flex-direction: row;
-                border-right: none;
+                border: none;
                 border-top: 1px solid var(--border-glass);
-                padding: 0 0.5rem;
+                padding: 0 1rem;
                 position: fixed;
                 bottom: 0;
                 top: auto;
                 justify-content: space-around;
                 z-index: 100;
             }
-
-            .nav-logo {
-                display: none;
-            }
-
-            .theme-selector {
-                flex-direction: row;
-                margin-top: 0;
-                padding: 0.3rem;
-            }
-
-            .nav-item[data-tooltip]::after {
-                display: none;
-            }
-
-            .app-container {
-                padding-bottom: 70px;
-                height: auto;
-            }
-
-            .sys-log {
-                display: none;
-            }
-
-            header {
-                padding: 0.5rem 1rem;
-                height: auto;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            .step-nav {
-                overflow-x: auto;
-            }
+            .nav-logo, .theme-selector, .sys-log { display: none; }
+            .app-container { padding-bottom: 60px; height: auto; }
+            header { padding: 0.5rem 1rem; height: auto; flex-wrap: wrap; gap: 0.5rem; }
+            .step-nav { overflow-x: auto; }
         }
 
         @media (max-width: 600px) {
@@ -1564,10 +1616,6 @@
         <div class="nav-item" id="btnAvaluo" onclick="switchMode('avaluo')" data-tooltip="🌳 Valorar Árboles"
             title="Valoración de Árboles">
             <i data-lucide="trees"></i>
-        </div>
-        <div class="nav-item" onclick="clearInput()" data-tooltip="🔄 Nuevo Proceso"
-            title="Reiniciar Sistema">
-            <i data-lucide="refresh-cw"></i>
         </div>
 
         <div class="theme-selector" aria-label="Selector de tema visual">
@@ -1787,7 +1835,7 @@
                 <div id="tab-results" class="tab-content">
                     <!-- IPC Results Matrix -->
                     <div id="resultsUI" class="results-wrapper" style="display: none;">
-                        <div class="glass-card table-panel">
+                        <div class="glass-card table-panel detailed-results">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="table-2"></i>
@@ -1833,7 +1881,7 @@
 
                     <!-- Avalúo Forestal Matrix -->
                     <div id="resultsAvaluo" class="results-wrapper" style="display: none;">
-                        <div class="glass-card table-panel">
+                        <div class="glass-card table-panel detailed-results">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="tree-pine"></i>
@@ -1882,7 +1930,7 @@
                         </div>
 
                         <!-- Summary Table -->
-                        <div class="glass-card table-panel" style="margin-top: 1.5rem;">
+                        <div class="glass-card table-panel summary-results">
                             <div class="section-header">
                                 <i data-lucide="sigma"></i>
                                 <h2>Resumen Gerencial de Valores</h2>
@@ -1928,6 +1976,13 @@
                 <!-- PDF Report Button -->
                 <button class="btn-pdf" id="pdfBtn" onclick="generatePremiumPDF()" style="display: none;">
                     <i data-lucide="file-text"></i> Generar Reporte PDF
+                </button>
+
+                <!-- System Reset Button -->
+                <button class="btn-ghost" onclick="clearInput()" 
+                    style="width: 100%; padding: 0.75rem; border-radius: 10px; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.6rem; border-color: rgba(244, 63, 94, 0.4); color: #f43f5e; background: rgba(244, 63, 94, 0.05);">
+                    <i data-lucide="refresh-cw" style="width:14px;"></i> 
+                    <strong>Reiniciar Para Nuevo Cálculo</strong>
                 </button>
 
                 <!-- Quick Metrics Grid -->

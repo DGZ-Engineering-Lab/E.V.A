@@ -191,11 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- FIXED: Switch correct results block within tab-results ---
         if (tabId === 'tab-results') {
             if (currentMode === 'ipc') {
-                resultsUI.style.display = 'block';
+                resultsUI.style.display = 'flex'; // FIXED FROM BLOCK
                 resultsAvaluo.style.display = 'none';
             } else {
                 resultsUI.style.display = 'none';
-                resultsAvaluo.style.display = 'block';
+                resultsAvaluo.style.display = 'flex'; // FIXED FROM BLOCK
             }
         }
 
@@ -519,8 +519,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(textArea);
     }
 
-    window.exportTableToCSV = function (ids, filename) {
-        const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
+    window.exportTableToCSV = function (ids, defaultFilename) {
+        let filename = prompt("Ingrese el nombre del archivo para exportar (CSV):", defaultFilename || "Reporte_EVA");
+        if (!filename) return; // User cancelled
+        if (!filename.endsWith('.csv')) filename += '.csv';
+        
+        let idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let fullCsv = [];
 
         idArray.forEach(id => {
@@ -547,13 +551,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", filename + ".csv");
+        link.setAttribute("download", filename);
         link.click();
         EVA.toast('✓ CSV generado con todas las tablas');
     };
 
-    window.exportTableToExcel = function (ids, filename) {
-        const idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
+    window.exportTableToExcel = function (ids, defaultFilename) {
+        let filename = prompt("Ingrese el nombre del archivo para exportar (EXCEL):", defaultFilename || "Reporte_EVA");
+        if (!filename) return; // User cancelled
+        if (!filename.endsWith('.xls')) filename += '.xls';
+
+        let idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let combinedHTML = '';
 
         idArray.forEach(id => {
@@ -582,7 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const blob = new Blob([html], { type: "application/vnd.ms-excel" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", filename + ".xls");
+        link.setAttribute("download", filename);
         link.click();
         EVA.toast('✓ Excel generado (incluye todas las tablas)', 'warning');
     };
@@ -636,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (count > 0) {
-            resultsUI.style.display = 'block';
+            resultsUI.style.display = 'flex';
             resultsAvaluo.style.display = 'none';
             const pdfBtn = document.getElementById('pdfBtn');
             if (pdfBtn) pdfBtn.style.display = 'block';
@@ -853,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (showAlerts) {
                 kpiCount.textContent = count;
-                resultsAvaluo.style.display = 'block';
+                resultsAvaluo.style.display = 'flex';
                 resultsUI.style.display = 'none';
                 EVA.toast(`✓ Valoración completada: ${count} árboles calculados`);
                 saveToLedger(`Valoración: ${count} árboles`);
