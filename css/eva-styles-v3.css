@@ -578,43 +578,159 @@ tr:hover td {
 }
 
 
-/* --- Professional Print Mode --- */
+/* ============================================
+   PROFESSIONAL FORENSIC PRINT LAYOUT
+   Optimized for Legal/Judicial Documentation
+   ============================================ */
 @media print {
-    body { background: white !important; color: black !important; }
-    .sidebar-nav, header, .cta-group, .theme-selector, .sys-log, .nav-item, .btn-zenith, .btn-ghost, .nav-logo {
+    @page {
+        margin: 2cm;
+        size: letter portrait;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
+    }
+
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 10pt;
+        display: block !important;
+    }
+
+    /* Hide UI Elements */
+    .sidebar-nav, 
+    header, 
+    .nav-item, 
+    .theme-selector, 
+    .sys-log, 
+    .cta-group, 
+    .btn-zenith, 
+    .btn-ghost, 
+    .btn-pdf,
+    .log-card,
+    #sessionHistory,
+    .info-insight,
+    .pulse-dot,
+    .nav-logo,
+    .step-nav,
+    .header-right,
+    #pdfBtn,
+    .h-del,
+    i[data-lucide="trash-2"] {
         display: none !important;
     }
-    .app-container { height: auto !important; overflow: visible !important; padding: 0 !important; }
-    .dashboard-main { 
-        display: block !important; padding: 0 !important; width: 100% !important; max-width: none !important; 
+
+    .app-container {
+        padding: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
     }
-    .glass-card { 
-        box-shadow: none !important; border: 1px solid #ddd !important; 
-        background: white !important; padding: 1.5rem !important; 
-        break-inside: avoid; margin-bottom: 2rem !important;
+
+    .dashboard-main {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
-    .kpi-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; }
-    .kpi-stack { border: 1px solid #eee !important; background: #fafafa !important; }
-    .results-wrapper { display: block !important; }
-    .table-canvas { border: 1px solid #000 !important; background: white !important; }
-    th { background: #f0f0f0 !important; color: black !important; border-bottom: 2px solid #000 !important; }
-    td { border-bottom: 1px solid #eee !important; color: black !important; }
-    .num, .upd, .delta { color: black !important; background: transparent !important; }
-    .brand-box h1 { color: black !important; font-size: 1.5rem !important; margin-bottom: 1rem; }
+
+    .glass-card {
+        background: #ffffff !important;
+        border: 1px solid #000000 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding: 1.5rem !important;
+        margin-bottom: 2rem !important;
+        break-inside: avoid;
+    }
+
+    .section-header h2 {
+        color: #000 !important;
+        border-bottom: 2px solid #000;
+        padding-bottom: 5px;
+        margin-bottom: 1rem;
+    }
+
+    /* Table Formatting */
+    .table-canvas {
+        background: #fff !important;
+        border: 2px solid #000 !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    th {
+        background: #eeeeee !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        font-size: 8pt;
+    }
+
+    td {
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #999 !important;
+        font-size: 9pt !important;
+        padding: 8px !important;
+    }
+
+    .num, .upd, .delta {
+        color: #000 !important;
+        font-weight: bold !important;
+    }
     
-    /* Document header for print */
+    .delta {
+        border: 1px solid #ccc !important;
+        background: #f9f9f9 !important;
+    }
+
+    /* Outcome HUD Optimization */
+    .outcome-card {
+        border: 3px solid #000 !important;
+        text-align: center;
+    }
+
+    .outcome-value {
+        font-size: 32pt !important;
+        color: #000 !important;
+    }
+
+    /* Document Branding */
     body::before {
-        content: 'E.V.A. PRO — ENGINE v2.5.1 — REPORTE TÉCNICO PERICIAL';
-        display: block; text-align: right; font-family: 'Space Mono'; font-size: 8pt;
-        color: #999; margin-bottom: 1cm;
+        content: "REPORTE TÉCNICO DE VALORACIÓN - ALGORITMO E.V.A. v3.1.0";
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        border-bottom: 1px solid #000;
+        margin-bottom: 1cm;
+        font-size: 10pt;
     }
-    
-    /* Footer for print */
+
     body::after {
-        content: 'Este reporte ha sido generado por el Motor E.V.A. PRO. Todos los cálculos se basan en el Factor Zenith (1.5226) oficial. DGZ Engineering Lab.';
-        position: fixed; bottom: 0; left: 0; right: 0; text-align: center;
-        font-size: 7pt; color: #aaa; border-top: 1px solid #eee; padding-top: 5mm;
+        content: "Este documento es parte integral de un proceso de valoración pericial. Datos procesados mediante el Motor de Cálculo E.V.A. PRO © DGZ Engineering Lab. Factor de Indexación IPC Zenith: 1.5226.";
+        display: block;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 8pt;
+        border-top: 1px solid #ccc;
+        padding-top: 5mm;
+        color: #666;
     }
+
+    .trace-icon { display: none !important; } /* No icons on paper */
 }
 
 /* --- [E.V.A. V4] ADVANCED ANALYTICS GRID --- */

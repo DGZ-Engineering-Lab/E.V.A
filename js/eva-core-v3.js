@@ -515,12 +515,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     count++;
                     const updated = Math.round(val * ZENITH_FACTOR);
                     const delta = updated - val;
+                    const tag = tags[idx] || '';
                     totalOrig += val;
                     totalNew += updated;
-                    const tag = tags[idx] || '';
+
+                    // Traceability Data
+                    const traceMsg = `SISTEMA E.V.A. - EVIDENCIA MATEMÁTICA:\\n\\n` +
+                                     `• Registro: #ZEN_${count.toString().padStart(3, '0')}\\n` +
+                                     `• Valor Base: ${fmtElite.format(val)}\\n` +
+                                     `• Algoritmo: Indexación IPC Zenith\\n` +
+                                     `• Operación: ${val.toLocaleString()} * 1.5226 (Factor Acumulado)\\n` +
+                                     `• Resultado Final: ${fmtElite.format(updated)}`;
+
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td class="num">#ZEN_${count.toString().padStart(3, '0')}${tag}</td>
+                        <td class="num">
+                            <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática">
+                                <i data-lucide="info" style="width:12px;height:12px;"></i>
+                            </span>
+                            #ZEN_${count.toString().padStart(3, '0')}${tag}
+                        </td>
                         <td class="num">${fmtElite.format(val)}</td>
                         <td class="num upd">${fmtElite.format(updated)}</td>
                         <td class="num"><span class="delta">+ ${fmtElite.format(delta)}</span></td>
@@ -589,6 +603,28 @@ document.addEventListener('DOMContentLoaded', () => {
             renderAvaluoBoard(false);
             EVA.toast(`✓ Categoría cambiada a "${newCat}" — valores recalculados`);
         }
+    };
+
+    window.showTrace = function (msg) {
+        const lines = msg.split('\\n');
+        const formatted = lines.map(line => `<div>${line}</div>`).join('');
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.innerHTML = `
+            <div class="modal-box" style="border-color: var(--primary); max-width: 400px;">
+                <div class="modal-title" style="color: var(--primary);">
+                    <i data-lucide="shield-check"></i> Evidencia Pericial Matemática
+                </div>
+                <div class="modal-body" style="font-family: 'Space Mono', monospace; font-size: 0.75rem; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 8px; line-height: 1.5;">
+                    ${formatted}
+                </div>
+                <button class="modal-btn" style="background: var(--primary); margin-top: 1rem;" onclick="this.closest('.modal-overlay').remove()">Cerrar Auditoría</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        if (window.lucide) lucide.createIcons();
+        setTimeout(() => overlay.classList.add('active'), 10);
     };
 
     function renderAvaluoBoard(showAlerts = false) {
