@@ -479,15 +479,15 @@
 
         /* ── Compact Analytics Grid ── */
         .analytics-grid {
-            gap: 0.75rem;
+            gap: 1.5rem;
         }
 
         .analytics-grid .glass-card {
-            padding: 1rem 1.25rem;
+            padding: 1.5rem;
         }
 
         .analytics-grid .section-header {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         /* ── KPI Row (top, full width) ── */
@@ -1707,7 +1707,7 @@
                                 </div>
                                 <span class="badge-tag">Original vs Actualizado</span>
                             </div>
-                            <div class="chart-container-fixed" style="height: 180px;">
+                            <div class="chart-container-fixed" style="height: 220px;">
                                 <canvas id="compChart"></canvas>
                             </div>
                         </div>
@@ -1721,7 +1721,7 @@
                                 </div>
                                 <span class="badge-tag">DANE Histórico 2018 — 2025</span>
                             </div>
-                            <div class="chart-container-fixed" style="height: 180px;">
+                            <div class="chart-container-fixed" style="height: 220px;">
                                 <canvas id="eliteChart"></canvas>
                             </div>
                         </div>
@@ -1731,20 +1731,20 @@
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="donut"></i>
-                                    <h2>Inteligencia de Inventario Forestal</h2>
+                                    <h2>Graficas de Inventario Forestal</h2>
                                 </div>
                                 <span class="badge-tag">Distribución Biológica y Especies</span>
                             </div>
                             <div class="analytics-double-grid">
                                 <div class="chart-box">
-                                    <h3 class="chart-sub-title">Composición por Especie</h3>
-                                    <div class="chart-container-fixed" style="height: 150px;">
+                                    <h3 class="chart-sub-title">Clasificación por Especie</h3>
+                                    <div class="chart-container-fixed" style="height: 180px;">
                                         <canvas id="distChart"></canvas>
                                     </div>
                                 </div>
                                 <div class="chart-box">
-                                    <h3 class="chart-sub-title">Calidad del Activo (Cat)</h3>
-                                    <div class="chart-container-fixed" style="height: 150px;">
+                                    <h3 class="chart-sub-title">Clasificación Categoria (Cat)</h3>
+                                    <div class="chart-container-fixed" style="height: 180px;">
                                         <canvas id="catChart"></canvas>
                                     </div>
                                 </div>
@@ -1755,7 +1755,7 @@
                         <div class="glass-card metrics-card full-width" id="metricsPanel" style="display:none;">
                             <div class="section-header">
                                 <i data-lucide="shield-check"></i>
-                                <h2>Métricas de Valoración</h2>
+                                <h2>Valoración General de Inventario</h2>
                             </div>
                             <div class="kpi-mini-grid">
                                 <div class="mini-kpi">
@@ -1781,217 +1781,211 @@
 
                 <!-- Tab 3: Result Tables -->
                 <div id="tab-results" class="tab-content">
-                                        <!-- IPC Results Matrix -->
-                                        <div id="resultsUI" class="results-wrapper" style="display: none;">
-                                            <div class="glass-card table-panel">
-                                                <div class="section-header">
-                                                    <div style="display:flex; align-items:center; gap:0.6rem;">
-                                                        <i data-lucide="table-2"></i>
-                                                        <h2>Matriz de Resultados IPC</h2>
-                                                    </div>
-                                                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                                        <div class="search-wrapper">
-                                                            <input type="text" placeholder="Filtrar resultados..."
-                                                                class="eva-search"
-                                                                onkeyup="filterTable('eliteBody', this.value)">
-                                                        </div>
-                                                        <button class="btn-ghost" onclick="copyTable(['eliteTable'])"
-                                                            title="Copiar tabla">
-                                                            <i data-lucide="copy" style="width:13px;"></i> Copiar
-                                                        </button>
-                                                        <button class="btn-ghost"
-                                                            onclick="exportTableToCSV(['eliteTable'],'Resultados_IPC')"
-                                                            title="Descargar CSV">
-                                                            <i data-lucide="file-spreadsheet" style="width:13px;"></i>
-                                                            CSV
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="table-canvas">
-                                                    <table id="eliteTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Referencia</th>
-                                                                <th>Valor Original</th>
-                                                                <th>Valor Actualizado</th>
-                                                                <th>Diferencia</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="eliteBody"></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Avalúo Forestal Matrix -->
-                                        <div id="resultsAvaluo" class="results-wrapper" style="display: none;">
-                                            <div class="glass-card table-panel">
-                                                <div class="section-header">
-                                                    <div style="display:flex; align-items:center; gap:0.6rem;">
-                                                        <i data-lucide="tree-pine"></i>
-                                                        <h2>Detalle de Valoración Forestal</h2>
-                                                    </div>
-                                                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                                        <div class="search-wrapper">
-                                                            <input type="text" placeholder="Filtrar especies..."
-                                                                class="eva-search"
-                                                                onkeyup="filterTable('avaluoBody', this.value)">
-                                                        </div>
-                                                        <button class="btn-ghost"
-                                                            onclick="copyTable(['avaluoTable','summaryTable'])"
-                                                            title="Copiar tablas">
-                                                            <i data-lucide="copy" style="width:13px;"></i> Copiar Todo
-                                                        </button>
-                                                        <button class="btn-ghost"
-                                                            onclick="exportTableToCSV(['avaluoTable','summaryTable'],'Avaluo_Forestal')"
-                                                            title="Descargar CSV">
-                                                            <i data-lucide="file-spreadsheet" style="width:13px;"></i>
-                                                            CSV
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="table-canvas">
-                                                    <table id="avaluoTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Especie</th>
-                                                                <th>Categoría</th>
-                                                                <th>DAP (cm)</th>
-                                                                <th>Altura (m)</th>
-                                                                <th>Val 40%</th>
-                                                                <th>Val 60%</th>
-                                                                <th>Val 70%</th>
-                                                                <th>Val 100%</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="avaluoBody"></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                            <!-- Summary Table -->
-                                            <div class="glass-card table-panel" style="margin-top: 1.5rem;">
-                                                <div class="section-header">
-                                                    <i data-lucide="sigma"></i>
-                                                    <h2>Resumen Gerencial de Valores</h2>
-                                                </div>
-                                                <div class="table-canvas">
-                                                    <table id="summaryTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Concepto</th>
-                                                                <th>Base</th>
-                                                                <th>Actualizado</th>
-                                                                <th>Incremento</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="avaluoSummaryBody"></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div> <!-- End Results Avaluo -->
-                                    </div> <!-- End Tab Results -->
-
-                                </div> <!-- End Main Stage -->
-
-                                <!-- ── Side Panel (Right) ── -->
-                                <aside class="side-panel">
-
-                                    <!-- Outcome HUD: Total Value -->
-                                    <div class="glass-card outcome-card">
-                                        <div class="outcome-label">💰 Valor Total Calculado</div>
-                                        <div class="outcome-value" id="sumFinal">$ 0</div>
-                                        <div class="outcome-meta">
-                                            <div class="outcome-meta-item">
-                                                <span class="outcome-meta-label">Total Base</span>
-                                                <span class="outcome-meta-val" id="sumOrig">$ 0</span>
-                                            </div>
-                                            <div class="outcome-meta-item" style="text-align: right;">
-                                                <span class="outcome-meta-label"
-                                                    style="color: var(--primary);">Indexación Zenith</span>
-                                                <span class="outcome-meta-val"
-                                                    style="color: var(--primary);">+52.26%</span>
-                                            </div>
-                                        </div>
+                    <!-- IPC Results Matrix -->
+                    <div id="resultsUI" class="results-wrapper" style="display: none;">
+                        <div class="glass-card table-panel">
+                            <div class="section-header">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <i data-lucide="table-2"></i>
+                                    <h2>Matriz de Resultados IPC</h2>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <div class="search-wrapper">
+                                        <input type="text" placeholder="Filtrar resultados..." class="eva-search"
+                                            onkeyup="filterTable('eliteBody', this.value)">
                                     </div>
-
-                                    <!-- PDF Report Button -->
-                                    <button class="btn-pdf" id="pdfBtn" onclick="generatePremiumPDF()" style="display: none;">
-                                        <i data-lucide="file-text"></i> Generar Reporte PDF
+                                    <button class="btn-ghost" onclick="copyTable(['eliteTable'])" title="Copiar tabla">
+                                        <i data-lucide="copy" style="width:13px;"></i> Copiar
                                     </button>
+                                    <button class="btn-ghost"
+                                        onclick="exportTableToCSV(['eliteTable'],'Resultados_IPC')"
+                                        title="Descargar CSV">
+                                        <i data-lucide="file-spreadsheet" style="width:13px;"></i>
+                                        CSV
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-canvas">
+                                <table id="eliteTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Referencia</th>
+                                            <th>Valor Original</th>
+                                            <th>Valor Actualizado</th>
+                                            <th>Diferencia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="eliteBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-                                    <!-- Quick Metrics Grid -->
-                                    <div class="metrics-grid">
-                                        <div class="metric-mini has-tip">
-                                            <div class="metric-mini-label">Precisión Algorítmica</div>
-                                            <div class="metric-mini-val" style="color: var(--success);">99.8%</div>
-                                            <div class="metric-mini-bar">
-                                                <div class="metric-mini-bar-fill"
-                                                    style="width: 99%; background: var(--success);"></div>
-                                            </div>
-                                            <div class="tip-bubble">📐 Cálculo basado en Factor Zenith v3.1 con
-                                                auditoría en tiempo real.</div>
-                                        </div>
-                                        <div class="metric-mini has-tip">
-                                            <div class="metric-mini-label">Modo Operativo</div>
-                                            <div class="metric-mini-val" id="opModeLabel"
-                                                style="color: var(--primary);">E.V.A. CORE</div>
-                                            <div style="font-size: 0.5rem; opacity: 0.5; margin-top: 0.3rem;">Engine
-                                                v3.1.0 Ready</div>
-                                            <div class="tip-bubble">🤖 El motor detecta automáticamente el tipo de datos
-                                                ingresados.</div>
-                                        </div>
+                    <!-- Avalúo Forestal Matrix -->
+                    <div id="resultsAvaluo" class="results-wrapper" style="display: none;">
+                        <div class="glass-card table-panel">
+                            <div class="section-header">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <i data-lucide="tree-pine"></i>
+                                    <h2>Detalle de Valoración Forestal</h2>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <div class="search-wrapper">
+                                        <input type="text" placeholder="Filtrar especies..." class="eva-search"
+                                            onkeyup="filterTable('avaluoBody', this.value)">
                                     </div>
+                                    <button class="btn-ghost" onclick="copyTable(['avaluoTable','summaryTable'])"
+                                        title="Copiar tablas">
+                                        <i data-lucide="copy" style="width:1px;"></i> Copiar Todo
+                                    </button>
+                                    <button class="btn-ghost"
+                                        onclick="exportTableToCSV(['avaluoTable','summaryTable'],'Avaluo_Forestal')"
+                                        title="Descargar CSV">
+                                        <i data-lucide="file-spreadsheet" style="width:13px;"></i>
+                                        CSV
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-canvas">
+                                <table id="avaluoTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Especie</th>
+                                            <th>Categoría</th>
+                                            <th>DAP (cm)</th>
+                                            <th>Altura (m)</th>
+                                            <th>Val 40%</th>
+                                            <th>Val 60%</th>
+                                            <th>Val 70%</th>
+                                            <th>Val 100%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="avaluoBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
 
-                                    <!-- Session Project Persistence (EVA v5) -->
-                                    <div class="glass-card stat-box" id="projectManager">
-                                        <div class="section-header">
-                                            <div style="display:flex; align-items:center; gap:0.6rem;">
-                                                <i data-lucide="folder-kanban"></i>
-                                                <h2>Gestión de Proyecto</h2>
-                                            </div>
-                                            <div style="display: flex; gap: 0.5rem;" class="ignore-print">
-                                                <button class="btn-ghost" onclick="saveSessionFile()"
-                                                    title="Guardar Proyecto .eva">
-                                                    <i data-lucide="save" style="width:14px;"></i>
-                                                </button>
-                                                <button class="btn-ghost"
-                                                    onclick="document.getElementById('loadEva').click()"
-                                                    title="Cargar Proyecto .eva">
-                                                    <i data-lucide="upload" style="width:14px;"></i>
-                                                </button>
-                                                <input type="file" id="loadEva" style="display: none" accept=".eva"
-                                                    onchange="loadSessionFile(event)">
-                                            </div>
-                                        </div>
+                        <!-- Summary Table -->
+                        <div class="glass-card table-panel" style="margin-top: 1.5rem;">
+                            <div class="section-header">
+                                <i data-lucide="sigma"></i>
+                                <h2>Resumen Gerencial de Valores</h2>
+                            </div>
+                            <div class="table-canvas">
+                                <table id="summaryTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Concepto</th>
+                                            <th>Base</th>
+                                            <th>Actualizado</th>
+                                            <th>Incremento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="avaluoSummaryBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> <!-- End Results Avaluo -->
+                </div> <!-- End Tab Results -->
 
-                                        <div class="forensic-tool-row" style="margin-top: 1rem;">
-                                            <div
-                                                style="display:flex; justify-content:space-between; align-items:center;">
-                                                <span class="badge-tag"><i data-lucide="shield-check"
-                                                        style="width:10px;"></i> Auditor Forense</span>
-                                                <label class="switch-zenith">
-                                                    <input type="checkbox" id="auditorMode"
-                                                        onchange="toggleAuditorMode()">
-                                                    <span class="slider-zenith"></span>
-                                                </label>
-                                            </div>
-                                        </div>
+            </div> <!-- End Main Stage -->
 
-                                        <div id="sessionHistory" class="history-pool">
-                                            <!-- Historial de Sesión -->
-                                        </div>
-                                    </div>
+            <!-- ── Side Panel (Right) ── -->
+            <aside class="side-panel">
 
-                                    <!-- Insight Helper -->
-                                    <div class="info-insight">
-                                        <i data-lucide="help-circle"></i>
-                                        <p>
-                                            Presione <strong>Ctrl + P</strong> para generar el pdf optimizado.
-                                        </p>
-                                    </div>
+                <!-- Outcome HUD: Total Value -->
+                <div class="glass-card outcome-card">
+                    <div class="outcome-label">💰 Valor Total Calculado</div>
+                    <div class="outcome-value" id="sumFinal">$ 0</div>
+                    <div class="outcome-meta">
+                        <div class="outcome-meta-item">
+                            <span class="outcome-meta-label">Total Base</span>
+                            <span class="outcome-meta-val" id="sumOrig">$ 0</span>
+                        </div>
+                        <div class="outcome-meta-item" style="text-align: right;">
+                            <span class="outcome-meta-label" style="color: var(--primary);">Indexación Zenith</span>
+                            <span class="outcome-meta-val" style="color: var(--primary);">+52.26%</span>
+                        </div>
+                    </div>
+                </div>
 
-                                </aside><!-- End Side Panel -->
+                <!-- PDF Report Button -->
+                <button class="btn-pdf" id="pdfBtn" onclick="generatePremiumPDF()" style="display: none;">
+                    <i data-lucide="file-text"></i> Generar Reporte PDF
+                </button>
+
+                <!-- Quick Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-mini has-tip">
+                        <div class="metric-mini-label">Precisión Algorítmica</div>
+                        <div class="metric-mini-val" style="color: var(--success);">99.8%</div>
+                        <div class="metric-mini-bar">
+                            <div class="metric-mini-bar-fill" style="width: 99%; background: var(--success);"></div>
+                        </div>
+                        <div class="tip-bubble">📐 Cálculo basado en Factor Zenith v3.1 con
+                            auditoría en tiempo real.</div>
+                    </div>
+                    <div class="metric-mini has-tip">
+                        <div class="metric-mini-label">Modo Operativo</div>
+                        <div class="metric-mini-val" id="opModeLabel" style="color: var(--primary);">E.V.A. CORE</div>
+                        <div style="font-size: 0.5rem; opacity: 0.5; margin-top: 0.3rem;">Engine
+                            v3.1.0 Ready</div>
+                        <div class="tip-bubble">🤖 El motor detecta automáticamente el tipo de datos
+                            ingresados.</div>
+                    </div>
+                </div>
+
+                <!-- Session Project Persistence (EVA v5) -->
+                <div class="glass-card stat-box" id="projectManager">
+                    <div class="section-header">
+                        <div style="display:flex; align-items:center; gap:0.6rem;">
+                            <i data-lucide="folder-kanban"></i>
+                            <h2>Gestión de Proyecto</h2>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;" class="ignore-print">
+                            <button class="btn-ghost" onclick="saveSessionFile()" title="Guardar Proyecto .eva">
+                                <i data-lucide="save" style="width:14px;"></i>
+                            </button>
+                            <button class="btn-ghost" onclick="document.getElementById('loadEva').click()"
+                                title="Cargar Proyecto .eva">
+                                <i data-lucide="upload" style="width:14px;"></i>
+                            </button>
+                            <input type="file" id="loadEva" style="display: none" accept=".eva"
+                                onchange="loadSessionFile(event)">
+                        </div>
+                    </div>
+
+                    <div class="forensic-tool-row" style="margin-top: 1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="badge-tag"><i data-lucide="shield-check" style="width:10px;"></i> Validacion
+                                Datos</span>
+                            <label class="switch-zenith">
+                                <input type="checkbox" id="auditorMode" onchange="toggleAuditorMode()">
+                                <span class="slider-zenith"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="sessionHistory" class="history-pool">
+                        <!-- Historial de Sesión -->
+                    </div>
+                </div>
+
+                <!-- Insight Helper -->
+                <div class="info-insight">
+                    <i data-lucide="help-circle"></i>
+                    <p>
+                        Presione <br> <strong>Ctrl + P</strong> para generar el pdf optimizado.
+                    </p>
+                    <p
+                        style="font-size: 0.62rem; opacity: 0.6; margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; line-height: 1.5;">
+                        * Los cálculos de indexación se basan en el IPC oficial del <strong>DANE Colombia</strong> (Base
+                        2018). El Factor Zenith de <strong>1.5226</strong> representa la acumulación inflacionaria
+                        consolidada hasta el primer trimestre de 2025.
+                    </p>
+                </div>
+
+            </aside><!-- End Side Panel -->
         </main> <!-- End Dashboard Main -->
 
         <!-- System Log / Footer -->

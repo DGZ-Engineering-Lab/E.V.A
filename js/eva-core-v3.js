@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- [E.V.A. V5] FORENSIC TOOLS (PERSISTENCE, SEARCH, AUDITOR) ---
 
-    window.saveSessionFile = function() {
+    window.saveSessionFile = function () {
         const data = {
             version: CURRENT_VERSION,
             timestamp: new Date().toISOString(),
@@ -393,18 +393,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        const date = new Date().toISOString().slice(0,10);
+        const date = new Date().toISOString().slice(0, 10);
         a.href = url;
         a.download = `Proyecto_EVA_${date}.eva`;
         a.click();
         EVA.toast('✓ Proyecto exportado (.eva) correctamente');
     };
 
-    window.loadSessionFile = function(event) {
+    window.loadSessionFile = function (event) {
         const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             try {
                 const data = JSON.parse(e.target.result);
                 sysInputArea.value = data.input || '';
@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsText(file);
     };
 
-    window.filterTable = function(bodyId, query) {
+    window.filterTable = function (bodyId, query) {
         const q = query.toLowerCase();
         const rows = document.getElementById(bodyId).querySelectorAll('tr');
         rows.forEach(row => {
@@ -431,11 +431,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    window.toggleAuditorMode = function() {
+    window.toggleAuditorMode = function () {
         auditorActive = document.getElementById('auditorMode').checked;
         if (currentMode === 'ipc') executeZenith();
         else renderAvaluoBoard();
-        
+
         if (auditorActive) {
             EVA.toast('🛡️ Modo Auditor: Analizando integridad de datos...', 'warning');
         }
@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const d = parseFloat(data.ab);
             const alt = parseFloat(data.h);
             // Alertas Biológicas: Alturas > 45m o Diámetros < 10cm o > 200cm
-            if (alt > 45 || d > 200 || d < 10) return 'auditor-flag'; 
+            if (alt > 45 || d > 200 || d < 10) return 'auditor-flag';
             return '';
         }
     }
@@ -598,19 +598,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     totalNew += updated;
 
                     // Traceability Data
-                    const traceMsg = `SISTEMA E.V.A. - EVIDENCIA MATEMÁTICA:\\n\\n` +
-                                     `• Registro: #ZEN_${count.toString().padStart(3, '0')}\\n` +
-                                     `• Valor Base: ${fmtElite.format(val)}\\n` +
-                                     `• Algoritmo: Indexación IPC Zenith\\n` +
-                                     `• Operación: ${val.toLocaleString()} * 1.5226 (Factor Acumulado)\\n` +
-                                     `• Resultado Final: ${fmtElite.format(updated)}`;
+                    const traceMsg = `SISTEMA E.V.A. - INFORMACION DETALLE DE ESPECIE:\\n\\n` +
+                        `• Registro: #ZEN_${count.toString().padStart(3, '0')} • Valor Base: ${fmtElite.format(val)}\\n` +
+                        `• Algoritmo: Indexación IPC • Operación: ${val.toLocaleString()} * 1.5226\\n` +
+                        `• Resultado Final: ${fmtElite.format(updated)}`;
 
                     const auditClass = auditRow(val, 'ipc');
                     const row = document.createElement('tr');
                     if (auditClass) row.className = auditClass;
                     row.innerHTML = `
                         <td class="num">
-                            <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática">
+                            <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver Detalle Especie">
                                 <i data-lucide="info" style="width:12px;height:12px;"></i>
                             </span>
                             #ZEN_${count.toString().padStart(3, '0')}${tag}
@@ -697,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.showTrace = function (msg) {
         const lines = msg.split('\\n');
         const formatted = lines.map(line => `<div>${line}</div>`).join('');
-        
+
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
         overlay.innerHTML = `
@@ -757,11 +755,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 </td>`;
 
                 const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
-                                 `• Especie: ${esp}\\n` +
-                                 `• Categoría: ${typeNorm}\\n` +
-                                 `• Diámetro: ${ab}cm | Altura: ${alt}m\\n` +
-                                 `• Valor Base (40%): ${fmtElite.format(v40)}\\n` +
-                                 `• Valor Final (100%): ${fmtElite.format(v100)}`;
+                    `• Especie: ${esp} • Categoría: ${typeNorm}\\n` +
+                    `• Diámetro: ${ab}cm | Altura: ${alt}m • Valor Base (40%): ${fmtElite.format(v40)}\\n` +
+                    `• Valor Final (100%): ${fmtElite.format(v100)}`;
 
                 const auditClass = auditRow({ ab: ab, h: alt }, 'avaluo');
                 const row = document.createElement('tr');
