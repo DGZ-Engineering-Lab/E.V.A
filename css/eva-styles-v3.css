@@ -948,3 +948,28 @@ input:checked + .slider-zenith:before {
         grid-template-columns: 1fr;
     }
 }
+
+/* Forensic Traceability Icon Visibility */
+.trace-icon {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary) !important;
+    cursor: pointer;
+    margin-right: 8px;
+    opacity: 0.7;
+    transition: all 0.3s var(--ease);
+    vertical-align: middle;
+}
+
+.trace-icon:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px var(--primary));
+}
+
+.trace-icon svg {
+    width: 14px !important;
+    height: 14px !important;
+    stroke-width: 2.5px !important;
+}

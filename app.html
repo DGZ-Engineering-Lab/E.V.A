@@ -1685,29 +1685,32 @@
                 <!-- Tab 2: Analytics (High-Performance Grid) -->
                 <div id="tab-analytics" class="tab-content">
                     <div class="analytics-grid">
-                        <!-- Card 1: Comparative Values (Original vs Updated) -->
-                        <div class="glass-card" id="comparisonPanel" style="display:none;">
+                        <!-- Unified Forest Inventory Intelligence -->
+                        <div class="glass-card full-width" id="combinedAnalyticsPanel" style="display: none;">
                             <div class="section-header">
-                                <i data-lucide="bar-chart-3"></i>
-                                <h2>Comparativa de Valores</h2>
-                                <span class="badge-tag">Valores Brutos</span>
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <i data-lucide="donut"></i>
+                                    <h2>Inteligencia de Inventario Forestal</h2>
+                                </div>
+                                <span class="badge-tag">Distribución Biológica y Especies</span>
                             </div>
-                            <div class="chart-container-fixed">
-                                <canvas id="compChart"></canvas>
+                            <div class="analytics-double-grid">
+                                <div class="chart-box">
+                                    <h3 class="chart-sub-title">Composición por Especie</h3>
+                                    <div class="chart-container-fixed" style="height: 250px;">
+                                        <canvas id="distChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="chart-box">
+                                    <h3 class="chart-sub-title">Calidad del Activo (Cat)</h3>
+                                    <div class="chart-container-fixed" style="height: 250px;">
+                                        <canvas id="catChart"></canvas>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="glass-card" id="distPanel" style="display:none;">
-                            <div class="section-header">
-                                <i data-lucide="pie-chart"></i>
-                                <h2>Distribución por Especie</h2>
-                            </div>
-                            <div class="chart-container-fixed">
-                                <canvas id="distChart"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Card 3: IPC Factor Evolution (Trend) -->
+                        <!-- IPC Factor Evolution (Trend) -->
                         <div class="glass-card full-width">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -1721,7 +1724,7 @@
                             </div>
                         </div>
 
-                        <!-- Card 4: Forensic KPI Metrics -->
+                        <!-- Forensic KPI Metrics -->
                         <div class="glass-card metrics-card full-width" id="metricsPanel" style="display:none;">
                             <div class="section-header">
                                 <i data-lucide="shield-check"></i>
@@ -1745,79 +1748,108 @@
                                     <span class="v" id="kpiBaseYear">2018</span>
                                 </div>
                             </div>
-                                </button>
-                            </div>
                         </div>
-                        <div class="table-canvas">
-                            <table id="eliteTable">
-                                <thead>
-                                    <tr>
-                                        <th>Referencia</th>
-                                        <th>Valor Original</th>
-                                        <th>Valor Actualizado</th>
-                                        <th>Diferencia</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="eliteBody"></tbody>
-                            </table>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Result Tables -->
+                <div id="tab-results" class="tab-content">
+                    <!-- IPC Results -->
+                    <div id="resultsUI" class="results-wrapper" style="display: none;">
+                        <div class="glass-card table-panel">
+                            <div class="section-header">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <i data-lucide="table-2"></i>
+                                    <h2>Matriz de Resultados</h2>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <div class="search-wrapper">
+                                        <input type="text" placeholder="Filtrar resultados..." class="eva-search" onkeyup="filterTable('eliteBody', this.value)">
+                                    </div>
+                                    <button class="btn-ghost" onclick="copyTable(['eliteTable'])" title="Copiar tabla">
+                                        <i data-lucide="copy" style="width:13px;"></i> Copiar
+                                    </button>
+                                    <button class="btn-ghost" onclick="exportTableToCSV(['eliteTable'],'Resultados_IPC')" title="Descargar CSV">
+                                        <i data-lucide="file-spreadsheet" style="width:13px;"></i> CSV
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-canvas">
+                                <table id="eliteTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Referencia</th>
+                                            <th>Valor Original</th>
+                                            <th>Valor Actualizado</th>
+                                            <th>Diferencia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="eliteBody"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Avalúo Results -->
-                    <div id="resultsAvaluo" class="results-wrapper">
-                        <div class="section-header" style="justify-content: space-between; margin-top: 1rem;">
-                            <div style="display: flex; align-items: center; gap: 0.6rem;">
-                                <i data-lucide="tree-pine"></i>
-                                <h2>Detalle de Valoración por Especie</h2>
+                    <div id="resultsAvaluo" class="results-wrapper" style="display: none;">
+                        <div class="glass-card table-panel">
+                            <div class="section-header">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <i data-lucide="layers"></i>
+                                    <h2>Detalle de Valoración por Especie</h2>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <div class="search-wrapper">
+                                        <input type="text" placeholder="Filtrar árboles..." class="eva-search" onkeyup="filterTable('avaluoBody', this.value)">
+                                    </div>
+                                    <button class="btn-ghost" onclick="copyTable(['avaluoTable','summaryTable'])" title="Copiar tablas">
+                                        <i data-lucide="copy" style="width:13px;"></i> Copiar Todo
+                                    </button>
+                                    <button class="btn-ghost" onclick="exportTableToCSV(['avaluoTable','summaryTable'],'Avaluo_Forestal')" title="Descargar CSV">
+                                        <i data-lucide="file-spreadsheet" style="width:13px;"></i> CSV
+                                    </button>
+                                </div>
                             </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn-ghost" onclick="copyTable('avaluoTable,summaryTable')"
-                                    title="Copiar tablas">
-                                    <i data-lucide="copy" style="width:13px;"></i> Copiar
-                                </button>
-                                <button class="btn-ghost"
-                                    onclick="exportTableToCSV('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
-                                    title="Descargar CSV">
-                                    <i data-lucide="download" style="width:13px;"></i> CSV
-                                </button>
-                                <button class="btn-ghost"
-                                    onclick="exportTableToExcel('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
-                                    title="Descargar Excel">
-                                    <i data-lucide="file-spreadsheet" style="width:13px;"></i> Excel
-                                </button>
+                            <div class="table-canvas">
+                                <table id="avaluoTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Especie</th>
+                                            <th>Categoría</th>
+                                            <th>DAP (cm)</th>
+                                            <th>Altura (m)</th>
+                                            <th>Valor 40%</th>
+                                            <th>Valor 60%</th>
+                                            <th>Valor 70%</th>
+                                            <th>Valor 100%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="avaluoBody"></tbody>
+                                </table>
                             </div>
-                        </div>
-                        <div class="table-canvas">
-                            <table id="avaluoTable">
-                                <thead>
-                                    <tr>
-                                        <th>Especie</th>
-                                        <th>Categoría</th>
-                                        <th>Abarcadura (cm)</th>
-                                        <th>Altura (m)</th>
-                                        <th>Valor 40%</th>
-                                        <th>Valor 60%</th>
-                                        <th>Valor 70%</th>
-                                        <th>Valor 100%</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="avaluoBody"></tbody>
-                            </table>
                         </div>
 
                         <!-- Summary Table -->
-                        <div class="section-header" style="margin-top: 1.5rem;">
-                            <i data-lucide="sigma"></i>
-                            <h2>Resumen de Valores Totales</h2>
+                        <div class="glass-card table-panel" style="margin-top: 1.5rem;">
+                            <div class="section-header">
+                                <i data-lucide="sigma"></i>
+                                <h2>Resumen de Valores Totales</h2>
+                            </div>
+                            <div class="table-canvas">
+                                <table id="summaryTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Concepto</th>
+                                            <th>Valor Base</th>
+                                            <th>Valor Actualizado (2025)</th>
+                                            <th>Incremento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="summaryBody"></tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="table-canvas">
-                            <table id="summaryTable">
-                                <thead>
-                                    <tr>
-                                        <th>Concepto</th>
-                                        <th>Valor Base (2018)</th>
-                                        <th>Valor Actualizado (2025)</th>
-                                        <th>Incremento</th>
+                    </div>
                                     </tr>
                                 </thead>
                                 <tbody id="avaluoSummaryBody"></tbody>

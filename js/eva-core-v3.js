@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else renderAvaluoBoard();
         
         if (auditorActive) {
-            EVA.toast('🛡️ Modo Auditor Activado: Analizando anomalías...', 'warning');
+            EVA.toast('🛡️ Modo Auditor: Analizando integridad de datos...', 'warning');
         }
     };
 
@@ -444,13 +444,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!auditorActive) return '';
         if (type === 'ipc') {
             const val = cleanVal(data.toString());
-            return (val > 1000000000) ? 'auditor-flag' : ''; // Flag > 1B COP
+            return (val > 500000000) ? 'auditor-flag' : ''; // Alerta > 500M COP
         } else {
-            // Forest Auditor rules
-            const { ab, h } = data;
-            const d = parseFloat(ab);
-            const alt = parseFloat(h);
-            if (alt > 45 || d > 180 || d < 5) return 'auditor-flag'; // Biometry anomaly
+            const d = parseFloat(data.ab);
+            const alt = parseFloat(data.h);
+            // Alertas Biológicas: Alturas > 45m o Diámetros < 10cm o > 200cm
+            if (alt > 45 || d > 200 || d < 10) return 'auditor-flag'; 
             return '';
         }
     }
@@ -634,6 +633,14 @@ document.addEventListener('DOMContentLoaded', () => {
             animateValue('sumFinal', totalNew);
             document.getElementById('sumOrig').innerText = `$ ${totalOrig.toLocaleString()}`;
 
+            // Trigger Unified Analytics for IPC also
+            updateLiveAnalytics({
+                original: totalOrig,
+                updated: totalNew,
+                items: count,
+                ipcTrend: true
+            });
+
             if (window.lucide) lucide.createIcons();
             EVA.toast(`✓ ${count} valores actualizados correctamente`);
             saveToLedger(`${count} valores actualizados con IPC`);
@@ -746,35 +753,70 @@ document.addEventListener('DOMContentLoaded', () => {
                     <option value="Selección" ${selS}>Selección</option>
                 </select>
             </td>`;
+            try {
+                const { id, esp, ab, alt, isUnknown, typeNorm } = item;
+                const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
 
-            const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
-                             `• Especie: ${esp}\\n` +
-                             `• Categoría: ${typeNorm}\\n` +
-                             `• Diámetro: ${ab}cm | Altura: ${alt}m\\n` +
-                             `• Valor Base (40%): ${fmtElite.format(v40)}\\n` +
-                             `• Valor Final (100%): ${fmtElite.format(v100)}`;
+                const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
+                const abM = ab / 100;
+                let cI = t.Cols.findIndex(c => c >= abM); if (cI === -1) cI = t.Cols.length - 2;
+                let rI = t.Rows.findIndex(r => r >= alt); if (rI === -1) rI = t.Rows.length - 1;
+                let base = t.Data[rI][cI] || 0;
 
-            const auditClass = auditRow({ ab: ab, h: alt }, 'avaluo');
-            const row = document.createElement('tr');
-            if (auditClass) row.className = auditClass;
-            row.innerHTML = `
-                <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">
-                    <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática" style="cursor:pointer; color:var(--primary); margin-right:5px;">
-                        <i data-lucide="info" style="width:12px;height:12px;"></i>
-                    </span>
-                    ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
-                </td>
-                ${catHTML}
-                <td class="num">${ab}</td>
-                <td class="num">${alt}</td>
-                <td class="num">${fmtElite.format(v40)}</td>
-                <td class="num">${fmtElite.format(v60)}</td>
-                <td class="num">${fmtElite.format(v70)}</td>
-                <td class="num">${fmtElite.format(v100)}</td>
-            `;
-            tbody.appendChild(row);
+                if (typeNorm === 'Selección') base = Math.round(base * 1.2);
+
+                const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
+                s40 += v40; s60 += v60; s70 += v70; s100 += v100;
+
+                if (isUnknown && showAlerts) unknownSpecies.push(esp);
+
+                const sel1 = typeNorm === 'Primera' ? 'selected' : '';
+                const sel2 = typeNorm === 'Segunda' ? 'selected' : '';
+                const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
+                const selS = typeNorm === 'Selección' ? 'selected' : '';
+
+                let catHTML = `<td>
+                    <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría" ${!isUnknown ? 'style="border-color:rgba(255,255,255,0.1); color:var(--text-dim); background:transparent;"' : ''}>
+                        <option value="Primera" ${sel1}>Primera</option>
+                        <option value="Segunda" ${sel2}>Segunda</option>
+                        <option value="Tercera" ${sel3}>Tercera</option>
+                        <option value="Selección" ${selS}>Selección</option>
+                    </select>
+                </td>`;
+
+                const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
+                                 `• Especie: ${esp}\\n` +
+                                 `• Categoría: ${typeNorm}\\n` +
+                                 `• Diámetro: ${ab}cm | Altura: ${alt}m\\n` +
+                                 `• Valor Base (40%): ${fmtElite.format(v40)}\\n` +
+                                 `• Valor Final (100%): ${fmtElite.format(v100)}`;
+
+                const auditClass = auditRow({ ab: ab, h: alt }, 'avaluo');
+                const row = document.createElement('tr');
+                if (auditClass) row.className = auditClass;
+                row.innerHTML = `
+                    <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">
+                        <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática" style="cursor:pointer; color:var(--primary); margin-right:5px;">
+                            <i data-lucide="info" style="width:12px;height:12px;"></i>
+                        </span>
+                        ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
+                    </td>
+                    ${catHTML}
+                    <td class="num">${ab}</td>
+                    <td class="num">${alt}</td>
+                    <td class="num">${fmtElite.format(v40)}</td>
+                    <td class="num">${fmtElite.format(v60)}</td>
+                    <td class="num">${fmtElite.format(v70)}</td>
+                    <td class="num upd">${fmtElite.format(v100)}</td>
+                `;
+                tbody.appendChild(row);
+                count++;
+            } catch (e) {
+                console.error("Error en fila de avalúo:", e);
+            }
         });
 
+        if (window.lucide) lucide.createIcons();
 
         if (unknownSpecies.length > 0 && showAlerts) {
             showCustomAlert([...new Set(unknownSpecies)]);
