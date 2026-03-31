@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fmtElite = new Intl.NumberFormat('es-CO', {
         style: 'currency', currency: 'COP', maximumFractionDigits: 0
     });
+    const CURRENT_VERSION = "2.5.2"; 
     let currentMode = 'ipc';
     let actParsedAvaluo = [];
     let compChart = null;
@@ -326,12 +327,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => entry.classList.add('phase-in'), 10);
             
-            setTimeout(() => {
-                entry.classList.remove('phase-in');
-                setTimeout(() => entry.remove(), 800);
-            }, duration);
+            if (duration > 0) {
+                setTimeout(() => {
+                    entry.classList.remove('phase-in');
+                    setTimeout(() => entry.remove(), 800);
+                }, duration);
+            }
+            return entry; // Return for manual persistence
         }
     };
+
+    // --- Dynamic Evolution: Version Polling ---
+    async function checkSystemUpdates() {
+        try {
+            const response = await fetch(`./version.json?t=${Date.now()}`, { cache: 'no-store' });
+            const serverData = await response.json();
+            
+            if (serverData.version !== CURRENT_VERSION) {
+                console.log(`[E.V.A.] Update detected: ${CURRENT_VERSION} -> ${serverData.version}`);
+                
+                const updateMsg = `Sincronizando nueva versión (${serverData.version}). El sistema se reiniciará en 5 segundos...`;
+                const toast = EVA.toast(updateMsg, 'warning', 0); // Persistent toast
+
+                // Force SW update
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistration().then(reg => {
+                        if (reg) reg.update();
+                    });
+                }
+
+                setTimeout(() => {
+                    localStorage.setItem('evaInputData', sysInputArea.value); // Backup current input
+                    location.reload(true);
+                }, 5000);
+            }
+        } catch (err) {
+            console.warn('[E.V.A.] Update check failed:', err);
+        }
+    }
+
+    // Check on startup and every 10 minutes
+    checkSystemUpdates();
+    setInterval(checkSystemUpdates, 10 * 60 * 1000); 
+    
+    // Check when user returns to the tab
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') checkSystemUpdates();
+    });
 
 
 
@@ -928,11 +970,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Service Worker Registration
+// Service Worker Registration & Version Check
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('[E.V.A. APP] SW registered:', reg.scope))
+            .then(reg => {
+                console.log('[E.V.A. APP] SW registered:', reg.scope);
+                
+                // Handle version changes immediately
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // New version has been cached
+                            console.log('[E.V.A.] New content available, notifying UI...');
+                        }
+                    });
+                });
+            })
             .catch(err => console.warn('[E.V.A. APP] SW failed:', err));
     });
 }

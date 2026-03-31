@@ -1656,7 +1656,7 @@
                         </div>
 
                         <textarea id="mainInput" oninput="scanData(this.value)"
-                            placeholder="📋  Pegue aquí los valores que desea actualizar... &#10;# Recuerde que puede escribirlos manual teniendo encuenta que desdes de cada espacio debe ir el simbolo | &#10;&#10;Ejemplo: Copie y pegue una columna de Excel con valores como:&#10;$ 1.500.000&#10;$ 2.300.000&#10;$ 850.000"></textarea>
+                            placeholder="📋  Pegue aquí los valores que desea actualizar... &#10;# Recuerde que puede escribir manualmente los valores &#10;&#10;Ejemplo: Copie y pegue una columna de Excel con valores como:&#10;$ 1.500.000&#10;$ 2.300.000&#10;$ 850.000"></textarea>
 
                         <!-- Smart Validation Feedback -->
                         <div id="validationStatus" class="validation-panel">
@@ -1808,14 +1808,17 @@
                                 <h2>Detalle de Valoración por Especie</h2>
                             </div>
                             <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn-ghost" onclick="copyTable('avaluoTable,summaryTable')" title="Copiar tablas">
+                                <button class="btn-ghost" onclick="copyTable('avaluoTable,summaryTable')"
+                                    title="Copiar tablas">
                                     <i data-lucide="copy" style="width:13px;"></i> Copiar
                                 </button>
-                                <button class="btn-ghost" onclick="exportTableToCSV('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
+                                <button class="btn-ghost"
+                                    onclick="exportTableToCSV('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
                                     title="Descargar CSV">
                                     <i data-lucide="download" style="width:13px;"></i> CSV
                                 </button>
-                                <button class="btn-ghost" onclick="exportTableToExcel('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
+                                <button class="btn-ghost"
+                                    onclick="exportTableToExcel('avaluoTable,summaryTable','Avaluo_Forestal_Completo')"
                                     title="Descargar Excel">
                                     <i data-lucide="file-spreadsheet" style="width:13px;"></i> Excel
                                 </button>

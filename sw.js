@@ -6,12 +6,13 @@
  * where internet connectivity is unreliable.
  */
 
-const CACHE_NAME = 'eva-pro-v3.3.0-seo-visual';
+const CACHE_NAME = 'eva-pro-v3.3.1-dynamic-update';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './app.html',
     './manifest.json',
+    './version.json', // Añadido para seguimiento de red
     './assets/logo.png',
     './css/themes/dark.css',
     './css/themes/light.css',
@@ -36,25 +37,40 @@ self.addEventListener('install', (event) => {
     self.skipWaiting();
 });
 
-// Activate: Clean old caches
+// Activate: Clean old caches and claim clients
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames
-                    .filter((name) => name !== CACHE_NAME)
-                    .map((name) => caches.delete(name))
-            );
-        })
+        Promise.all([
+            caches.keys().then((cacheNames) => {
+                return Promise.all(
+                    cacheNames
+                        .filter((name) => name !== CACHE_NAME)
+                        .map((name) => caches.delete(name))
+                );
+            }),
+            self.clients.claim()
+        ])
     );
-    self.clients.claim();
 });
 
-// Fetch: Cache-first strategy for local assets, network-first for CDN
+// Message Listener for explicit SKIP_WAITING
+self.addEventListener('message', (event) => {
+    if (event.data === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+});
+
+// Fetch Strategy: Stale-while-revalidate for flexibility
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
     
-    // Network-first for CDN resources (fonts, icons, chart.js)
+    // Always Network-first for version.json to detect updates
+    if (url.pathname.endsWith('version.json')) {
+        event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
+        return;
+    }
+
+    // Network-first for external CDNs
     if (url.origin !== location.origin) {
         event.respondWith(
             fetch(event.request)
@@ -68,7 +84,7 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Cache-first for local assets
+    // Cache-first for local assets (handled by Version Polling in UI)
     event.respondWith(
         caches.match(event.request).then((cached) => {
             return cached || fetch(event.request).then((response) => {
