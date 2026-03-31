@@ -477,6 +477,19 @@
             min-height: 0;
         }
 
+        /* ── Compact Analytics Grid ── */
+        .analytics-grid {
+            gap: 0.75rem;
+        }
+
+        .analytics-grid .glass-card {
+            padding: 1rem 1.25rem;
+        }
+
+        .analytics-grid .section-header {
+            margin-bottom: 0.5rem;
+        }
+
         /* ── KPI Row (top, full width) ── */
         .kpi-row {
             grid-column: 1 / -1;
@@ -1686,7 +1699,7 @@
                 <div id="tab-analytics" class="tab-content">
                     <div class="analytics-grid">
                         <!-- Comparison Bar Chart -->
-                        <div class="glass-card full-width" id="comparisonPanel" style="display: none;">
+                        <div class="glass-card" id="comparisonPanel" style="display: none;">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="bar-chart-2"></i>
@@ -1694,8 +1707,22 @@
                                 </div>
                                 <span class="badge-tag">Original vs Actualizado</span>
                             </div>
-                            <div class="chart-container-fixed" style="height: 250px;">
+                            <div class="chart-container-fixed" style="height: 180px;">
                                 <canvas id="compChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- IPC Factor Evolution (Trend) -->
+                        <div class="glass-card">
+                            <div class="section-header">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <i data-lucide="trending-up"></i>
+                                    <h2>Evolución del IPC</h2>
+                                </div>
+                                <span class="badge-tag">DANE Histórico 2018 — 2025</span>
+                            </div>
+                            <div class="chart-container-fixed" style="height: 180px;">
+                                <canvas id="eliteChart"></canvas>
                             </div>
                         </div>
 
@@ -1711,30 +1738,16 @@
                             <div class="analytics-double-grid">
                                 <div class="chart-box">
                                     <h3 class="chart-sub-title">Composición por Especie</h3>
-                                    <div class="chart-container-fixed" style="height: 250px;">
+                                    <div class="chart-container-fixed" style="height: 150px;">
                                         <canvas id="distChart"></canvas>
                                     </div>
                                 </div>
                                 <div class="chart-box">
                                     <h3 class="chart-sub-title">Calidad del Activo (Cat)</h3>
-                                    <div class="chart-container-fixed" style="height: 250px;">
+                                    <div class="chart-container-fixed" style="height: 150px;">
                                         <canvas id="catChart"></canvas>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- IPC Factor Evolution (Trend) -->
-                        <div class="glass-card full-width">
-                            <div class="section-header">
-                                <div style="display:flex; align-items:center; gap:0.6rem;">
-                                    <i data-lucide="trending-up"></i>
-                                    <h2>Evolución del IPC</h2>
-                                </div>
-                                <span class="badge-tag">DANE Histórico 2018 — 2025</span>
-                            </div>
-                            <div class="chart-container-fixed" style="height: 260px;">
-                                <canvas id="eliteChart"></canvas>
                             </div>
                         </div>
 
