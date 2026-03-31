@@ -1738,29 +1738,15 @@
                                 <div class="mini-kpi">
                                     <span class="l">Registro Máximo</span>
                                     <span class="v" id="kpiMax">$0</span>
-                                </div>
-                                <div class="mini-kpi">
-                                    <span class="l">Incremento Real</span>
-                                    <span class="v" id="kpiVariance">+0%</span>
-                                </div>
-                                <div class="mini-kpi">
-                                    <span class="l">Base de Cálculo</span>
-                                    <span class="v" id="kpiBaseYear">2018</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab 3: Result Tables -->
+                                     <!-- Tab 3: Result Tables -->
                 <div id="tab-results" class="tab-content">
-                    <!-- IPC Results -->
+                    <!-- IPC Results Matrix -->
                     <div id="resultsUI" class="results-wrapper" style="display: none;">
                         <div class="glass-card table-panel">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="table-2"></i>
-                                    <h2>Matriz de Resultados</h2>
+                                    <h2>Matriz de Resultados IPC</h2>
                                 </div>
                                 <div style="display: flex; gap: 0.5rem; align-items: center;">
                                     <div class="search-wrapper">
@@ -1790,17 +1776,17 @@
                         </div>
                     </div>
 
-                    <!-- Avalúo Results -->
+                    <!-- Avalúo Forestal Matrix -->
                     <div id="resultsAvaluo" class="results-wrapper" style="display: none;">
                         <div class="glass-card table-panel">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
-                                    <i data-lucide="layers"></i>
-                                    <h2>Detalle de Valoración por Especie</h2>
+                                    <i data-lucide="tree-pine"></i>
+                                    <h2>Detalle de Valoración Forestal</h2>
                                 </div>
                                 <div style="display: flex; gap: 0.5rem; align-items: center;">
                                     <div class="search-wrapper">
-                                        <input type="text" placeholder="Filtrar árboles..." class="eva-search" onkeyup="filterTable('avaluoBody', this.value)">
+                                        <input type="text" placeholder="Filtrar especies..." class="eva-search" onkeyup="filterTable('avaluoBody', this.value)">
                                     </div>
                                     <button class="btn-ghost" onclick="copyTable(['avaluoTable','summaryTable'])" title="Copiar tablas">
                                         <i data-lucide="copy" style="width:13px;"></i> Copiar Todo
@@ -1818,10 +1804,10 @@
                                             <th>Categoría</th>
                                             <th>DAP (cm)</th>
                                             <th>Altura (m)</th>
-                                            <th>Valor 40%</th>
-                                            <th>Valor 60%</th>
-                                            <th>Valor 70%</th>
-                                            <th>Valor 100%</th>
+                                            <th>Val 40%</th>
+                                            <th>Val 60%</th>
+                                            <th>Val 70%</th>
+                                            <th>Val 100%</th>
                                         </tr>
                                     </thead>
                                     <tbody id="avaluoBody"></tbody>
@@ -1833,15 +1819,15 @@
                         <div class="glass-card table-panel" style="margin-top: 1.5rem;">
                             <div class="section-header">
                                 <i data-lucide="sigma"></i>
-                                <h2>Resumen de Valores Totales</h2>
+                                <h2>Resumen Gerencial de Valores</h2>
                             </div>
                             <div class="table-canvas">
                                 <table id="summaryTable">
                                     <thead>
                                         <tr>
                                             <th>Concepto</th>
-                                            <th>Valor Base</th>
-                                            <th>Valor Actualizado (2025)</th>
+                                            <th>Base</th>
+                                            <th>Actualizado</th>
                                             <th>Incremento</th>
                                         </tr>
                                     </thead>
@@ -1849,26 +1835,13 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
-                                    </tr>
-                                </thead>
-                                <tbody id="avaluoSummaryBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="pdfBtn" style="display:none; margin-top: 1rem;">
-                        <button class="btn-zenith" onclick="generatePremiumPDF()"
-                            style="background: var(--text-main); color: #000;">
-                            <i data-lucide="file-text"></i> Descargar Reporte en PDF
-                        </button>
-                    </div>
-                </div>
+                    </div> <!-- End Results Avaluo -->
+                </div> <!-- End Tab Results -->
 
             </div> <!-- End Main Stage -->
 
             <!-- ── Side Panel (Right) ── -->
-            <div class="side-panel">
+            <aside class="side-panel">
 
                 <!-- Outcome HUD: Total Value -->
                 <div class="glass-card outcome-card">
@@ -1876,92 +1849,112 @@
                     <div class="outcome-value" id="sumFinal">$ 0</div>
                     <div class="outcome-meta">
                         <div class="outcome-meta-item">
-                            <span class="outcome-meta-label">Valor Original</span>
+                            <span class="outcome-meta-label">Total Base</span>
                             <span class="outcome-meta-val" id="sumOrig">$ 0</span>
                         </div>
                         <div class="outcome-meta-item" style="text-align: right;">
-                            <span class="outcome-meta-label" style="color: var(--primary);">Incremento por IPC</span>
+                            <span class="outcome-meta-label" style="color: var(--primary);">Indexación Zenith</span>
                             <span class="outcome-meta-val" style="color: var(--primary);">+52.26%</span>
                         </div>
                     </div>
-                    <button class="btn-pdf" onclick="generatePremiumPDF()">
-                        <i data-lucide="file-check"></i> Descargar Reporte PDF
-                    </button>
                 </div>
 
-                <!-- Quick Metrics -->
+                <!-- Quick Metrics Grid -->
                 <div class="metrics-grid">
                     <div class="metric-mini has-tip">
-                        <div class="metric-mini-label">Precisión del cálculo</div>
-                        <div class="metric-mini-val" style="color: var(--success);">98.4%</div>
+                        <div class="metric-mini-label">Precisión Algorítmica</div>
+                        <div class="metric-mini-val" style="color: var(--success);">99.8%</div>
                         <div class="metric-mini-bar">
-                            <div class="metric-mini-bar-fill" style="width: 98%; background: var(--success);"></div>
+                            <div class="metric-mini-bar-fill" style="width: 99%; background: var(--success);"></div>
                         </div>
-                        <div class="tip-bubble">📐 El sistema calcula con alta precisión basándose en las tablas
-                            oficiales del DANE y Banco de la República.</div>
+                        <div class="tip-bubble">📐 Cálculo basado en Factor Zenith v3.1 con auditoría en tiempo real.</div>
                     </div>
                     <div class="metric-mini has-tip">
-                        <div class="metric-mini-label">Comparación de Mercado</div>
-                        <div class="metric-mini-val">+4.2% <i data-lucide="trending-up"
-                                style="width:12px; color: var(--primary);"></i></div>
-                        <div style="font-size: 0.5rem; opacity: 0.5; margin-top: 0.3rem;">vs. promedio de la región
-                        </div>
-                        <div class="tip-bubble">📊 Indica cómo se compara su resultado con el promedio de valoraciones
-                            similares en la región.</div>
+                        <div class="metric-mini-label">Modo Operativo</div>
+                        <div class="metric-mini-val" id="opModeLabel" style="color: var(--primary);">E.V.A. CORE</div>
+                        <div style="font-size: 0.5rem; opacity: 0.5; margin-top: 0.3rem;">Engine v3.1.0 Ready</div>
+                        <div class="tip-bubble">🤖 El motor detecta automáticamente el tipo de datos ingresados.</div>
                     </div>
                 </div>
 
-                <!-- Session History (Compact) -->
-                <div class="glass-card log-card">
+                <!-- Session Project Persistence (EVA v5) -->
+                <div class="glass-card stat-box" id="projectManager">
                     <div class="section-header">
-                        <i data-lucide="history"></i>
-                        <h2>Historial Reciente</h2>
+                        <div style="display:flex; align-items:center; gap:0.6rem;">
+                            <i data-lucide="folder-kanban"></i>
+                            <h2>Gestión de Proyecto</h2>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;" class="ignore-print">
+                            <button class="btn-ghost" onclick="saveSessionFile()" title="Guardar Proyecto .eva">
+                                <i data-lucide="save" style="width:14px;"></i>
+                            </button>
+                            <button class="btn-ghost" onclick="document.getElementById('loadEva').click()" title="Cargar Proyecto .eva">
+                                <i data-lucide="upload" style="width:14px;"></i>
+                            </button>
+                            <input type="file" id="loadEva" style="display: none" accept=".eva" onchange="loadSessionFile(event)">
+                        </div>
                     </div>
-                    <div id="sessionHistory" class="history-list">
-                        <!-- Dynamic -->
+                    
+                    <div class="forensic-tool-row" style="margin-top: 1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="badge-tag"><i data-lucide="shield-check" style="width:10px;"></i> Auditor Forense</span>
+                            <label class="switch-zenith">
+                                <input type="checkbox" id="auditorMode" onchange="toggleAuditorMode()">
+                                <span class="slider-zenith"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="historyPool" class="history-pool">
+                        <!-- Historial de Sesión -->
                     </div>
                 </div>
 
-                <!-- Insight Box -->
+                <!-- Insight Helper -->
                 <div class="info-insight">
-                    <i data-lucide="lightbulb"></i>
+                    <i data-lucide="help-circle"></i>
                     <p>
-                        <strong>💡 Información importante:</strong> El sistema actualiza los valores usando el factor
-                        IPC oficial (<span style="color: var(--primary);">52.26%</span> de incremento entre 2018 y
-                        2025). Los resultados se pueden usar en informes técnicos y peritajes profesionales.
+                        Presione <strong>Ctrl + P</strong> para generar el reporte físico optimizado para procesos judiciales.
                     </p>
                 </div>
 
-            </div><!-- End Side Panel -->
-        </main>
+            </aside><!-- End Side Panel -->
+        </main> <!-- End Dashboard Main -->
 
-        <!-- Footer -->
+        <!-- System Log / Footer -->
         <footer class="sys-log">
-            <div class="segment"><a href="https://dgz-engineering.vercel.app/" target="_blank"
-                    style="color: inherit; text-decoration: none; opacity: 0.8; transition: opacity 0.3s;"
-                    onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">DGZ Engineering Lab ©
-                    2026</a></div>
-            <div class="segment">Motor de Cálculo <span>v2.5.1</span></div>
-            <div class="segment">Sistema Avaluo Vegetacion</div>
+            <div class="segment">DGZ Engineering Lab © 2026</div>
+            <div class="segment">Zenith Engine <span>v3.1.0</span></div>
+            <div class="segment">Forensic Biological Suite</div>
         </footer>
 
     </div><!-- End App Container -->
 
-    <!-- ========================
-         ENGINE (NO CHANGES)
-         ======================== -->
-    <script src="js/eva-core-v3.js?v=2026.3" defer></script>
+    <!-- ============================================
+         SCRIPTS & ENGINE
+         ============================================ -->
+    <script src="js/eva-core-v3.js?v=3.1.0" defer></script>
 
     <script>
-        // Initialize icons
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
+            
+            // Live Clock (Colombia Time)
+            function updateClock() {
+                const el = document.getElementById('sysClock');
+                if (el) el.textContent = new Intl.DateTimeFormat('es-CO', {
+                        timeZone: 'America/Bogota', 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        second: '2-digit', 
+                        hour12: false
+                    }).format(new Date());
+            }
+            setInterval(updateClock, 1000); 
+            updateClock();
         });
-
-        // Live Clock (Forced Colombia Time)
-        function updateClock() {
-            const el = document.getElementById('sysClock');
-            if (el) {
+    </script>
+</body>
                 const options = {
                     timeZone: 'America/Bogota',
                     hour: '2-digit',
