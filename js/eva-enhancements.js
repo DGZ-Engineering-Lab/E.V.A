@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (typeof updateIPCChart === 'function') updateIPCChart(years.from, years.to);
-        if (typeof executeAction === 'function' && document.getElementById('mainInput')?.value.trim()) executeAction();
+        if (typeof window.executeAction === 'function' && document.getElementById('mainInput')?.value.trim()) window.executeAction();
     }
 
     if (yearFrom) yearFrom.addEventListener('change', updateDynamicFactor);
@@ -266,19 +266,27 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.showTrace = function(data) {
-        const nameMatch = data.match(/Especie:\s*([^(\n]+)/);
-        const name = nameMatch ? nameMatch[1].trim() : 'Árbol';
+        // Adjust regex for new data text format
+        const nameMatch = data.match(/Especie:\s*([^\n]+)/);
+        const name = nameMatch ? nameMatch[1].trim() : (data.match(/Registro:\s*([^\n]+)/) ? data.match(/Registro:\s*([^\n]+)/)[1].trim() : 'Ítem');
+        
         const key = name.split(' ')[0].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-        const sciMatch = data.match(/\(([^)]+)\)/);
+        
+        const sciMatch = data.match(/Nombre Científico:\s*([^\n]+)/);
         const sci = sciMatch && sciMatch[1] !== 'N/A' ? sciMatch[1] : (SCIENTIFIC_MAP[name] || 'N/A');
+        
         const img = treeImgs[key] || 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?q=80&w=600';
 
         const lines = data.split('\n').filter(l => l.trim()).map(l => l.replace(/•\s*/, '').trim());
+        
+        // External Catalogue link
+        const searchQuery = sci !== 'N/A' ? sci : name;
+        const catalogLink = `https://www.google.com/search?q=site:catalogofloravalleaburra.eia.edu.co+${encodeURIComponent(searchQuery)}`;
 
         const html = `
-            <div id="traceModal" class="modal-overlay active" style="z-index:99999; display:flex; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,10,20,0.85); backdrop-filter:blur(15px); transition: 0.3s;">
-                <div class="glass-card" style="width:550px; max-width:95vw; padding:0; overflow:hidden; border:1px solid rgba(0,242,254,0.3); animation:reveal 0.4s cubic-bezier(0.23, 1, 0.32, 1);">
-                    <div style="height:250px; position:relative; overflow:hidden;">
+            <div id="traceModal" class="modal-overlay active" style="z-index:99999; display:flex; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,10,20,0.85); backdrop-filter:blur(15px); transition: 0.3s; padding: 1rem;">
+                <div class="glass-card" style="width:100%; max-width:650px; max-height: 90vh; overflow-y: auto; padding:0; border:1px solid rgba(0,242,254,0.3); animation:reveal 0.4s cubic-bezier(0.23, 1, 0.32, 1); display:flex; flex-direction:column;">
+                    <div style="height:220px; flex-shrink:0; position:relative; overflow:hidden;">
                         <img src="${img}" style="width:100%; height:100%; object-fit:cover; opacity:0.8; transition: transform 2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
                         <div style="position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,0.2), #0a0f1e);"></div>
                         <div style="position:absolute; bottom:0; left:0; width:100%; padding:2rem;">
@@ -286,49 +294,52 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span style="background:var(--primary); color:#000; font-size:0.6rem; font-weight:900; padding:2px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:1px;">Inteligencia Pericial</span>
                                 <span style="color:rgba(255,255,255,0.5); font-size:0.6rem; font-family:'Space Mono';">SYNCED REAL-TIME</span>
                             </div>
-                            <h2 style="margin:0; font-size:2rem; color:#fff; font-weight:900; letter-spacing:-1px;">${name}</h2>
-                            <p style="margin:0; color:var(--primary); font-style:italic; font-size:1rem; font-weight:600;">${sci}</p>
+                            <h2 style="margin:0; font-size:2rem; color:#fff; font-weight:900; letter-spacing:-1px; line-height: 1.1;">${name}</h2>
+                            ${sci !== 'N/A' ? `<p style="margin:0; margin-top:0.25rem; color:var(--primary); font-style:italic; font-size:1rem; font-weight:600;">${sci}</p>` : ''}
                         </div>
                         <button onclick="document.getElementById('traceModal').remove()" style="position:absolute; top:20px; right:20px; border:none; background:rgba(255,255,255,0.1); color:#fff; border-radius:50%; width:36px; height:36px; cursor:pointer; backdrop-filter:blur(10px); transition:0.3s; display:flex; align-items:center; justify-content:center;" onmouseover="this.style.background='rgba(244,63,94,0.5)'">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                         </button>
                     </div>
                     <div style="padding:2rem;">
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem;">
                             <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:1.25rem; border:1px solid rgba(255,255,255,0.05);">
                                 <h3 style="font-size:0.7rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database"><path d="M4 6c0 1.66 3.58 3 8 3s8-1.34 8-3s-3.58-3-8-3s-8 1.34-8 3"/><path d="M4 10c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 14c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 18c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 1.66 3.58 3 8 3s8-1.34 8-3s-3.58-3-8-3s-8 1.34-8 3"/><path d="M4 10c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 14c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 18c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/></svg>
                                     Datos de Peritaje
                                 </h3>
                                 <div style="display:flex; flex-direction:column; gap:0.75rem;">
                                     ${lines.filter(l => !l.includes('SISTEMA E.V.A') && !l.includes('PERICIAL')).map(l => {
-                                        const [label, val] = l.split(':');
-                                        if(!val) return '';
-                                        return `<div style="display:flex; justify-content:space-between; align-items:center;">
-                                            <span style="font-size:0.7rem; color:rgba(255,255,255,0.4); text-transform:uppercase;">${label}</span>
-                                            <span style="font-size:0.85rem; color:#fff; font-weight:700; font-family:'Space Mono';">${val.trim()}</span>
+                                        // Allow splitting ONLY at the first colon
+                                        const match = l.match(/^([^:]+):(.*)$/);
+                                        if(!match) return '';
+                                        const label = match[1].trim();
+                                        const val = match[2].trim();
+                                        return `<div style="display:flex; justify-content:space-between; align-items:center; gap: 1rem;">
+                                            <span style="font-size:0.7rem; color:rgba(255,255,255,0.4); text-transform:uppercase; white-space:nowrap;">${label}</span>
+                                            <span style="font-size:0.85rem; color:#fff; font-weight:700; font-family:'Space Mono'; text-align:right;">${val}</span>
                                         </div>`;
                                     }).join('')}
                                 </div>
                             </div>
-                            <div style="background:rgba(0,242,254,0.02); border-radius:12px; padding:1.25rem; border:1px solid rgba(0,242,254,0.1);">
+                            <div style="background:rgba(0,242,254,0.02); border-radius:12px; padding:1.25rem; border:1px solid rgba(0,242,254,0.1); display:flex; flex-direction:column;">
                                 <h3 style="font-size:0.7rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                                    Análisis Botánico
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                    Análisis Botánico Externo
                                 </h3>
-                                <p style="font-size:0.75rem; color:rgba(255,255,255,0.7); line-height:1.5; margin:0;">
-                                    Especie catalogada dentro del ecosistema forestal colombiano. Categoría asignada basada en el manual de valoración de activos biológicos vigente para el año fiscal en curso.
+                                <p style="font-size:0.75rem; color:rgba(255,255,255,0.7); line-height:1.5; margin:0; margin-bottom: 1rem; flex:1;">
+                                    Puede consultar más información verificada, taxonomía y fotografías detalladas de esta especie directamente en la base de datos de Flora del Valle de Aburrá y ecosistemas de Colombia.
                                 </p>
-                                <div style="margin-top:1rem; display:flex; gap:0.5rem;">
-                                    <div style="flex:1; background:rgba(0,0,0,0.2); height:4px; border-radius:2px;"><div style="width:85%; background:var(--primary); height:100%; border-radius:2px;"></div></div>
-                                    <span style="font-size:0.6rem; color:var(--primary); font-family:'Space Mono';">MATCH 98%</span>
-                                </div>
+                                <a href="${catalogLink}" target="_blank" style="display:flex; align-items:center; justify-content:center; gap:0.5rem; text-decoration:none; padding:12px 20px; border-radius:8px; background:linear-gradient(135deg, rgba(0,242,254,0.15) 0%, rgba(9,9,14,0.8) 100%); color:var(--primary); font-size:0.8rem; font-family:'Space Mono'; font-weight:800; border:1px solid rgba(0,242,254,0.4); box-shadow: 0 0 15px rgba(0,242,254,0.1); transition:all 0.4s cubic-bezier(0.23, 1, 0.32, 1); letter-spacing:0.5px; text-transform:uppercase;" onmouseover="this.style.background='var(--primary)'; this.style.color='#000'; this.style.boxShadow='0 0 25px rgba(0,242,254,0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='linear-gradient(135deg, rgba(0,242,254,0.15) 0%, rgba(0,0,0,0.5) 100%)'; this.style.color='var(--primary)'; this.style.boxShadow='0 0 15px rgba(0,242,254,0.1)'; this.style.transform='translateY(0)'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                                    Consultar Especie
+                                </a>
                             </div>
                         </div>
-                        <div style="margin-top:2rem; display:flex; justify-content:flex-end; gap:1rem;">
-                            <button onclick="document.getElementById('traceModal').remove()" class="action-btn" style="padding:10px 25px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff;">Cerrar</button>
-                            <button onclick="window.print()" class="action-btn" style="padding:10px 25px; background:var(--primary); color:#000; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                        <div style="margin-top:2rem; display:flex; flex-wrap:wrap; justify-content:flex-end; gap:1rem;">
+                            <button onclick="document.getElementById('traceModal').remove()" class="action-btn" style="padding:10px 25px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:8px; cursor:pointer;">Cerrar Panel</button>
+                            <button onclick="window.print()" class="action-btn" style="padding:10px 25px; background:var(--primary); color:#000; font-weight:800; display:flex; align-items:center; gap:0.5rem; border:none; border-radius:8px; cursor:pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
                                 Imprimir Evidencia
                             </button>
                         </div>

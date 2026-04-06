@@ -631,10 +631,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Traceability Data
                     const zf = getZenithFactor();
-                    const traceMsg = `SISTEMA E.V.A. - INFORMACION DETALLE DE ESPECIE:\\n\\n` +
-                        `• Registro: #ZEN_${count.toString().padStart(3, '0')} • Valor Base: ${fmtElite.format(val)}\\n` +
-                        `• Algoritmo: Indexación IPC • Factor: ${zf.toFixed(4)} • Operación: ${val.toLocaleString()} × ${zf.toFixed(4)}\\n` +
-                        `• Resultado Final: ${fmtElite.format(updated)}`;
+                    const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
+                        `Registro: #ZEN_${count.toString().padStart(3, '0')}\\n` +
+                        `Valor Base: ${fmtElite.format(val)}\\n` +
+                        `Algoritmo: Indexación IPC\\n` +
+                        `Factor Aplicado: ${zf.toFixed(4)}\\n` +
+                        `Operación Matricial: ${val.toLocaleString()} × ${zf.toFixed(4)}\\n` +
+                        `Resultado Final: ${fmtElite.format(updated)}`;
 
                     const auditClass = auditRow(val, 'ipc');
                     const row = document.createElement('tr');
@@ -778,6 +781,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
                 s40 += v40; s60 += v60; s70 += v70; s100 += v100;
 
+                const zf = getZenithFactor();
+                const u40 = Math.round(v40 * zf);
+                const u60 = Math.round(v60 * zf);
+                const u70 = Math.round(v70 * zf);
+                const u100 = Math.round(v100 * zf);
+
                 if (isUnknown && showAlerts) unknownSpecies.push(esp);
 
                 const sel1 = typeNorm === 'Primera' ? 'selected' : '';
@@ -795,9 +804,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </td>`;
 
                 const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
-                    `• Especie: ${esp} (${scientific || 'N/A'}) • Categoría: ${typeNorm}\\n` +
-                    `• Diámetro: ${ab}cm | Altura: ${alt}m • Valor Base (40%): ${fmtElite.format(v40)}\\n` +
-                    `• Valor Final (100%): ${fmtElite.format(v100)}`;
+                    `Especie: ${esp}\\n` +
+                    `Nombre Científico: ${scientific || 'N/A'}\\n` +
+                    `Categoría: ${typeNorm}\\n` +
+                    `Diámetro (DAP): ${ab} cm\\n` +
+                    `Altura: ${alt} m\\n` +
+                    `Valor Base (40%): ${fmtElite.format(v40)}\\n` +
+                    `Valor Proyectado (40%): ${fmtElite.format(u40)}\\n` +
+                    `Valor Final (100%): ${fmtElite.format(u100)}`;
 
                 const auditClass = auditRow({ ab: ab, h: alt }, 'avaluo');
                 const row = document.createElement('tr');
@@ -813,10 +827,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${catHTML}
                     <td class="num col-ab">${ab}</td>
                     <td class="num col-alt">${alt}</td>
-                    <td class="num col-v40">${fmtElite.format(v40)}</td>
-                    <td class="num col-v60">${fmtElite.format(v60)}</td>
-                    <td class="num col-v70">${fmtElite.format(v70)}</td>
-                    <td class="num upd col-v100">${fmtElite.format(v100)}</td>
+                    <td class="num col-v40">${fmtElite.format(u40)}</td>
+                    <td class="num col-v60">${fmtElite.format(u60)}</td>
+                    <td class="num col-v70">${fmtElite.format(u70)}</td>
+                    <td class="num upd col-v100">${fmtElite.format(u100)}</td>
                 `;
                 tbody.appendChild(row);
                 count++;
