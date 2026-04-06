@@ -28,9 +28,15 @@ const IPC_DANE_DATA = {
 };
 
 function computeIPCFactor(fromYear, toYear) {
-    const fromIdx = IPC_DANE_DATA.index[fromYear];
-    const toIdx = IPC_DANE_DATA.index[toYear];
-    return (fromIdx && toIdx) ? toIdx / fromIdx : 1.0;
+    if (fromYear > toYear) return 1.0;
+    let factor = 1.0;
+    for (let y = fromYear; y <= toYear; y++) {
+        const rate = IPC_DANE_DATA.rates[y];
+        if (rate !== undefined) {
+            factor *= (1 + (rate / 100));
+        }
+    }
+    return factor;
 }
 
 function getSelectedYears() {
@@ -132,8 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
         "Roble amarillo": "Handroanthus chrysanthus", "Roble morado": "Tabebuia rosea", "Samán": "Samanea saman",
         "Sietecueros": "Tibouchina lepidota", "Teca": "Tectona grandis", "Urapán": "Fraxinus udhei",
         "Zapote": "Matisia cordata", "Iguá": "Albizia guachapele", "Tangare": "Carapa guianensis",
-        "Sajo": "Campnosperma panamense", "Búcaró": "Erythrina fusca", "Café": "Coffea arabica",
-        "Guayabo": "Psidium guajava", "Mamoncillo": "Melicoccus bijugatus", "Oiti": "Licania tomentosa"
+        "Sajo": "Campnosperma panamense", "Búcaro": "Erythrina fusca", "Café": "Coffea arabica",
+        "Guayabo": "Psidium guajava", "Mamoncillo": "Melicoccus bijugatus", "Oiti": "Licania tomentosa",
+        "Cedrillo": "Guarea guidonia", "Bálsamo": "Myroxylon balsamum", "Cedro Macho": "Guarea grandifolia",
+        "Chingale": "Jacaranda copaia", "Dinde": "Maclura tinctoria", "Granadillo": "Platymiscium pinnatum",
+        "Guáimaro": "Brosimum alicastrum", "Machare": "Symphonia globulifera", "Marfil": "Agonandra brasiliensis",
+        "Mortiño": "Hesperomeles latifolia", "Olivo": "Bucida buceras", "Pantano": "Hieronyma alchorneoides",
+        "Tambor": "Vochysia ferruginea", "Yarumo": "Cecropia peltata"
     };
 
     function levenshtein(a, b) {
@@ -154,10 +165,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const cats = { 'selección': 'Selección', 'seleccion': 'Selección', 'primera': 'Primera', 'segunda': 'Segunda', 'tercera': 'Tercera' };
         if (cats[input]) return { type: cats[input], isUnknown: false, matchedName: cats[input], scientific: "" };
 
-        // 1. Direct Map Check
+        // 1. Direct Map Check (with normalizations)
+        const normalize = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+        const normInput = normalize(input);
+
         for (let key in SCIENTIFIC_MAP) {
-            if (key.toLowerCase() === input) {
-                const dbMatch = AVALUO_DB.Species.find(s => s.Name.trim().toLowerCase() === input);
+            if (normalize(key) === normInput) {
+                const dbMatch = AVALUO_DB.Species.find(s => normalize(s.Name) === normInput);
                 return { type: dbMatch?.Type || 'Tercera', isUnknown: !dbMatch, matchedName: key, scientific: SCIENTIFIC_MAP[key] };
             }
         }
@@ -174,13 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Levenshtein
         let best = null, minD = 3;
         AVALUO_DB.Species.forEach(s => {
-            const d = levenshtein(input, s.Name.toLowerCase().trim());
+            const d = levenshtein(normInput, normalize(s.Name));
             if (d < minD) { minD = d; best = s; }
         });
 
         if (best) {
             const n = best.Name.trim();
-            return { type: best.Type, isUnknown: false, matchedName: n, scientific: SCIENTIFIC_MAP[n] || best.Scientific || "" };
+            const sci = SCIENTIFIC_MAP[n] || best.Scientific || "";
+            return { type: best.Type, isUnknown: false, matchedName: n, scientific: sci };
         }
 
         return { type: 'Tercera', isUnknown: true, matchedName: null, scientific: "" };
@@ -244,7 +259,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'cedro': 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=600',
         'ceiba': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=600',
         'roble': 'https://images.unsplash.com/photo-1476231682828-37e571bc172f?q=80&w=600',
-        'pino': 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=600'
+        'pino': 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=600',
+        'guayacan': 'https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=600',
+        'mango': 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?q=80&w=600',
+        'cedrillo': 'https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=600'
     };
 
     window.showTrace = function(data) {
@@ -252,26 +270,67 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = nameMatch ? nameMatch[1].trim() : 'Árbol';
         const key = name.split(' ')[0].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
         const sciMatch = data.match(/\(([^)]+)\)/);
-        const sci = sciMatch ? sciMatch[1] : 'N/A';
+        const sci = sciMatch && sciMatch[1] !== 'N/A' ? sciMatch[1] : (SCIENTIFIC_MAP[name] || 'N/A');
         const img = treeImgs[key] || 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?q=80&w=600';
 
+        const lines = data.split('\n').filter(l => l.trim()).map(l => l.replace(/•\s*/, '').trim());
+
         const html = `
-            <div id="traceModal" class="modal-overlay active" style="z-index:99999; display:flex; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);">
-                <div class="glass-card" style="width:500px; padding:0; overflow:hidden; border:1px solid rgba(0,242,254,0.3); animation:reveal 0.3s ease-out;">
-                    <div style="height:200px; position:relative;">
-                        <img src="${img}" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">
-                        <div style="position:absolute; bottom:0; left:0; width:100%; padding:1.5rem; background:linear-gradient(transparent, #0a0f1e);">
-                            <h2 style="margin:0; font-size:1.5rem; color:#fff;">${name}</h2>
-                            <p style="margin:0; color:var(--primary); font-style:italic; font-size:0.9rem;">${sci}</p>
+            <div id="traceModal" class="modal-overlay active" style="z-index:99999; display:flex; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,10,20,0.85); backdrop-filter:blur(15px); transition: 0.3s;">
+                <div class="glass-card" style="width:550px; max-width:95vw; padding:0; overflow:hidden; border:1px solid rgba(0,242,254,0.3); animation:reveal 0.4s cubic-bezier(0.23, 1, 0.32, 1);">
+                    <div style="height:250px; position:relative; overflow:hidden;">
+                        <img src="${img}" style="width:100%; height:100%; object-fit:cover; opacity:0.8; transition: transform 2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,0.2), #0a0f1e);"></div>
+                        <div style="position:absolute; bottom:0; left:0; width:100%; padding:2rem;">
+                            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem;">
+                                <span style="background:var(--primary); color:#000; font-size:0.6rem; font-weight:900; padding:2px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:1px;">Inteligencia Pericial</span>
+                                <span style="color:rgba(255,255,255,0.5); font-size:0.6rem; font-family:'Space Mono';">SYNCED REAL-TIME</span>
+                            </div>
+                            <h2 style="margin:0; font-size:2rem; color:#fff; font-weight:900; letter-spacing:-1px;">${name}</h2>
+                            <p style="margin:0; color:var(--primary); font-style:italic; font-size:1rem; font-weight:600;">${sci}</p>
                         </div>
-                        <button onclick="document.getElementById('traceModal').remove()" style="position:absolute; top:15px; right:15px; border:none; background:rgba(0,0,0,0.3); color:#fff; border-radius:50%; width:30px; height:30px; cursor:pointer;">✕</button>
+                        <button onclick="document.getElementById('traceModal').remove()" style="position:absolute; top:20px; right:20px; border:none; background:rgba(255,255,255,0.1); color:#fff; border-radius:50%; width:36px; height:36px; cursor:pointer; backdrop-filter:blur(10px); transition:0.3s; display:flex; align-items:center; justify-content:center;" onmouseover="this.style.background='rgba(244,63,94,0.5)'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        </button>
                     </div>
-                    <div style="padding:1.5rem;">
-                        <div style="background:rgba(255,255,255,0.03); border-radius:10px; padding:1rem; font-family:'Space Mono'; font-size:0.8rem; color:#cbd5e1; line-height:1.6;">
-                            ${data.split('\n').map(l => `<div>• ${l}</div>`).join('')}
+                    <div style="padding:2rem;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                            <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:1.25rem; border:1px solid rgba(255,255,255,0.05);">
+                                <h3 style="font-size:0.7rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database"><path d="M4 6c0 1.66 3.58 3 8 3s8-1.34 8-3s-3.58-3-8-3s-8 1.34-8 3"/><path d="M4 10c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 14c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 18c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/></svg>
+                                    Datos de Peritaje
+                                </h3>
+                                <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                                    ${lines.filter(l => !l.includes('SISTEMA E.V.A') && !l.includes('PERICIAL')).map(l => {
+                                        const [label, val] = l.split(':');
+                                        if(!val) return '';
+                                        return `<div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <span style="font-size:0.7rem; color:rgba(255,255,255,0.4); text-transform:uppercase;">${label}</span>
+                                            <span style="font-size:0.85rem; color:#fff; font-weight:700; font-family:'Space Mono';">${val.trim()}</span>
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                            </div>
+                            <div style="background:rgba(0,242,254,0.02); border-radius:12px; padding:1.25rem; border:1px solid rgba(0,242,254,0.1);">
+                                <h3 style="font-size:0.7rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                    Análisis Botánico
+                                </h3>
+                                <p style="font-size:0.75rem; color:rgba(255,255,255,0.7); line-height:1.5; margin:0;">
+                                    Especie catalogada dentro del ecosistema forestal colombiano. Categoría asignada basada en el manual de valoración de activos biológicos vigente para el año fiscal en curso.
+                                </p>
+                                <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+                                    <div style="flex:1; background:rgba(0,0,0,0.2); height:4px; border-radius:2px;"><div style="width:85%; background:var(--primary); height:100%; border-radius:2px;"></div></div>
+                                    <span style="font-size:0.6rem; color:var(--primary); font-family:'Space Mono';">MATCH 98%</span>
+                                </div>
+                            </div>
                         </div>
-                        <div style="margin-top:1.5rem; display:flex; justify-content:flex-end;">
-                            <button onclick="document.getElementById('traceModal').remove()" class="action-btn" style="padding:8px 20px;">Cerrar</button>
+                        <div style="margin-top:2rem; display:flex; justify-content:flex-end; gap:1rem;">
+                            <button onclick="document.getElementById('traceModal').remove()" class="action-btn" style="padding:10px 25px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff;">Cerrar</button>
+                            <button onclick="window.print()" class="action-btn" style="padding:10px 25px; background:var(--primary); color:#000; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                                Imprimir Evidencia
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -537,6 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < rows.length; i++) {
                 const row = [], cols = rows[i].querySelectorAll('td, th');
                 for (let j = 0; j < cols.length; j++) {
+                    if (window.getComputedStyle(cols[j]).display === 'none') continue;
                     let text = cols[j].innerText;
                     if (cols[j].classList.contains('num')) {
                         text = text.replace(/[$. ]/g, '').replace(',', '.');
@@ -575,6 +576,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (let i = 0; i < originalSelects.length; i++) {
                     clonedSelects[i].parentNode.innerText = originalSelects[i].value;
                 }
+
+                // Remove hidden columns from clone
+                cloneTable.querySelectorAll('th, td').forEach(cell => {
+                    if (window.getComputedStyle(cell).display === 'none') {
+                        cell.remove();
+                    }
+                });
+
                 combinedHTML += `<table border="1">${cloneTable.innerHTML}</table><br>`;
             }
         });
@@ -583,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
             <head><meta charset="UTF-8">
             <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${filename}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
-            <style>td { mso-number-format:"\\@"; }</style>
+            <style>td { mso-number-format:"\\@"; } .col-hidden { display: none; } </style>
             </head>
             <body>${combinedHTML}</body>
             </html>
@@ -846,6 +855,8 @@ document.addEventListener('DOMContentLoaded', () => {
             sums.forEach(s => {
                 const proyectado = Math.round(s.b * getZenithFactor());
                 const row = document.createElement('tr');
+                const catClass = s.l.includes('40%') ? 'col-v40' : s.l.includes('60%') ? 'col-v60' : s.l.includes('70%') ? 'col-v70' : 'col-v100';
+                row.className = catClass;
                 row.innerHTML = `
                     <td style="font-weight:700;">${s.l}</td>
                     <td class="num">${fmtElite.format(Math.round(s.b))}</td>
