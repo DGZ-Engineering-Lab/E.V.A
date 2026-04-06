@@ -25,7 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const eliteChartEl = document.getElementById('eliteChart');
 
     // --- Shared Constants & State ---
-    const ZENITH_FACTOR = 1.5226;
+    // Dynamic Factor: Can be overridden by enhancement module for year selection
+    window.ZENITH_FACTOR = window.ZENITH_FACTOR || 1.5226;
+    function getZenithFactor() { return window.ZENITH_FACTOR || 1.5226; }
     const fmtElite = new Intl.NumberFormat('es-CO', {
         style: 'currency', currency: 'COP', maximumFractionDigits: 0
     });
@@ -39,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const combinedPanel = document.getElementById('combinedAnalyticsPanel');
     const compPanel = document.getElementById('comparisonPanel');
-    const distPanel = document.getElementById('combinedAnalyticsPanel');
+    const distPanel = combinedPanel; // Same element, aliased for clarity
     const metricsPanel = document.getElementById('metricsPanel');
 
     // --- Initialization: Persistence (Auto-Save) ---
@@ -142,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.sanitizeText = function (str) {
         if (!str) return '';
-        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
     };
 
     window.cleanVal = function (str) {
@@ -612,16 +614,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const val = cleanVal(part);
                 if (val > 0) {
                     count++;
-                    const updated = Math.round(val * ZENITH_FACTOR);
+                    const updated = Math.round(val * getZenithFactor());
                     const delta = updated - val;
                     const tag = tags[idx] || '';
                     totalOrig += val;
                     totalNew += updated;
 
                     // Traceability Data
+                    const zf = getZenithFactor();
                     const traceMsg = `SISTEMA E.V.A. - INFORMACION DETALLE DE ESPECIE:\\n\\n` +
                         `• Registro: #ZEN_${count.toString().padStart(3, '0')} • Valor Base: ${fmtElite.format(val)}\\n` +
-                        `• Algoritmo: Indexación IPC • Operación: ${val.toLocaleString()} * 1.5226\\n` +
+                        `• Algoritmo: Indexación IPC • Factor: ${zf.toFixed(4)} • Operación: ${val.toLocaleString()} × ${zf.toFixed(4)}\\n` +
                         `• Resultado Final: ${fmtElite.format(updated)}`;
 
                     const auditClass = auditRow(val, 'ipc');
@@ -668,18 +671,11 @@ document.addEventListener('DOMContentLoaded', () => {
             animateValue('sumFinal', totalNew);
             document.getElementById('sumOrig').innerText = `$ ${totalOrig.toLocaleString()}`;
 
-            // Trigger Unified Analytics for IPC also
-            updateLiveAnalytics({
-                original: totalOrig,
-                updated: totalNew,
-                items: count,
-                ipcTrend: true
-            });
-
             if (window.lucide) lucide.createIcons();
             EVA.toast(`✓ ${count} valores actualizados correctamente`);
             saveToLedger(`${count} valores actualizados con IPC`);
 
+            // Trigger Unified Analytics for IPC (single consolidated call)
             const maxVal = Math.max(...lines.map(l => cleanVal(l))) || 0;
             updateLiveAnalytics({
                 original: totalOrig,
@@ -759,7 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         actParsedAvaluo.forEach(item => {
             try {
-                const { id, esp, ab, alt, isUnknown, typeNorm } = item;
+                const { id, esp, scientific, ab, alt, isUnknown, typeNorm } = item;
                 const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
 
                 const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
@@ -780,7 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
                 const selS = typeNorm === 'Selección' ? 'selected' : '';
 
-                let catHTML = `<td>
+                let catHTML = `<td class="col-cat">
                     <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría" ${!isUnknown ? 'style="border-color:rgba(255,255,255,0.1); color:var(--text-dim); background:transparent;"' : ''}>
                         <option value="Primera" ${sel1}>Primera</option>
                         <option value="Segunda" ${sel2}>Segunda</option>
@@ -790,7 +786,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </td>`;
 
                 const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
-                    `• Especie: ${esp} • Categoría: ${typeNorm}\\n` +
+                    `• Especie: ${esp} (${scientific || 'N/A'}) • Categoría: ${typeNorm}\\n` +
                     `• Diámetro: ${ab}cm | Altura: ${alt}m • Valor Base (40%): ${fmtElite.format(v40)}\\n` +
                     `• Valor Final (100%): ${fmtElite.format(v100)}`;
 
@@ -798,19 +794,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement('tr');
                 if (auditClass) row.className = auditClass;
                 row.innerHTML = `
-                    <td style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">
+                    <td class="col-esp" style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">
                         <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática" style="cursor:pointer; color:var(--primary); margin-right:5px;">
                             <i data-lucide="info" style="width:12px;height:12px;"></i>
                         </span>
                         ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
                     </td>
+                    <td class="col-sci" style="font-style:italic; font-size:0.75rem; color:var(--text-dim);">${scientific || '—'}</td>
                     ${catHTML}
-                    <td class="num">${ab}</td>
-                    <td class="num">${alt}</td>
-                    <td class="num">${fmtElite.format(v40)}</td>
-                    <td class="num">${fmtElite.format(v60)}</td>
-                    <td class="num">${fmtElite.format(v70)}</td>
-                    <td class="num upd">${fmtElite.format(v100)}</td>
+                    <td class="num col-ab">${ab}</td>
+                    <td class="num col-alt">${alt}</td>
+                    <td class="num col-v40">${fmtElite.format(v40)}</td>
+                    <td class="num col-v60">${fmtElite.format(v60)}</td>
+                    <td class="num col-v70">${fmtElite.format(v70)}</td>
+                    <td class="num upd col-v100">${fmtElite.format(v100)}</td>
                 `;
                 tbody.appendChild(row);
                 count++;
@@ -847,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             sums.forEach(s => {
-                const proyectado = Math.round(s.b * ZENITH_FACTOR);
+                const proyectado = Math.round(s.b * getZenithFactor());
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td style="font-weight:700;">${s.l}</td>
@@ -859,7 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Expert HUD Update (Forest)
-            const overallFinal = Math.round(s100 * ZENITH_FACTOR);
+            const overallFinal = Math.round(s100 * getZenithFactor());
             animateValue('sumFinal', overallFinal);
             document.getElementById('sumOrig').innerText = `$ ${Math.round(s100).toLocaleString()}`;
             kpiCount.textContent = count;
@@ -902,17 +899,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const esp = sanitizeText(espRaw);
                 let type = null;
-                let spL = esp.toLowerCase().trim();
                 let isUnknown = false;
+                let scientific = "";
 
-                const directCategories = ['selección', 'seleccion', 'primera', 'segunda', 'tercera'];
-                if (directCategories.includes(spL)) {
-                    type = spL === 'seleccion' ? 'Selección' : esp.charAt(0).toUpperCase() + esp.slice(1).toLowerCase();
+                // Use enhanced fuzzy matching if available, fallback to exact
+                if (typeof findSpeciesFuzzy === 'function') {
+                    const match = findSpeciesFuzzy(espRaw);
+                    type = match.type;
+                    isUnknown = match.isUnknown;
+                    scientific = match.scientific || "";
                 } else {
-                    for (let s of AVALUO_DB.Species) {
-                        if (s.Name.toLowerCase().trim() === spL) {
-                            type = s.Type;
-                            break;
+                    let spL = esp.toLowerCase().trim();
+                    const directCategories = ['selección', 'seleccion', 'primera', 'segunda', 'tercera'];
+                    if (directCategories.includes(spL)) {
+                        type = spL === 'seleccion' ? 'Selección' : esp.charAt(0).toUpperCase() + esp.slice(1).toLowerCase();
+                    } else {
+                        for (let s of AVALUO_DB.Species) {
+                            if (s.Name.toLowerCase().trim() === spL) {
+                                type = s.Type;
+                                // In the fallback, if we have it
+                                scientific = s.Scientific || "";
+                                break;
+                            }
                         }
                     }
                 }
@@ -925,7 +933,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const typeNorm = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
 
                 actParsedAvaluo.push({
-                    id: rowIdCounter++, esp, ab, alt, isUnknown, typeNorm
+                    id: rowIdCounter++, esp, scientific, ab, alt, isUnknown, typeNorm
                 });
             }
         });
@@ -943,11 +951,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. COMPARISON BAR CHART
         const ctxComp = document.getElementById('compChart').getContext('2d');
         if (compChart) compChart.destroy();
+        
+        const years = typeof getSelectedYears === 'function' ? getSelectedYears() : { from: 2018, to: 2025 };
+        
         compChart = new Chart(ctxComp, {
             type: 'bar',
             plugins: [ChartDataLabels],
             data: {
-                labels: ['Valor Original', 'Valor Actualizado'],
+                labels: [`Valor ${years.from}`, `Valor ${years.to}`],
                 datasets: [{
                     label: 'Masa Monetaria',
                     data: [payload.original, payload.updated],

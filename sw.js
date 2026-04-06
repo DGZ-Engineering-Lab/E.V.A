@@ -6,7 +6,7 @@
  * where internet connectivity is unreliable.
  */
 
-const CACHE_NAME = 'eva-pro-v3.3.1-dynamic-update';
+const CACHE_NAME = 'eva-pro-v3.4.0-enhancements';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -20,8 +20,10 @@ const ASSETS_TO_CACHE = [
     './css/themes/forest.css',
     './css/themes/minimal.css',
     './css/eva-styles-v3.css',
+    './css/eva-enhancements.css',
     './js/avaluo_db.js',
     './js/eva-core-v3.js',
+    './js/eva-enhancements.js',
     './js/theme-switcher.js'
 ];
 
