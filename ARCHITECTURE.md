@@ -39,12 +39,11 @@ Base Value × Z-Factor → Present Value (IPC-adjusted)
 
 ### 1.2 IPC Indexation Engine (Corrección Inflacionaria)
 
-The **Zenith Factor (`Z = 1.5226`)** is a compound accumulator:
+The **Zenith Factor (`Z ≈ 1.5710`)** is a compound accumulator calculated dynamically:
 
 ```
-Z = Π(1 + IPC_year)     for year ∈ [2018, 2025]
-  = 1.038 × 1.0357 × 1.053 × 1.0551 × 1.1318 × 1.0928 × 1.0545
-  = 1.5226
+Z = Π(1 + IPC_year/100)     for year ∈ [Selected_Range]
+  (e.g., 2018-2025 ≈ 1.5710)
 ```
 
 **Data Source:** [DANE IPC Series](https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc)

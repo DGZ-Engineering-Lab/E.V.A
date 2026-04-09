@@ -53,11 +53,13 @@
         rel="stylesheet">
 
     <!-- Icons & Charts -->
-    <script src="https://unpkg.com/lucide@0.344.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Icons & Charts (Local) -->
+    <script src="js/vendor/lucide.min.js"></script>
+    <script src="js/vendor/chart.min.js"></script>
+    <script src="js/vendor/chartjs-plugin-datalabels.min.js"></script>
+    <script src="js/vendor/jspdf.umd.min.js"></script>
+    <script src="js/vendor/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/vendor/html2canvas.min.js"></script>
     <script src="js/avaluo_db.js"></script>
 
     <!-- Core Assets -->
@@ -2022,11 +2024,11 @@
             </div>
 
             <!-- ── Main Stage (Left) ── -->
-            <div class="main-stage">
+            <section class="main-stage">
 
-                <!-- Tab 1: Data Input -->
-                <div id="tab-input" class="tab-content active">
-                    <div class="glass-card input-card">
+                <!-- Tab: Input Terminal -->
+                <article id="tab-input" class="tab-content active" aria-labelledby="s1">
+                    <section class="glass-card input-card">
                         <div class="section-header" style="justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 0.6rem;">
                                 <i data-lucide="edit-3" style="color: var(--primary);"></i>
@@ -2060,14 +2062,14 @@
                                 <i data-lucide="trash-2" style="width:14px;"></i>
                             </button>
                         </div>
-                    </div>
-                </div>
+                    </section>
+                </article>
 
                 <!-- Tab 2: Analytics (High-Performance Grid) -->
-                <div id="tab-analytics" class="tab-content">
+                <article id="tab-analytics" class="tab-content" aria-labelledby="s2">
                     <div class="analytics-grid">
                         <!-- Comparison Bar Chart -->
-                        <div class="glass-card" id="comparisonPanel" style="display: none;">
+                        <section class="glass-card" id="comparisonPanel" style="display: none;">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="bar-chart-2"></i>
@@ -2078,10 +2080,10 @@
                             <div class="chart-container-fixed" style="height: 220px;">
                                 <canvas id="compChart"></canvas>
                             </div>
-                        </div>
+                        </section>
 
                         <!-- IPC Factor Evolution (Trend) -->
-                        <div class="glass-card">
+                        <section class="glass-card">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="trending-up"></i>
@@ -2092,10 +2094,10 @@
                             <div class="chart-container-fixed" style="height: 220px;">
                                 <canvas id="eliteChart"></canvas>
                             </div>
-                        </div>
+                        </section>
 
                         <!-- Unified Forest Inventory Intelligence -->
-                        <div class="glass-card full-width" id="combinedAnalyticsPanel" style="display: none;">
+                        <section class="glass-card full-width" id="combinedAnalyticsPanel" style="display: none;">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <i data-lucide="donut"></i>
@@ -2117,10 +2119,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
 
                         <!-- Forensic KPI Metrics -->
-                        <div class="glass-card metrics-card full-width" id="metricsPanel" style="display:none;">
+                        <section class="glass-card metrics-card full-width" id="metricsPanel" style="display:none;">
                             <div class="section-header">
                                 <i data-lucide="shield-check"></i>
                                 <h2>Valoración General de Inventario</h2>
@@ -2143,15 +2145,15 @@
                                     <span class="v" id="kpiBaseYear">2018</span>
                                 </div>
                             </div>
-                        </div>
+                        </section>
                     </div>
-                </div>
+                </article>
 
                 <!-- Tab 3: Result Tables -->
-                <div id="tab-results" class="tab-content">
+                <article id="tab-results" class="tab-content" aria-labelledby="s3">
                     <!-- IPC Results Matrix -->
                     <div id="resultsUI" class="results-wrapper" style="display: none;">
-                        <div class="glass-card table-panel detailed-results collapsible-card" id="cardDetailedIPC">
+                        <section class="glass-card table-panel detailed-results collapsible-card" id="cardDetailedIPC">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <button class="toggle-card-btn" onclick="toggleCard('cardDetailedIPC')"
@@ -2196,10 +2198,10 @@
                                     <tbody id="eliteBody"></tbody>
                                 </table>
                             </div>
-                        </div>
+                        </section>
 
                         <!-- Summary Table IPC -->
-                        <div class="glass-card table-panel summary-results collapsible-card" id="cardSummaryIPC">
+                        <section class="glass-card table-panel summary-results collapsible-card" id="cardSummaryIPC">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <button class="toggle-card-btn" onclick="toggleCard('cardSummaryIPC')"
@@ -2223,12 +2225,12 @@
                                     <tbody id="eliteSummaryBody"></tbody>
                                 </table>
                             </div>
-                        </div>
+                        </section>
                     </div>
 
                     <!-- Avalúo Forestal Matrix -->
                     <div id="resultsAvaluo" class="results-wrapper" style="display: none;">
-                        <div class="glass-card table-panel detailed-results collapsible-card" id="cardDetailedAvaluo">
+                        <section class="glass-card table-panel detailed-results collapsible-card" id="cardDetailedAvaluo">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <button class="toggle-card-btn" onclick="toggleCard('cardDetailedAvaluo')"
@@ -2290,10 +2292,10 @@
                                     <tbody id="avaluoBody"></tbody>
                                 </table>
                             </div>
-                        </div>
+                        </section>
 
                         <!-- Summary Table AVALUO -->
-                        <div class="glass-card table-panel summary-results collapsible-card" id="cardSummaryAvaluo">
+                        <section class="glass-card table-panel summary-results collapsible-card" id="cardSummaryAvaluo">
                             <div class="section-header">
                                 <div style="display:flex; align-items:center; gap:0.6rem;">
                                     <button class="toggle-card-btn" onclick="toggleCard('cardSummaryAvaluo')"
@@ -2317,17 +2319,17 @@
                                     <tbody id="avaluoSummaryBody"></tbody>
                                 </table>
                             </div>
-                        </div>
+                        </section>
                     </div> <!-- End Results Avaluo -->
-                </div> <!-- End Tab Results -->
+                </article> <!-- End Tab Results -->
 
-            </div> <!-- End Main Stage -->
+            </section> <!-- End Main Stage -->
 
             <!-- ── Side Panel (Right) ── -->
             <aside class="side-panel">
 
                 <!-- Outcome HUD: Total Value -->
-                <div class="glass-card outcome-card">
+                <section class="glass-card outcome-card">
                     <div class="outcome-label">💰 Valor Total Calculado</div>
                     <div class="outcome-value" id="sumFinal">$ 0</div>
                     <div class="outcome-meta">
@@ -2341,7 +2343,7 @@
                                 id="outcomePercent">+52.26%</span>
                         </div>
                     </div>
-                </div>
+                </section>
 
                 <!-- PDF Report Button -->
                 <button class="btn-pdf" id="pdfBtn" onclick="generatePremiumPDF()" style="display: none;">
@@ -2356,7 +2358,7 @@
                 </button>
 
                 <!-- Quick Metrics Grid -->
-                <div class="metrics-grid">
+                <section class="metrics-grid">
                     <div class="metric-mini has-tip">
                         <div class="metric-mini-label">Precisión Algorítmica</div>
                         <div class="metric-mini-val" style="color: var(--success);">99.8%</div>
@@ -2374,10 +2376,10 @@
                         <div class="tip-bubble">🤖 El motor detecta automáticamente el tipo de datos
                             ingresados.</div>
                     </div>
-                </div>
+                </section>
 
                 <!-- Session Project Persistence (EVA v5) -->
-                <div class="glass-card stat-box" id="projectManager">
+                <section class="glass-card stat-box" id="projectManager">
                     <div class="section-header">
                         <div style="display:flex; align-items:center; gap:0.6rem;">
                             <i data-lucide="folder-kanban"></i>
@@ -2410,10 +2412,10 @@
                     <div id="sessionHistory" class="history-pool">
                         <!-- Historial de Sesión -->
                     </div>
-                </div>
+                </section>
 
                 <!-- Insight Helper -->
-                <div class="info-insight">
+                <section class="info-insight">
                     <i data-lucide="help-circle"></i>
                     <p>
                         Presione <br> <strong>Ctrl + P</strong> para generar el pdf optimizado.
@@ -2424,7 +2426,7 @@
                         2018). El Factor Zenith de <strong>1.5226</strong> representa la acumulación inflacionaria
                         consolidada hasta el primer trimestre de 2025.
                     </p>
-                </div>
+                </section>
 
             </aside><!-- End Side Panel -->
         </main> <!-- End Dashboard Main -->

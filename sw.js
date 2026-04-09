@@ -6,7 +6,7 @@
  * where internet connectivity is unreliable.
  */
 
-const CACHE_NAME = 'eva-pro-v3.4.0-enhancements';
+const CACHE_NAME = 'eva-pro-v3.4.1-network-fix';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -24,7 +24,12 @@ const ASSETS_TO_CACHE = [
     './js/avaluo_db.js',
     './js/eva-core-v3.js',
     './js/eva-enhancements.js',
-    './js/theme-switcher.js'
+    './js/theme-switcher.js',
+    './js/vendor/lucide.min.js',
+    './js/vendor/chart.min.js',
+    './js/vendor/chartjs-plugin-datalabels.min.js',
+    './js/vendor/jspdf.umd.min.js',
+    './js/vendor/html2canvas.min.js'
 ];
 
 
@@ -72,16 +77,32 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Network-first for external CDNs
+    // Network-first for external CDNs and Images
     if (url.origin !== location.origin) {
         event.respondWith(
             fetch(event.request)
                 .then((response) => {
+                    // Only cache valid responses or opaque responses safely
+                    if (!response || (response.status !== 200 && response.type !== 'opaque')) {
+                        return response;
+                    }
                     const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+                    caches.open(CACHE_NAME).then((cache) => {
+                        // Avoid caching if request method is not GET or protocol isn't http(s)
+                        if (event.request.method === 'GET' && url.protocol.startsWith('http')) {
+                            cache.put(event.request, clone).catch(err => console.warn('Cache error for external resource:', err));
+                        }
+                    });
                     return response;
                 })
-                .catch(() => caches.match(event.request))
+                .catch((err) => {
+                    console.warn('[E.V.A. SW] Network error for external resource:', event.request.url);
+                    return caches.match(event.request).then(cached => {
+                        if (cached) return cached;
+                        // Return empty generic response to prevent "Failed to convert value to 'Response'" TypeError
+                        return new Response('', { status: 404, statusText: 'Not Found Offline' });
+                    });
+                })
         );
         return;
     }

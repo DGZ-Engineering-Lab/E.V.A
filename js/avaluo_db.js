@@ -1,11 +1,13 @@
-const AVALUO_DB = {
+﻿const AVALUO_DB = {
     "Species": [
         {
             "Name": "Abarco",
+            "Scientific": "Cariniana pyriformis",
             "Type": "Selección"
         },
         {
             "Name": "Acacia",
+            "Scientific": "Acacia verticillata",
             "Type": "Segunda"
         },
         {
@@ -14,6 +16,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Acacia japonesa",
+            "Scientific": "Acacia melanoxylon",
             "Type": "Segunda"
         },
         {
@@ -26,6 +29,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Aceituno",
+            "Scientific": "Aniba perutilis",
             "Type": "Segunda"
         },
         {
@@ -38,30 +42,34 @@ const AVALUO_DB = {
         },
         {
             "Name": "Aguacate",
+            "Scientific": "Persea americana",
             "Type": "Primera"
         },
         {
             "Name": "Aguacatillo",
+            "Scientific": "Persea cuneata",
             "Type": "Segunda"
         },
         {
             "Name": "Aguanoso",
+            "Scientific": "Boehmeria caudata",
             "Type": "Segunda"
         },
         {
-            "Name": "Aguarr�s",
+            "Name": "Aguarrás",
             "Type": "Primera"
         },
         {
-            "Name": "Aj� de monte",
+            "Name": "Ají de monte",
             "Type": "Tercera"
         },
         {
-            "Name": "Aj� sabana",
+            "Name": "Ají sabana",
             "Type": "Tercera"
         },
         {
             "Name": "Ajicillo",
+            "Scientific": "Beilschmiedia tilaranensis",
             "Type": "Segunda"
         },
         {
@@ -78,10 +86,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Algarrobillo",
+            "Scientific": "Samanea saman",
             "Type": "Primera"
         },
         {
             "Name": "Algarrobo",
+            "Scientific": "Hymenaea courbaril",
             "Type": "Primera"
         },
         {
@@ -90,6 +100,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Aliso",
+            "Scientific": "Alnus acuminata",
             "Type": "Segunda"
         },
         {
@@ -97,7 +108,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Aray�",
+            "Name": "Arayán",
             "Type": "Tercera"
         },
         {
@@ -105,7 +116,7 @@ const AVALUO_DB = {
             "Type": "Segunda"
         },
         {
-            "Name": "Array�n",
+            "Name": "Arrayán",
             "Type": "Segunda"
         },
         {
@@ -118,6 +129,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Balaustre",
+            "Scientific": "Centrolobium yavizanum",
             "Type": "Segunda"
         },
         {
@@ -130,6 +142,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Balso",
+            "Scientific": "Heliocarpus americanus",
             "Type": "segunda"
         },
         {
@@ -138,18 +151,20 @@ const AVALUO_DB = {
         },
         {
             "Name": "Barbasco",
+            "Scientific": "Tephrosia toxicaria",
             "Type": "Segunda"
         },
         {
             "Name": "Bolombolo",
+            "Scientific": "Andira inermis",
             "Type": "Tercera"
         },
         {
-            "Name": "B�car�",
+            "Name": "Búcaro",
             "Type": "Segunda"
         },
         {
-            "Name": "Caf�",
+            "Name": "Café",
             "Type": "Segunda"
         },
         {
@@ -158,10 +173,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Caimito",
+            "Scientific": "Sideroxylon obtusifolium",
             "Type": "Tercera"
         },
         {
             "Name": "Caoba",
+            "Scientific": "Swietenia macrophylla",
             "Type": "Primera"
         },
         {
@@ -178,22 +195,24 @@ const AVALUO_DB = {
         },
         {
             "Name": "Campano",
+            "Scientific": "Vallea stipularis",
             "Type": "Primera"
         },
         {
-            "Name": "Ca�afistulo",
+            "Name": "Cañafistulo",
             "Type": "Segunda"
         },
         {
-            "Name": "Ca�aguate",
+            "Name": "Cañaguate",
             "Type": "Segunda"
         },
         {
-            "Name": "Ca�a�ola",
+            "Name": "Cañola",
             "Type": "Segunda"
         },
         {
             "Name": "Capacho",
+            "Scientific": "Terminalia",
             "Type": "Segunda"
         },
         {
@@ -210,10 +229,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Carate",
+            "Scientific": "Miconia dodecandra",
             "Type": "segunda"
         },
         {
             "Name": "Carbonero",
+            "Scientific": "Albizia lebbeck",
             "Type": "Segunda"
         },
         {
@@ -222,10 +243,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Caucho",
+            "Scientific": "Sapium stylare",
             "Type": "Tercera"
         },
         {
             "Name": "Cedrillo",
+            "Scientific": "Tapirira guianensis",
             "Type": "Segunda"
         },
         {
@@ -234,27 +257,30 @@ const AVALUO_DB = {
         },
         {
             "Name": "Cedro",
+            "Scientific": "Cedrela odorata",
             "Type": "Primera"
         },
         {
             "Name": "Cedro amargo",
-            "Type": "Selecci�n"
+            "Type": "Selección"
         },
         {
             "Name": "Cedro amarillo",
+            "Scientific": "Pseudosamanea guachapele",
             "Type": "Segunda"
         },
         {
             "Name": "Cedro andino",
-            "Type": "Selecci�n"
+            "Type": "Selección"
         },
         {
             "Name": "Cedro blanco",
+            "Scientific": "Spondias mombin",
             "Type": "Segunda"
         },
         {
             "Name": "Cedro caoba",
-            "Type": "Selecci�n"
+            "Type": "Selección"
         },
         {
             "Name": "Cedro cebolla",
@@ -262,7 +288,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Cedro clavel",
-            "Type": "Selecci�n"
+            "Type": "Selección"
         },
         {
             "Name": "Cedro dulce",
@@ -278,18 +304,20 @@ const AVALUO_DB = {
         },
         {
             "Name": "Cedro negro",
-            "Type": "Selecci�n"
+            "Scientific": "Juglans neotropica",
+            "Type": "Selección"
         },
         {
             "Name": "Cedro oloroso",
-            "Type": "Selecci�n"
+            "Type": "Selección"
         },
         {
-            "Name": "Cedr�n",
+            "Name": "Cedrï¿½n",
             "Type": "Tercera"
         },
         {
             "Name": "Ceiba",
+            "Scientific": "Ceiba pentandra",
             "Type": "Primera"
         },
         {
@@ -302,14 +330,17 @@ const AVALUO_DB = {
         },
         {
             "Name": "Ceiba blanca",
+            "Scientific": "Hura crepitans",
             "Type": "Tercera"
         },
         {
             "Name": "Ceiba bonga ",
+            "Scientific": "Ceiba pentandra",
             "Type": "Segunda"
         },
         {
             "Name": "Ceiba colorada",
+            "Scientific": "Ceiba pentandra",
             "Type": "Tercera"
         },
         {
@@ -321,24 +352,26 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Ceiba tol�a",
+            "Name": "Ceiba tolï¿½a",
             "Type": "Primera"
         },
         {
             "Name": "Ceiba verde",
+            "Scientific": "Pseudobombax septenatum",
             "Type": "Tercera"
         },
         {
-            "Name": "Ce�babuya",
+            "Name": "Ceï¿½babuya",
             "Type": "Tercera"
         },
         {
             "Name": "Cerezo",
+            "Scientific": "Freziera verrucosa",
             "Type": "Segunda"
         },
         {
             "Name": "Chachajo",
-            "Type": "Selecci�n"
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Chacho",
@@ -350,6 +383,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Chagualo",
+            "Scientific": "Clusia",
             "Type": "Segunda"
         },
         {
@@ -357,11 +391,12 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Chanc�n",
+            "Name": "Chancï¿½n",
             "Type": "Tercera"
         },
         {
             "Name": "Chaparro",
+            "Scientific": "Adenaria floribunda",
             "Type": "Tercera"
         },
         {
@@ -370,10 +405,11 @@ const AVALUO_DB = {
         },
         {
             "Name": "Chaquiro",
-            "Type": "Selecci�n"
+            "Scientific": "Psychotria monsalveae",
+            "Type": "Selecciï¿½n"
         },
         {
-            "Name": "Chical�",
+            "Name": "Chicalï¿½",
             "Type": "Primera"
         },
         {
@@ -386,30 +422,36 @@ const AVALUO_DB = {
         },
         {
             "Name": "Chilco",
+            "Scientific": "Baccharis pedunculata",
             "Type": "Tercera"
         },
         {
             "Name": "Chiminango",
+            "Scientific": "Pithecellobium dulce",
             "Type": "Tercera"
         },
         {
-            "Name": "Chingal�",
+            "Name": "Chingalï¿½",
             "Type": "Segunda"
         },
         {
             "Name": "Chiraco",
+            "Scientific": "Phyllanthus salviifolius",
             "Type": "Tercera"
         },
         {
             "Name": "Chirco",
+            "Scientific": "Miconia elata",
             "Type": "Tercera"
         },
         {
             "Name": "Chiriguaco",
+            "Scientific": "Clethra fagifolia",
             "Type": "Tercera"
         },
         {
             "Name": "Chirriador",
+            "Scientific": "Muntingia calabura",
             "Type": "Tercera"
         },
         {
@@ -430,6 +472,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Chumbimbo",
+            "Scientific": "Sapindus saponaria",
             "Type": "Tercera"
         },
         {
@@ -442,6 +485,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Churimo",
+            "Scientific": "Inga",
             "Type": "Tercera"
         },
         {
@@ -449,24 +493,26 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Cipr�s",
+            "Name": "Ciprï¿½s",
             "Type": "Segunda"
         },
         {
             "Name": "Cirpo",
+            "Scientific": "Pourouma bicolor",
             "Type": "Tercera"
         },
         {
             "Name": "Coca",
+            "Scientific": "Erythroxylum novogranatense novogranatense",
             "Type": "Primera"
         },
         {
-            "Name": "Cocar�llo",
+            "Name": "Cocarï¿½llo",
             "Type": "Segunda"
         },
         {
             "Name": "Coco abarco",
-            "Type": "Selecci�n"
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Coco blanco",
@@ -478,6 +524,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Coco cristal",
+            "Scientific": "Lecythis mesophylla",
             "Type": "Segunda"
         },
         {
@@ -489,11 +536,12 @@ const AVALUO_DB = {
             "Type": "Segunda"
         },
         {
-            "Name": "Coc�",
+            "Name": "Cocï¿½",
             "Type": "Tercera"
         },
         {
             "Name": "Cocuelo",
+            "Scientific": "Lecythis minor",
             "Type": "Segunda"
         },
         {
@@ -506,18 +554,22 @@ const AVALUO_DB = {
         },
         {
             "Name": "Colorado",
+            "Scientific": "Hieronyma antioquensis",
             "Type": "Tercera"
         },
         {
             "Name": "Combo",
+            "Scientific": "Aspidosperma megalocarpon curranii",
             "Type": "Tercera"
         },
         {
             "Name": "Comino",
-            "Type": "Selecci�n"
+            "Scientific": "Aniba perutilis",
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Congo",
+            "Scientific": "Fabaceae",
             "Type": "Tercera"
         },
         {
@@ -526,6 +578,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Copey",
+            "Scientific": "Ficus nymphaeifolia",
             "Type": "Segunda"
         },
         {
@@ -538,10 +591,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Corcho",
+            "Scientific": "Apeiba glabra",
             "Type": "Segunda"
         },
         {
             "Name": "Cordoncillo",
+            "Scientific": "Peperomia acuminata",
             "Type": "Tercera"
         },
         {
@@ -558,6 +613,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Coronillo",
+            "Scientific": "Hasseltia floribunda",
             "Type": "Tercera"
         },
         {
@@ -566,10 +622,11 @@ const AVALUO_DB = {
         },
         {
             "Name": "Cruceto",
+            "Scientific": "Randia",
             "Type": "Tercera"
         },
         {
-            "Name": "Cu�ngare",
+            "Name": "Cuï¿½ngare",
             "Type": "Primera"
         },
         {
@@ -578,10 +635,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Cucharo",
+            "Scientific": "Rapanea sessiliflora",
             "Type": "Segunda"
         },
         {
             "Name": "Cuchillito",
+            "Scientific": "Platypodium elegans",
             "Type": "Tercera"
         },
         {
@@ -593,7 +652,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Curap�n",
+            "Name": "Curapï¿½n",
             "Type": "Tercera"
         },
         {
@@ -602,10 +661,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Dinde",
+            "Scientific": "Moraceae",
             "Type": "Primera"
         },
         {
             "Name": "Diomate",
+            "Scientific": "Astronium graveolens",
             "Type": "Primera"
         },
         {
@@ -614,30 +675,35 @@ const AVALUO_DB = {
         },
         {
             "Name": "Doncel ",
+            "Scientific": "Fagara",
             "Type": "Segunda"
         },
         {
             "Name": "Dorado",
+            "Scientific": "Laetia corymbulosa",
             "Type": "Tercera"
         },
         {
-            "Name": "Dormil�n",
+            "Name": "Dormilï¿½n",
             "Type": "Tercera"
         },
         {
             "Name": "Dulomoco",
+            "Scientific": "Saurauia brachybotrys",
             "Type": "Tercera"
         },
         {
-            "Name": "�bano",
-            "Type": "Selecci�n"
+            "Name": "ï¿½bano",
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Encenillo",
+            "Scientific": "Weinmannia pubescens pubescens",
             "Type": "Tercera"
         },
         {
             "Name": "Escobo",
+            "Scientific": "Sida poeppigiana",
             "Type": "Tercera"
         },
         {
@@ -646,14 +712,17 @@ const AVALUO_DB = {
         },
         {
             "Name": "Espadero",
+            "Scientific": "Myrsine coriacea",
             "Type": "Tercera"
         },
         {
             "Name": "Espino",
+            "Scientific": "Pithecellobium lanceolatum",
             "Type": "Tercera"
         },
         {
             "Name": "Eucalipto",
+            "Scientific": "Eucalyptus globulus",
             "Type": "Primera"
         },
         {
@@ -670,22 +739,27 @@ const AVALUO_DB = {
         },
         {
             "Name": "Fremo",
+            "Scientific": "Tapirira guianensis",
             "Type": "Primera"
         },
         {
             "Name": "Fresno",
+            "Scientific": "Tecoma stans",
             "Type": "Tercera"
         },
         {
             "Name": "Frijolillo",
+            "Scientific": "Podandrogyne decipiens",
             "Type": "Primera"
         },
         {
             "Name": "Frijolito",
+            "Scientific": "Fabaceae",
             "Type": "Tercera"
         },
         {
             "Name": "Frisolillo",
+            "Scientific": "Xylopia aromatica",
             "Type": "Tercera"
         },
         {
@@ -702,14 +776,17 @@ const AVALUO_DB = {
         },
         {
             "Name": "Gallinazo",
+            "Scientific": "Pollalesta",
             "Type": "Segunda"
         },
         {
             "Name": "Gallinero",
+            "Scientific": "Pithecellobium oblongum",
             "Type": "Tercera"
         },
         {
             "Name": "Gaque",
+            "Scientific": "Clusia multiflora",
             "Type": "Tercera"
         },
         {
@@ -718,34 +795,39 @@ const AVALUO_DB = {
         },
         {
             "Name": "Garrapato",
+            "Scientific": "Unonopsis pittieri",
             "Type": "Tercera"
         },
         {
-            "Name": "Gen�zaro",
+            "Name": "Genï¿½zaro",
             "Type": "Segunda"
         },
         {
             "Name": "Granadillo",
+            "Scientific": "Brosimum rubescens",
             "Type": "Primera"
         },
         {
             "Name": "Granizo",
+            "Scientific": "Hedyosmum racemosum",
             "Type": "Tercera"
         },
         {
             "Name": "Guacamayo",
+            "Scientific": "Albizia caribaea",
             "Type": "Tercera"
         },
         {
             "Name": "Guacharaco",
+            "Scientific": "Isertia haenkeana",
             "Type": "Tercera"
         },
         {
-            "Name": "Gu�cimo",
+            "Name": "Guï¿½cimo",
             "Type": "Tercera"
         },
         {
-            "Name": "Gu�cimo",
+            "Name": "Guï¿½cimo",
             "Type": "Tercera"
         },
         {
@@ -753,15 +835,16 @@ const AVALUO_DB = {
             "Type": "Segunda"
         },
         {
-            "Name": "Gu�imaro",
+            "Name": "Guï¿½imaro",
             "Type": "Tercera"
         },
         {
-            "Name": "Gu�jaro",
+            "Name": "Guï¿½jaro",
             "Type": "Segunda"
         },
         {
             "Name": "Gualanday",
+            "Scientific": "Jacaranda mimosifolia",
             "Type": "Segunda"
         },
         {
@@ -770,26 +853,31 @@ const AVALUO_DB = {
         },
         {
             "Name": "Guamacho",
+            "Scientific": "Pereskia guamacho",
             "Type": "Segunda"
         },
         {
             "Name": "Guamillo",
+            "Scientific": "Lonchocarpus",
             "Type": "Tercera"
         },
         {
             "Name": "Guamo ",
+            "Scientific": "Inga spectabilis",
             "Type": "Tercera"
         },
         {
             "Name": "Guamo bejuco",
+            "Scientific": "Inga thibaudiana",
             "Type": "Tercera"
         },
         {
-            "Name": "Guan�b.monte",
+            "Name": "Guanï¿½b.monte",
             "Type": "Tercera"
         },
         {
             "Name": "Guanabanito",
+            "Scientific": "Annona",
             "Type": "Tercera "
         },
         {
@@ -802,6 +890,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Guarango",
+            "Scientific": "Tara spinosa",
             "Type": "Tercera"
         },
         {
@@ -809,7 +898,7 @@ const AVALUO_DB = {
             "Type": "Segunda"
         },
         {
-            "Name": "Guarim�n",
+            "Name": "Guarimï¿½n",
             "Type": "Tercera"
         },
         {
@@ -818,10 +907,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Guarumo",
+            "Scientific": "Cecropia peltata",
             "Type": "Tercera"
         },
         {
             "Name": "Guayabo",
+            "Scientific": "Psidium cattleianum",
             "Type": "Tercera"
         },
         {
@@ -845,12 +936,12 @@ const AVALUO_DB = {
             "Type": "Segunda"
         },
         {
-            "Name": "Guayac�n ",
+            "Name": "Guayacï¿½n ",
             "Type": "Primera"
         },
         {
-            "Name": "Guayac�n.amil",
-            "Type": "Selecci�n"
+            "Name": "Guayacï¿½n.amil",
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Guayacozanca",
@@ -866,6 +957,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Gusanero",
+            "Scientific": "Astronium lecointei",
             "Type": "Primera"
         },
         {
@@ -882,6 +974,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Higo",
+            "Scientific": "Ficus carica",
             "Type": "Tercera"
         },
         {
@@ -889,7 +982,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Higuer�n",
+            "Name": "Higuerï¿½n",
             "Type": "Tercera"
         },
         {
@@ -898,10 +991,11 @@ const AVALUO_DB = {
         },
         {
             "Name": "Hobo",
+            "Scientific": "Bursera simaruba",
             "Type": "Tercera"
         },
         {
-            "Name": "Hogu�n ",
+            "Name": "Hoguï¿½n ",
             "Type": "Tercera"
         },
         {
@@ -922,14 +1016,17 @@ const AVALUO_DB = {
         },
         {
             "Name": "Hueso",
+            "Scientific": "Fabaceae",
             "Type": "Tercera"
         },
         {
             "Name": "Huevo de toro",
+            "Scientific": "Clavija",
             "Type": "Tercera"
         },
         {
             "Name": "Indio desnudo",
+            "Scientific": "Bursera simaruba",
             "Type": "Tercera"
         },
         {
@@ -938,6 +1035,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Jaboncillo",
+            "Scientific": "Isertia pittieri",
             "Type": "Tercera"
         },
         {
@@ -946,10 +1044,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Jagua",
+            "Scientific": "Senna alata",
             "Type": "Primera"
         },
         {
             "Name": "Jara",
+            "Scientific": "Eupatorium",
             "Type": "Tercera"
         },
         {
@@ -958,6 +1058,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Jigua",
+            "Scientific": "Cordia alliodora",
             "Type": "Primera"
         },
         {
@@ -966,6 +1067,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Jobo",
+            "Scientific": "Spondias mombin",
             "Type": "Tercera"
         },
         {
@@ -982,30 +1084,35 @@ const AVALUO_DB = {
         },
         {
             "Name": "Lanzo",
+            "Scientific": "Miconia trinervia",
             "Type": "Tercera"
         },
         {
-            "Name": "Lar�",
+            "Name": "Larï¿½",
             "Type": "Tercera"
         },
         {
-            "Name": "L�tigo",
+            "Name": "Lï¿½tigo",
             "Type": "Tercera"
         },
         {
             "Name": "Laurel",
+            "Scientific": "Nectandra",
             "Type": "Primera"
         },
         {
             "Name": "Laurel amarillo",
+            "Scientific": "Ocotea",
             "Type": "Primera"
         },
         {
             "Name": "Laurel blanco",
+            "Scientific": "Ocotea calophylla",
             "Type": "Primera"
         },
         {
             "Name": "Laurel comino",
+            "Scientific": "Aniba perutilis",
             "Type": "Primera"
         },
         {
@@ -1022,22 +1129,25 @@ const AVALUO_DB = {
         },
         {
             "Name": "Lechero",
+            "Scientific": "Perebea angustifolia",
             "Type": "Tercera"
         },
         {
             "Name": "Lechoso",
+            "Scientific": "Rauvolfia littoralis",
             "Type": "Tercera"
         },
         {
             "Name": "Leucaena",
+            "Scientific": "Leucaena leucocephala",
             "Type": "Tercera"
         },
         {
-            "Name": "lgu�",
+            "Name": "lguï¿½",
             "Type": "Segunda"
         },
         {
-            "Name": "Lim�n mandarino ",
+            "Name": "Limï¿½n mandarino ",
             "Type": "Tercera"
         },
         {
@@ -1045,7 +1155,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Lomoe caim�n",
+            "Name": "Lomoe caimï¿½n",
             "Type": "Segunda"
         },
         {
@@ -1054,6 +1164,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Macano",
+            "Scientific": "Terminalia amazonia",
             "Type": "Segunda"
         },
         {
@@ -1074,10 +1185,11 @@ const AVALUO_DB = {
         },
         {
             "Name": "Majagua",
+            "Scientific": "Annona papilionella",
             "Type": "Tercera"
         },
         {
-            "Name": "Majagua color�",
+            "Name": "Majagua colorï¿½",
             "Type": "Tercera"
         },
         {
@@ -1086,6 +1198,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Majaguito",
+            "Scientific": "Trema micrantha",
             "Type": "Tercera"
         },
         {
@@ -1094,6 +1207,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Malagano",
+            "Scientific": "Luehea seemannii",
             "Type": "Segunda"
         },
         {
@@ -1114,6 +1228,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Mango",
+            "Scientific": "Mangifera indica",
             "Type": "Primera"
         },
         {
@@ -1121,15 +1236,16 @@ const AVALUO_DB = {
             "Type": "Segunda"
         },
         {
-            "Name": "Mapur�to",
+            "Name": "Mapurï¿½to",
             "Type": "Tercera"
         },
         {
             "Name": "Mariangola",
+            "Scientific": "Randia armata",
             "Type": "Tercera"
         },
         {
-            "Name": "Matarrat�n",
+            "Name": "Matarratï¿½n",
             "Type": "Tercera"
         },
         {
@@ -1137,15 +1253,17 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Maz�balo",
+            "Name": "Mazï¿½balo",
             "Type": "Primera"
         },
         {
             "Name": "Melao",
+            "Scientific": "Cordia panamensis",
             "Type": "Tercera"
         },
         {
             "Name": "Melina",
+            "Scientific": "Gmelina arborea",
             "Type": "Segunda"
         },
         {
@@ -1154,6 +1272,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Mestizo",
+            "Scientific": "Cupania latifolia",
             "Type": "Tercera"
         },
         {
@@ -1170,6 +1289,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Mimbre",
+            "Scientific": "Tessaria integrifolia",
             "Type": "Tercera"
         },
         {
@@ -1189,7 +1309,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Monra�a",
+            "Name": "Monraï¿½a",
             "Type": "Tercera"
         },
         {
@@ -1202,6 +1322,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Mora",
+            "Scientific": "Maclura tinctoria",
             "Type": "Segunda"
         },
         {
@@ -1210,34 +1331,41 @@ const AVALUO_DB = {
         },
         {
             "Name": "Mula muerta",
+            "Scientific": "Gustavia romeroi",
             "Type": "Segunda"
         },
         {
             "Name": "Mulato",
+            "Scientific": "Senegalia",
             "Type": "Segunda"
         },
         {
-            "Name": "Mu�eco",
+            "Name": "Muï¿½eco",
             "Type": "Tercera"
         },
         {
             "Name": "Nacedero",
+            "Scientific": "Trichanthera gigantea",
             "Type": "Tercera"
         },
         {
             "Name": "Naranjillo",
+            "Scientific": "Crateva tapia",
             "Type": "Tercera"
         },
         {
             "Name": "Naranjito",
+            "Scientific": "Capparis pachaca",
             "Type": "Tercera"
         },
         {
             "Name": "Naranjo",
+            "Scientific": "Citrus aurantium",
             "Type": "Tercera"
         },
         {
             "Name": "Naranjuelo",
+            "Scientific": "Morisonia americana",
             "Type": "Tercera"
         },
         {
@@ -1246,10 +1374,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Nazareno",
+            "Scientific": "Hymenaea oblongifolia",
             "Type": "Primera"
         },
         {
             "Name": "Neem",
+            "Scientific": "Azadirachta indica",
             "Type": "Segunda"
         },
         {
@@ -1258,10 +1388,11 @@ const AVALUO_DB = {
         },
         {
             "Name": "Nigua",
+            "Scientific": "Muntingia calabura",
             "Type": "Tercera"
         },
         {
-            "Name": "N�guito",
+            "Name": "Nï¿½guito",
             "Type": "Tercera"
         },
         {
@@ -1274,30 +1405,33 @@ const AVALUO_DB = {
         },
         {
             "Name": "Nogal",
-            "Type": "Selecci�n"
+            "Scientific": "Juglans",
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Nogal bogotano",
-            "Type": "Selecci�n"
+            "Scientific": "Juglans columbiensis",
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Nogal cafetero",
+            "Scientific": "Cordia alliodora",
             "Type": "Primera"
         },
         {
-            "Name": "Nuez del par�",
-            "Type": "Selecci�n"
+            "Name": "Nuez del parï¿½",
+            "Type": "Selecciï¿½n"
         },
         {
-            "Name": "�ipi �ipi",
+            "Name": "ï¿½ipi ï¿½ipi",
             "Type": "Tercera"
         },
         {
             "Name": "Ocobo",
-            "Type": "Selecci�n"
+            "Type": "Selecciï¿½n"
         },
         {
-            "Name": "Ogu�n",
+            "Name": "Oguï¿½n",
             "Type": "Tercera"
         },
         {
@@ -1306,14 +1440,17 @@ const AVALUO_DB = {
         },
         {
             "Name": "Olivo",
+            "Scientific": "Morella pubescens",
             "Type": "Tercera"
         },
         {
             "Name": "Olla de mono",
+            "Scientific": "Lecythis lurida",
             "Type": "Segunda"
         },
         {
             "Name": "Orejero",
+            "Scientific": "Enterolobium",
             "Type": "Segunda"
         },
         {
@@ -1330,6 +1467,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Palanco",
+            "Scientific": "Xylopia frutescens",
             "Type": "Tercera"
         },
         {
@@ -1370,26 +1508,30 @@ const AVALUO_DB = {
         },
         {
             "Name": "Palmiche",
+            "Scientific": "Cordyline rubra",
             "Type": "Segunda"
         },
         {
             "Name": "Palo blanco",
+            "Scientific": "Capparis indica",
             "Type": "Tercera"
         },
         {
             "Name": "Palo brasil",
-            "Type": "Selecci�n"
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Palo cruz",
+            "Scientific": "Brownea rosa-de-monte",
             "Type": "Tercera"
         },
         {
             "Name": "palo de Agua",
+            "Scientific": "Micrandra",
             "Type": "Tercera"
         },
         {
-            "Name": "Palo de �guila",
+            "Name": "Palo de ï¿½guila",
             "Type": "Tercera"
         },
         {
@@ -1402,23 +1544,25 @@ const AVALUO_DB = {
         },
         {
             "Name": "Palo de rosa",
-            "Type": "Selecci�n"
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Palo de vaca",
             "Type": "Tercera"
         },
         {
-            "Name": "Palo Mar�a",
+            "Name": "Palo Marï¿½a",
             "Type": "Segunda"
         },
         {
             "Name": "Palo mora",
+            "Scientific": "Maclura tinctoria",
             "Type": "Segunda"
         },
         {
             "Name": "Palo santo",
-            "Type": "Selecci�n"
+            "Scientific": "Browneopsis excelsa",
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Palo seca",
@@ -1430,6 +1574,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Papayote",
+            "Scientific": "Cochlospermum vitifolium",
             "Type": "Tercera"
         },
         {
@@ -1446,6 +1591,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "pategallina ",
+            "Scientific": "Schefflera trianae",
             "Type": "Segunda"
         },
         {
@@ -1453,7 +1599,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Payand�",
+            "Name": "Payandï¿½",
             "Type": "Tercera"
         },
         {
@@ -1465,15 +1611,17 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Pepa de s�balo",
+            "Name": "Pepa de sï¿½balo",
             "Type": "Segunda"
         },
         {
             "Name": "Pepo",
+            "Scientific": "Sapindus saponaria",
             "Type": "Tercera"
         },
         {
             "Name": "Pera",
+            "Scientific": "Syzygium malaccense",
             "Type": "Tercera"
         },
         {
@@ -1482,22 +1630,24 @@ const AVALUO_DB = {
         },
         {
             "Name": "Perillo",
+            "Scientific": "Couma macrocarpa",
             "Type": "Segunda"
         },
         {
-            "Name": "Per�n",
+            "Name": "Perï¿½n",
             "Type": "Tercera"
         },
         {
             "Name": "Peronillo",
+            "Scientific": "Ormosia corcovada",
             "Type": "Tercera"
         },
         {
-            "Name": "Per� bambuco",
+            "Name": "Perï¿½ bambuco",
             "Type": "Tercera"
         },
         {
-            "Name": "Pietam�n",
+            "Name": "Pietamï¿½n",
             "Type": "Tercera"
         },
         {
@@ -1505,7 +1655,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Pil�n",
+            "Name": "Pilï¿½n",
             "Type": "Tercera"
         },
         {
@@ -1514,6 +1664,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Pino",
+            "Scientific": "Asteraceae",
             "Type": "Primera"
         },
         {
@@ -1521,7 +1672,7 @@ const AVALUO_DB = {
             "Type": "Primera"
         },
         {
-            "Name": "Pino p�tula",
+            "Name": "Pino pï¿½tula",
             "Type": "Primera"
         },
         {
@@ -1533,11 +1684,11 @@ const AVALUO_DB = {
             "Type": "Primera"
         },
         {
-            "Name": "Pi��n de oreja",
+            "Name": "Piï¿½ï¿½n de oreja",
             "Type": "Segunda"
         },
         {
-            "Name": "Pisqu�n",
+            "Name": "Pisquï¿½n",
             "Type": "Tercera"
         },
         {
@@ -1554,14 +1705,16 @@ const AVALUO_DB = {
         },
         {
             "Name": "Polvillo",
+            "Scientific": "Samanea saman",
             "Type": "Primera"
         },
         {
-            "Name": "Pomarr�n",
+            "Name": "Pomarrï¿½n",
             "Type": "Tercera"
         },
         {
             "Name": "Pomarroso",
+            "Scientific": "Celtis iguanaea",
             "Type": "Tercera"
         },
         {
@@ -1578,6 +1731,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Puntelanza",
+            "Scientific": "Miconia aeruginosa",
             "Type": "Tercera"
         },
         {
@@ -1590,10 +1744,11 @@ const AVALUO_DB = {
         },
         {
             "Name": "Quiebracha",
+            "Scientific": "Cupania",
             "Type": "Tercera"
         },
         {
-            "Name": "Quimul�",
+            "Name": "Quimulï¿½",
             "Type": "Segunda"
         },
         {
@@ -1605,11 +1760,12 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Raij�n rajado",
+            "Name": "Raijï¿½n rajado",
             "Type": "Tercera"
         },
         {
             "Name": "Raspador",
+            "Scientific": "Trema micrantha",
             "Type": "Tercera"
         },
         {
@@ -1617,27 +1773,31 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Ray�n",
+            "Name": "Rayï¿½n",
             "Type": "Tercera"
         },
         {
             "Name": "Rayo",
+            "Scientific": "Aristolochia",
             "Type": "Segunda"
         },
         {
             "Name": "Resbalamono",
+            "Scientific": "Bursera simaruba",
             "Type": "Tercera"
         },
         {
-            "Name": "Ri��n",
+            "Name": "Riï¿½ï¿½n",
             "Type": "Tercera"
         },
         {
             "Name": "Roble",
+            "Scientific": "Quercus humboldtii",
             "Type": "Primera"
         },
         {
             "Name": "Roble amarillo",
+            "Scientific": "Pseudosamanea guachapele",
             "Type": "Primera"
         },
         {
@@ -1646,7 +1806,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Roble morado",
-            "Type": "Selecci�n"
+            "Type": "Selecciï¿½n"
         },
         {
             "Name": "Roble rosado",
@@ -1658,6 +1818,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Sajino",
+            "Scientific": "Alchornea polyantha",
             "Type": "Segunda"
         },
         {
@@ -1666,6 +1827,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Salvio",
+            "Scientific": "Cordia cylindrostachya",
             "Type": "Tercera"
         },
         {
@@ -1673,7 +1835,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Sam�n",
+            "Name": "Samï¿½n",
             "Type": "Segunda"
         },
         {
@@ -1682,18 +1844,22 @@ const AVALUO_DB = {
         },
         {
             "Name": "Sande",
+            "Scientific": "Brosimum utile",
             "Type": "Segunda"
         },
         {
             "Name": "Sangregao",
+            "Scientific": "Andira",
             "Type": "Segunda"
         },
         {
             "Name": "Sangretoro",
+            "Scientific": "Iryanthera",
             "Type": "Primera"
         },
         {
             "Name": "Santacruz",
+            "Scientific": "Calophyllum",
             "Type": "Primera"
         },
         {
@@ -1709,7 +1875,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "S�uco",
+            "Name": "Sï¿½uco",
             "Type": "Tercera"
         },
         {
@@ -1738,6 +1904,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Solera",
+            "Scientific": "Terminalia",
             "Type": "Primera"
         },
         {
@@ -1746,18 +1913,22 @@ const AVALUO_DB = {
         },
         {
             "Name": "Sota",
+            "Scientific": "Virola flexuosa",
             "Type": "Segunda"
         },
         {
             "Name": "Soto",
+            "Scientific": "Dialyanthera otoba",
             "Type": "Segunda"
         },
         {
             "Name": "Sueldo",
+            "Scientific": "Pleurothyrium",
             "Type": "Tercera"
         },
         {
             "Name": "Swinglea",
+            "Scientific": "Swinglea glutinosa",
             "Type": "Segunda"
         },
         {
@@ -1778,10 +1949,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Tabaquillo",
+            "Scientific": "Macrocarpaea macrophylla",
             "Type": "Tercera"
         },
         {
             "Name": "Tachuelo",
+            "Scientific": "Calatola costaricensis",
             "Type": "Segunda"
         },
         {
@@ -1798,6 +1971,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Tambolero",
+            "Scientific": "Schizolobium parahyba",
             "Type": "Tercera"
         },
         {
@@ -1814,6 +1988,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Teca",
+            "Scientific": "Tectona grandis",
             "Type": "Primera"
         },
         {
@@ -1825,11 +2000,12 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Tiot�o",
+            "Name": "Tiotï¿½o",
             "Type": "Tercera"
         },
         {
             "Name": "Tiraco",
+            "Scientific": "Chrysochlamys macrophylla",
             "Type": "Tercera"
         },
         {
@@ -1862,14 +2038,17 @@ const AVALUO_DB = {
         },
         {
             "Name": "Tostao",
+            "Scientific": "Dialium guianense",
             "Type": "Tercera"
         },
         {
             "Name": "Totumero",
+            "Scientific": "Caryocar glabrum",
             "Type": "Tercera"
         },
         {
             "Name": "Totumo",
+            "Scientific": "Crescentia cujete",
             "Type": "Tercera"
         },
         {
@@ -1877,7 +2056,7 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Tr�bol negro",
+            "Name": "Trï¿½bol negro",
             "Type": "Primera"
         },
         {
@@ -1894,18 +2073,22 @@ const AVALUO_DB = {
         },
         {
             "Name": "Trompillo",
+            "Scientific": "Guarea guidonia",
             "Type": "Tercera"
         },
         {
             "Name": "Trompito",
+            "Scientific": "Jacquinia",
             "Type": "Tercera"
         },
         {
             "Name": "Tronador",
+            "Scientific": "Hura crepitans",
             "Type": "Segunda"
         },
         {
             "Name": "Trupillo",
+            "Scientific": "Prosopis juliflora",
             "Type": "Tercera"
         },
         {
@@ -1914,14 +2097,15 @@ const AVALUO_DB = {
         },
         {
             "Name": "Tuno",
+            "Scientific": "Miconia spicellata",
             "Type": "Segunda"
         },
         {
-            "Name": "U�a de Puerco",
+            "Name": "Uï¿½a de Puerco",
             "Type": "Tercera"
         },
         {
-            "Name": "Urapán",
+            "Name": "UrapÃ¡n",
             "Type": "Segunda"
         },
         {
@@ -1930,10 +2114,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Uvito",
+            "Scientific": "Muntingia calabura",
             "Type": "Tercera"
         },
         {
             "Name": "Vaco",
+            "Scientific": "Brosimum utile",
             "Type": "Tercera"
         },
         {
@@ -1941,11 +2127,12 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Vainep�jaro",
+            "Name": "Vainepï¿½jaro",
             "Type": "Tercera"
         },
         {
             "Name": "Vainilla",
+            "Scientific": "Senna obtusifolia",
             "Type": "Tercera"
         },
         {
@@ -1970,6 +2157,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Verraco",
+            "Scientific": "Trema micrantha",
             "Type": "Segunda"
         },
         {
@@ -1978,6 +2166,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Virola",
+            "Scientific": "Virola macrocarpa",
             "Type": "Segunda"
         },
         {
@@ -1986,10 +2175,12 @@ const AVALUO_DB = {
         },
         {
             "Name": "Vivaseca",
+            "Scientific": "Chloroleucon",
             "Type": "Tercera"
         },
         {
             "Name": "Volador",
+            "Scientific": "Hernandiaceae",
             "Type": "Tercera"
         },
         {
@@ -2014,6 +2205,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Yarumo",
+            "Scientific": "Cecropia angustifolia",
             "Type": "Tercera"
         },
         {
@@ -2022,14 +2214,17 @@ const AVALUO_DB = {
         },
         {
             "Name": "Yaya",
+            "Scientific": "Ephedranthus colombianus",
             "Type": "Segunda"
         },
         {
             "Name": "Yolombo",
+            "Scientific": "Andira",
             "Type": "Segunda"
         },
         {
             "Name": "Yuco ",
+            "Scientific": "Malvaceae",
             "Type": "Tercera"
         },
         {
@@ -2041,11 +2236,12 @@ const AVALUO_DB = {
             "Type": "Tercera"
         },
         {
-            "Name": "Zap�n",
+            "Name": "Zapï¿½n",
             "Type": "Primera"
         },
         {
             "Name": "Zapote",
+            "Scientific": "Matisia cordata",
             "Type": "Segunda"
         },
         {
@@ -2054,6 +2250,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Zapotillo",
+            "Scientific": "Pouteria subrotata",
             "Type": "Tercera"
         },
         {
@@ -2066,6 +2263,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Zorro",
+            "Scientific": "Pentagonia pinnatifida",
             "Type": "Tercera"
         },
         {
@@ -2074,6 +2272,7 @@ const AVALUO_DB = {
         },
         {
             "Name": "Zurrumbo",
+            "Scientific": "Trema integerrima",
             "Type": "Tercera"
         }
     ],
@@ -2791,3 +2990,4 @@ const AVALUO_DB = {
     }
 }
     ;
+

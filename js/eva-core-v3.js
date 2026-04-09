@@ -644,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (auditClass) row.className = auditClass;
                     row.innerHTML = `
                         <td class="num">
-                            <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver Detalle Especie">
+                            <span class="trace-icon" onclick="showTrace(decodeURIComponent('${encodeURIComponent(traceMsg)}'))" title="Ver Detalle Especie">
                                 <i data-lucide="info" style="width:12px;height:12px;"></i>
                             </span>
                             #ZEN_${count.toString().padStart(3, '0')}${tag}
@@ -735,27 +735,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.showTrace = function (msg) {
-        const lines = msg.split('\\n');
-        const formatted = lines.map(line => `<div>${line}</div>`).join('');
-
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
-        overlay.innerHTML = `
-            <div class="modal-box" style="border-color: var(--primary); max-width: 400px;">
-                <div class="modal-title" style="color: var(--primary);">
-                    <i data-lucide="shield-check"></i> Evidencia Pericial Matemática
-                </div>
-                <div class="modal-body" style="font-family: 'Space Mono', monospace; font-size: 0.75rem; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 8px; line-height: 1.5;">
-                    ${formatted}
-                </div>
-                <button class="modal-btn" style="background: var(--primary); margin-top: 1rem;" onclick="this.closest('.modal-overlay').remove()">Cerrar Auditoría</button>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        if (window.lucide) lucide.createIcons();
-        setTimeout(() => overlay.classList.add('active'), 10);
-    };
 
     function renderAvaluoBoard(showAlerts = false) {
         const tbody = document.getElementById('avaluoBody');
@@ -818,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (auditClass) row.className = auditClass;
                 row.innerHTML = `
                     <td class="col-esp" style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">
-                        <span class="trace-icon" onclick="showTrace('${traceMsg}')" title="Ver evidencia matemática" style="cursor:pointer; color:var(--primary); margin-right:5px;">
+                        <span class="trace-icon" onclick="showTrace(decodeURIComponent('${encodeURIComponent(traceMsg)}'))" title="Ver evidencia matemática" style="cursor:pointer; color:var(--primary); margin-right:5px;">
                             <i data-lucide="info" style="width:12px;height:12px;"></i>
                         </span>
                         ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
@@ -1095,49 +1074,138 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.generatePremiumPDF = async function () {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const resultsEl = currentMode === 'ipc' ? resultsUI : resultsAvaluo;
-
-        EVA.toast('Generando reporte PDF... por favor espere', 'info');
-
-        // --- FIXED: Temporary visibility for html2canvas ---
-        const originalStyle = resultsEl.style.display;
-        resultsEl.style.display = 'block';
-
-        // Wait 100ms for browser to reflow/render
-        await new Promise(r => setTimeout(r, 150));
-
-        const canvas = await html2canvas(resultsEl, {
-            backgroundColor: '#020408',
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            logging: false
-        });
-
-        resultsEl.style.display = originalStyle; // Revert
-
-        const imgData = canvas.toDataURL('image/png');
-
-        if (!imgData || imgData.length < 1000 || !imgData.startsWith('data:image/')) {
-            EVA.toast('Error crítico: El motor de captura no pudo procesar la tabla.', 'error');
+        if (!window.jspdf || !window.jspdf.jsPDF || !window.jspdf.jsPDF.prototype.autoTable) {
+            EVA.toast('Error: Módulo de Integridad Vectorial (AutoTable) no encontrado. Recargue la página.', 'error');
             return;
         }
 
-        try {
-            const imgProps = doc.getImageProperties(imgData);
-            const pdfWidth = doc.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        EVA.toast('Motor Vectorial Activado: Estructurando Documento Pericial Formal...', 'info');
 
-            doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
-            doc.save(`Reporte_EVA_${new Date().toISOString().slice(0, 10)}.pdf`);
-            EVA.toast('✓ Reporte PDF descargado correctamente');
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const forensicHash = Math.random().toString(36).substr(2, 9).toUpperCase();
+
+            // 1) Algoritmo de inyección de Sellos Forenses Universales
+            const overlayCorporateWatermark = (data) => {
+                const doc = data.doc;
+                const page = doc.internal.getCurrentPageInfo().pageNumber;
+                
+                // Head Ribbon (Corporate Slate)
+                doc.setFillColor(15, 23, 42); 
+                doc.rect(0, 0, pageWidth, 24, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.text("DICTAMEN TÉCNICO PERICIAL - SISTEMA E.V.A", 14, 13);
+                
+                doc.setTextColor(148, 163, 184); 
+                doc.setFontSize(8);
+                doc.setFont("helvetica", "normal");
+                doc.text("ESTRUCTURACIÓN MATRICIAL RIGUROSA Y AUDITORÍA", 14, 18);
+                
+                doc.setTextColor(56, 189, 248); 
+                doc.setFontSize(10);
+                doc.setFont("courier", "bold");
+                doc.text("EXP: #" + forensicHash, pageWidth - 14, 15, { align: 'right' });
+                
+                doc.setDrawColor(56, 189, 248);
+                doc.setLineWidth(0.5);
+                doc.line(0, 24, pageWidth, 24);
+
+                // Footer Ribbon (Light formal)
+                doc.setFillColor(248, 250, 252); 
+                doc.rect(0, pageHeight - 16, pageWidth, 16, 'F');
+                doc.setDrawColor(203, 213, 225); 
+                doc.line(0, pageHeight - 16, pageWidth, pageHeight - 16);
+                
+                doc.setTextColor(100, 116, 139);
+                doc.setFontSize(7);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Motor Analítico E.V.A Engine v3.1.0 | F. Emisión: \${new Date().toLocaleString()}`, 14, pageHeight - 7);
+                doc.setFont("helvetica", "bold");
+                doc.text(`FOLIO \${page}`, pageWidth - 14, pageHeight - 7, { align: 'right' });
+                
+                // Central Legal Watermark
+                doc.setTextColor(200, 200, 200); 
+                doc.setFontSize(65);
+                doc.setFont("helvetica", "bold");
+                doc.saveGraphicsState();
+                doc.setGState(new doc.GState({opacity: 0.08}));
+                doc.text("VALIDADO E.V.A", pageWidth/2, pageHeight/2 + 30, { align: 'center', angle: 45 });
+                doc.restoreGraphicsState();
+            };
+
+            // 2) Definición Estricta del Diccionario Visual de Tablas
+            const abstractMatrixTheme = {
+                theme: 'grid',
+                styles: { font: 'helvetica', fontSize: 7.5, textColor: [51, 65, 85], cellPadding: 3, lineColor: [226, 232, 240], lineWidth: 0.1 },
+                headStyles: { fillColor: [56, 189, 248], textColor: [15, 23, 42], fontStyle: 'bold', fontSize: 8, halign: 'center' },
+                alternateRowStyles: { fillColor: [248, 250, 252] },
+                margin: { top: 32, bottom: 22, left: 14, right: 14 },
+                didDrawPage: overlayCorporateWatermark,
+                columnStyles: { 0: { fontStyle: 'bold' } } // Primera columna destacada
+            };
+            
+            const isIPC = currentMode === 'ipc';
+            const sumTableId = isIPC ? '#summaryTableIPC' : '#summaryTable';
+            const detailTableId = isIPC ? '#eliteTable' : '#avaluoTable';
+
+            // 3) Bloque 1: Resumen General Paramétrico
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+            doc.setTextColor(15, 23, 42);
+            doc.text("1. SÍNTESIS GLOBAL DE VALORACIÓN", 14, 32);
+
+            doc.autoTable({
+                html: sumTableId,
+                ...abstractMatrixTheme,
+                startY: 35,
+                headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 }
+            });
+
+            // 4) Rutina de Separación Espacial Inteligente
+            let currentY = doc.lastAutoTable.finalY + 15;
+            
+            if (currentY > pageHeight - 50) {
+                doc.addPage();
+                currentY = 32;
+            }
+
+            // 5) Bloque 2: Matriz Analítica Extensa
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+            doc.setTextColor(15, 23, 42);
+            doc.text("2. DESGLOSE MATRICIAL RIGUROSO DE ACTIVOS", 14, currentY);
+
+            doc.autoTable({
+                html: detailTableId,
+                ...abstractMatrixTheme,
+                startY: currentY + 3
+            });
+
+            // 6) Inyección Legal de Responsabilidad (Final de Documento)
+            currentY = doc.lastAutoTable.finalY + 10;
+            if (currentY > pageHeight - 30) { doc.addPage(); currentY = 32; }
+            
+            doc.setFont("helvetica", "italic");
+            doc.setFontSize(7);
+            doc.setTextColor(100, 116, 139);
+            const disclaimer = "Certificación: Este documento ha sido estructurado mediante la consola E.V.A PRO utilizando formulación técnica estandarizada y/o IPC proporcionado por el DANE. La matriz es un elemento de apoyo pericial y no sustituye la firma de un auditor colegiado si la jurisdicción lo exige.";
+            doc.text(doc.splitTextToSize(disclaimer, pageWidth - 28), 14, currentY);
+
+            // 7) Compilación y Cifrado Simulado
+            doc.save(`Dictamen_Forense_EVA_\${isIPC?'IPC':'AVALUO'}_\${new Date().toISOString().slice(0, 10)}_\${forensicHash}.pdf`);
+            EVA.toast('✓ Dictamen Ciber-Forense Vectorial exportado exitosamente.');
         } catch (err) {
-            console.error("PDF-Error: ", err);
-            EVA.toast('Error al procesar el PDF: ' + err.message, 'error');
+            console.error("PDF-Engine Fatal Exception: ", err);
+            EVA.toast('Error grave de compilación PDF: ' + err.message, 'error');
         }
     };
+
 
     // --- Chart Initialization ---
     if (eliteChartEl) {

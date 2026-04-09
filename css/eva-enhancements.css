@@ -398,14 +398,4 @@
     color: var(--text-main, #F1F5F9);
 }
 
-/* ═══════════════════════════════════════════
-   PRINT: HIDE ENHANCEMENTS
-   ═══════════════════════════════════════════ */
-@media print {
-    #cmd-palette-overlay,
-    #eva-drop-zone,
-    .column-selector-btn {
-        display: none !important;
-    }
-}
 
