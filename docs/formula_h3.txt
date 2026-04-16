@@ -1,2 +1,0 @@
-﻿=SI(E3="Primera";'PRIMERA_O&M'!$N$11;SI(E3="Segunda";'SEGUNDA_O&M'!$M$11;SI(E3="Tercera";'TERCERA_O&M'!$M$11;SI(E3="Selección";"Pasar a tabla de Especies por selección"))))
-=BUSCARV(D3;A:B;2;FALSO)
