@@ -973,3 +973,127 @@ input:checked + .slider-zenith:before {
     height: 14px !important;
     stroke-width: 2.5px !important;
 }
+/* --- [E.V.A. V4] AGENT INTELLIGENCE UI --- */
+.agent-display-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.agent-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: 0.4s var(--ease);
+    position: relative;
+    overflow: hidden;
+}
+
+.agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: var(--primary);
+    opacity: 0.3;
+}
+
+.agent-card.warning::before { background: var(--warning); }
+.agent-card.error::before { background: #f43f5e; }
+.agent-card.success::before { background: var(--success); }
+
+.agent-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.agent-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 242, 254, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+}
+
+.agent-card h3 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+}
+
+.agent-role {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+}
+
+.agent-status-pills {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.status-pill {
+    font-size: 0.55rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-weight: 700;
+}
+
+/* --- [E.V.A. CORE FOCUS] FOREST VALUATION & IPC --- */
+.badge-cat {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.5px;
+}
+.badge-cat.primera { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+.badge-cat.segunda { background: rgba(99, 102, 241, 0.1); color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.2); }
+.badge-cat.tercera { background: rgba(100, 116, 139, 0.1); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.2); }
+.badge-cat.seleccion { background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); }
+
+.stat-mini-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s var(--ease);
+}
+
+.stat-mini-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.stat-mini-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+.stat-mini-value { font-size: 1.6rem; font-weight: 800; color: var(--text-main); font-family: 'Hanken Grotesk', sans-serif; }
+.stat-mini-sub { font-size: 0.6rem; opacity: 0.5; margin-top: 0.2rem; }
+
+.price-formula {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: 'Space Mono', monospace;
+}

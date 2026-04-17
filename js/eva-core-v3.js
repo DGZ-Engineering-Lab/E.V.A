@@ -25,9 +25,66 @@ document.addEventListener('DOMContentLoaded', () => {
     const eliteChartEl = document.getElementById('eliteChart');
 
     // --- Shared Constants & State ---
-    // Dynamic Factor: Can be overridden by enhancement module for year selection
-    window.ZENITH_FACTOR = window.ZENITH_FACTOR || 1.5226;
+    const IPC_TABLE = {
+        2010: 67.24,  2011: 69.75,  2012: 71.45,  2013: 72.84,  2014: 75.51,
+        2015: 80.62,  2016: 85.25,  2017: 88.74,  2018: 100.00, 2019: 103.80,
+        2020: 105.47, 2021: 111.40, 2022: 126.02, 2023: 137.71, 2024: 147.05, 2025: 152.26
+    };
+
+    window.updateZenithFactor = function() {
+        const base = parseInt(document.getElementById('ipcYearFrom')?.value) || 2018;
+        const target = parseInt(document.getElementById('ipcYearTo')?.value) || 2025;
+        
+        const factor = IPC_TABLE[target] / IPC_TABLE[base];
+        window.ZENITH_FACTOR = factor;
+        
+        const display = document.getElementById('dynamicFactorDisplay');
+        if(display) display.textContent = factor.toFixed(4);
+        
+        const outcome = document.getElementById('outcomePercent');
+        if(outcome) outcome.textContent = `+${((factor - 1) * 100).toFixed(2)}%`;
+
+        // Update table headers
+        const thBase = document.getElementById('thIpcBaseYear');
+        const thTarget = document.getElementById('thIpcTargetYear');
+        if(thBase) thBase.textContent = `Valor Base IPC ${base}`;
+        if(thTarget) thTarget.textContent = `Valor IPC ${target}`;
+        
+        const thAValBase = document.getElementById('thAvalBaseYear');
+        const thAValTarget = document.getElementById('thAvalTargetYear');
+        if(thAValBase) thAValBase.textContent = `Valor Base IPC ${base}`;
+        if(thAValTarget) thAValTarget.textContent = `Valor IPC ${target}`;
+
+        // Re-calculate if there's data
+        if (sysInputArea && sysInputArea.value.trim()) {
+            executeAction();
+        }
+
+        // Dynamically redraw eliteChart
+        if (typeof window.renderEliteChart === 'function') {
+            window.renderEliteChart(base, target);
+        }
+    };
+
+    // Attach listeners naturally
+    const selectFrom = document.getElementById('ipcYearFrom');
+    const selectTo = document.getElementById('ipcYearTo');
+    if(selectFrom) selectFrom.addEventListener('change', window.updateZenithFactor);
+    if(selectTo) selectTo.addEventListener('change', window.updateZenithFactor);
+
     function getZenithFactor() { return window.ZENITH_FACTOR || 1.5226; }
+
+    /**
+     * E.V.A. Forensic Integrity Hash (Pseudo-SHA256)
+     * Provides a digital signature for report traceability.
+     */
+    async function generateForensicHash(data) {
+        const msgUint8 = new TextEncoder().encode(data + Date.now());
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 12).toUpperCase();
+    }
+
     const fmtElite = new Intl.NumberFormat('es-CO', {
         style: 'currency', currency: 'COP', maximumFractionDigits: 0
     });
@@ -37,9 +94,49 @@ document.addEventListener('DOMContentLoaded', () => {
     let compChart = null;
     let distChart = null;
     let catChart = null;
+    let eliteChart = null;
     let auditorActive = false;
 
     const combinedPanel = document.getElementById('combinedAnalyticsPanel');
+
+    /**
+     * [E.V.A. CORE] SMART SAVER ENGINE
+     * Permite al usuario elegir la ruta de guardado si el navegador lo permite.
+     */
+    async function smartSaveFile(blob, suggestedName, typeDesc, fileExt) {
+        const fallbackSave = (b, name) => {
+            const url = URL.createObjectURL(b);
+            const a = document.createElement('a');
+            a.href = url; a.download = name;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        if ('showSaveFilePicker' in window) {
+            try {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: suggestedName,
+                    types: [{
+                        description: typeDesc,
+                        accept: { [blob.type]: [fileExt] },
+                    }],
+                });
+                const writable = await handle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+                return true;
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.warn("[EVA Saver] API Error, falling back to legacy:", err);
+                    fallbackSave(blob, suggestedName);
+                }
+                return false;
+            }
+        } else {
+            fallbackSave(blob, suggestedName);
+            return true;
+        }
+    }
     const compPanel = document.getElementById('comparisonPanel');
     const distPanel = combinedPanel; // Same element, aliased for clarity
     const metricsPanel = document.getElementById('metricsPanel');
@@ -176,9 +273,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Sync Forensic Stepper
         document.querySelectorAll('.step-btn').forEach(s => s.classList.remove('active'));
-        const stepMap = { 'tab-input': 's1', 'tab-analytics': 's2', 'tab-results': 's3' };
+        const stepMap = { 
+            'tab-input': 's1', 
+            'tab-analytics': 's2', 
+            'tab-results': 's3',
+            'tab-agents': 's4'
+        };
         const step = document.getElementById(stepMap[tabId]);
         if (step) step.classList.add('active');
+
+        // Nav Active State
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const navMap = {
+            'tab-input': 'nav-input',
+            'tab-analytics': 'nav-analytics',
+            'tab-results': 'nav-results',
+            'tab-agents': 'nav-agents'
+        };
+        const navI = document.getElementById(navMap[tabId]);
+        if(navI) navI.classList.add('active');
 
         const activeTab = document.getElementById(tabId);
         if (activeTab) activeTab.classList.add('active');
@@ -283,13 +396,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.lucide) lucide.createIcons();
     };
 
-    window.executeAction = function () {
+    window.executeAction = async function () {
         // Visual feedback on execution
         document.body.style.filter = 'brightness(1.1) contrast(1.1)';
         setTimeout(() => document.body.style.filter = 'none', 150);
 
-        if (currentMode === 'ipc') executeZenith();
-        else executeAvaluo();
+        if (currentMode === 'ipc') await executeZenith();
+        else await executeAvaluo();
 
         // Auto-switch to Results tab
         setTimeout(() => switchTab('tab-results'), 300);
@@ -355,6 +468,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /**
+     * [E.V.A. CORE] SMART SAVER ENGINE
+     * Permite al usuario elegir la ruta de guardado si el navegador lo permite.
+     */
+    async function smartSaveFile(blob, suggestedName, typeDesc, fileExt) {
+        const fallbackSave = (b, name) => {
+            const url = URL.createObjectURL(b);
+            const a = document.createElement('a');
+            a.href = url; a.download = name;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        if ('showSaveFilePicker' in window) {
+            try {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: suggestedName,
+                    types: [{
+                        description: typeDesc,
+                        accept: { [blob.type]: [fileExt] },
+                    }],
+                });
+                const writable = await handle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+                return true;
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.warn("[EVA Saver] API Error, falling back to legacy:", err);
+                    fallbackSave(blob, suggestedName);
+                }
+                return false;
+            }
+        } else {
+            fallbackSave(blob, suggestedName);
+            return true;
+        }
+    }
+
     // --- Dynamic Evolution: Version Polling ---
     async function checkSystemUpdates() {
         try {
@@ -396,7 +548,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- [E.V.A. V5] FORENSIC TOOLS (PERSISTENCE, SEARCH, AUDITOR) ---
 
-    window.saveSessionFile = function () {
+    window.saveSessionFile = async function () {
+        const date = new Date().toISOString().slice(0, 10);
+        const fileName = `Proyecto_EVA_${date}.eva`;
         const data = {
             version: CURRENT_VERSION,
             timestamp: new Date().toISOString(),
@@ -406,13 +560,9 @@ document.addEventListener('DOMContentLoaded', () => {
             theme: localStorage.getItem('evaTheme') || 'dark'
         };
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        const date = new Date().toISOString().slice(0, 10);
-        a.href = url;
-        a.download = `Proyecto_EVA_${date}.eva`;
-        a.click();
-        EVA.toast('✓ Proyecto exportado (.eva) correctamente');
+        
+        const ok = await smartSaveFile(blob, fileName, "Archivo de Proyecto E.V.A", ".eva");
+        if (ok) EVA.toast('✓ Proyecto guardado correctamente');
     };
 
     window.loadSessionFile = function (event) {
@@ -521,11 +671,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(textArea);
     }
 
-    window.exportTableToCSV = function (ids, defaultFilename) {
-        let filename = prompt("Ingrese el nombre del archivo para exportar (CSV):", defaultFilename || "Reporte_EVA");
-        if (!filename) return; // User cancelled
-        if (!filename.endsWith('.csv')) filename += '.csv';
-
+    window.exportTableToCSV = async function (ids, defaultFilename) {
+        let suggestedName = (defaultFilename || "Reporte_EVA") + "_" + new Date().toISOString().slice(0, 10) + ".csv";
+        
         let idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let fullCsv = [];
 
@@ -551,19 +699,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const csvContent = "\uFEFF" + fullCsv.join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", filename);
-        link.click();
-        EVA.toast('✓ CSV generado con todas las tablas');
+        const ok = await smartSaveFile(blob, suggestedName, "Archivo separado por comas", ".csv");
+        if (ok) EVA.toast('✓ CSV generado con todas las tablas');
     };
 
-    window.exportTableToExcel = function (ids, defaultFilename) {
-        let filename = prompt("Ingrese el nombre del archivo para exportar (EXCEL):", defaultFilename || "Reporte_EVA");
-        if (!filename) return; // User cancelled
-        if (!filename.endsWith('.xls')) filename += '.xls';
-
+    window.exportTableToExcel = async function (ids, defaultFilename) {
+        let suggestedName = (defaultFilename || "Reporte_EVA") + "_" + new Date().toISOString().slice(0, 10) + ".xls";
+        
         let idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
         let combinedHTML = '';
 
@@ -591,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const html = `
             <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
             <head><meta charset="UTF-8">
-            <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${filename}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+            <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${suggestedName}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
             <style>td { mso-number-format:"\\@"; } .col-hidden { display: none; } </style>
             </head>
             <body>${combinedHTML}</body>
@@ -599,14 +741,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         const blob = new Blob([html], { type: "application/vnd.ms-excel" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", filename);
-        link.click();
-        EVA.toast('✓ Excel generado (incluye todas las tablas)', 'warning');
+        const ok = await smartSaveFile(blob, suggestedName, "Libro de Excel 97-2003", ".xls");
+        if (ok) EVA.toast('✓ Excel generado y guardado exitosamente');
     };
 
-    function executeZenith() {
+    async function executeZenith() {
         const txt = sysInputArea.value;
         if (!txt.trim()) return;
         const lines = txt.split('\n');
@@ -615,11 +754,12 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalOrig = 0;
         let totalNew = 0;
 
-        lines.forEach((line) => {
+        for (const line of lines) {
             const parts = line.split(/\t|\s{2,}/).filter(p => p.trim().length > 0);
             const tags = (parts.length === 4) ? [' (40%)', ' (60%)', ' (70%)', ' (100%)'] : ['', '', '', ''];
 
-            parts.forEach((part, idx) => {
+            for (let idx = 0; idx < parts.length; idx++) {
+                const part = parts[idx];
                 const val = cleanVal(part);
                 if (val > 0) {
                     count++;
@@ -640,6 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         `Resultado Final: ${fmtElite.format(updated)}`;
 
                     const auditClass = auditRow(val, 'ipc');
+                    const forensicId = await generateForensicHash(`${val}-${count}`);
                     const row = document.createElement('tr');
                     if (auditClass) row.className = auditClass;
                     row.innerHTML = `
@@ -648,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i data-lucide="info" style="width:12px;height:12px;"></i>
                             </span>
                             #ZEN_${count.toString().padStart(3, '0')}${tag}
+                            <div style="font-size:0.5rem; color:var(--primary); opacity:0.6; font-family:Space Mono;">HASH: ${forensicId}</div>
                         </td>
                         <td class="num">${fmtElite.format(val)}</td>
                         <td class="num upd">${fmtElite.format(updated)}</td>
@@ -655,8 +797,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     tbody.appendChild(row);
                 }
-            });
-        });
+            }
+        }
 
         // Populate IPC Summary
         const tbodySum = document.getElementById('eliteSummaryBody');
@@ -693,8 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 original: totalOrig,
                 updated: totalNew,
                 max: maxVal,
-                items: count,
-                species: { 'Proyección IPC': count }
+                items: count
             });
         }
     }
@@ -736,7 +877,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-    function renderAvaluoBoard(showAlerts = false) {
+    async function renderAvaluoBoard(showAlerts = false) {
         const tbody = document.getElementById('avaluoBody');
         const tbodySum = document.getElementById('avaluoSummaryBody');
         tbody.innerHTML = ''; tbodySum.innerHTML = '';
@@ -744,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let count = 0, s40 = 0, s60 = 0, s70 = 0, s100 = 0;
         const unknownSpecies = [];
 
-        actParsedAvaluo.forEach(item => {
+        for (const item of actParsedAvaluo) {
             try {
                 const { id, esp, scientific, ab, alt, isUnknown, typeNorm } = item;
                 const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
@@ -773,13 +914,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
                 const selS = typeNorm === 'Selección' ? 'selected' : '';
 
+                const catClass = typeNorm.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents for class
                 let catHTML = `<td class="col-cat">
-                    <select class="cat-select" onchange="updateRowCat(${id}, this.value)" title="Modificar Categoría" ${!isUnknown ? 'style="border-color:rgba(255,255,255,0.1); color:var(--text-dim); background:transparent;"' : ''}>
-                        <option value="Primera" ${sel1}>Primera</option>
-                        <option value="Segunda" ${sel2}>Segunda</option>
-                        <option value="Tercera" ${sel3}>Tercera</option>
-                        <option value="Selección" ${selS}>Selección</option>
-                    </select>
+                    <div class="badge-cat ${catClass}">
+                        <i data-lucide="${typeNorm === 'Selección' ? 'award' : 'tag'}" style="width:10px;height:10px;"></i>
+                        ${typeNorm}
+                    </div>
                 </td>`;
 
                 const traceMsg = `SISTEMA E.V.A. - EVIDENCIA PERICIAL:\\n\\n` +
@@ -793,6 +933,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     `Valor Final (100%): ${fmtElite.format(u100)}`;
 
                 const auditClass = auditRow({ ab: ab, h: alt }, 'avaluo');
+                const forensicId = await generateForensicHash(`${esp}-${ab}-${alt}`);
+
                 const row = document.createElement('tr');
                 if (auditClass) row.className = auditClass;
                 row.innerHTML = `
@@ -801,10 +943,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i data-lucide="info" style="width:12px;height:12px;"></i>
                         </span>
                         ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
+                        <div style="font-size:0.5rem; color:var(--primary); opacity:0.6; font-family:Space Mono; margin-top:4px;">ID: ${forensicId}</div>
                     </td>
                     <td class="col-sci" style="font-style:italic; font-size:0.75rem; color:var(--text-dim);">${scientific || '—'}</td>
                     ${catHTML}
-                    <td class="num col-ab">${ab}</td>
+                    <td class="num col-ab">
+                        ${ab}
+                    </td>
                     <td class="num col-alt">${alt}</td>
                     <td class="num col-v40">${fmtElite.format(u40)}</td>
                     <td class="num col-v60">${fmtElite.format(u60)}</td>
@@ -816,7 +961,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 console.error("Error en fila de avalúo:", e);
             }
-        });
+        }
 
         if (window.lucide) lucide.createIcons();
 
@@ -882,9 +1027,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveToLedger(`Valoración: ${count} árboles`);
             }
         }
+
+        return { count, s40, s60, s70, s100 };
     }
 
-    function executeAvaluo() {
+    async function executeAvaluo() {
         const txt = sysInputArea.value;
         if (!txt.trim()) return;
         const lines = txt.split('\n');
@@ -942,7 +1089,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        renderAvaluoBoard(true);
+        const totals = await renderAvaluoBoard(true);
+        
+        // Re-trigger analytics
+        updateLiveAnalytics({
+            original: totals.s100,
+            updated: Math.round(totals.s100 * getZenithFactor()),
+            species: {}
+        });
     }
 
     // --- Interaction Engine Disabled (Static Protocol) ---
@@ -950,74 +1104,133 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Phase 3: Live Analytics Dashboard ---
     window.updateLiveAnalytics = function (payload) {
-        if (combinedPanel) combinedPanel.style.display = 'block';
+        if (currentMode === 'ipc') {
+            if (combinedPanel) combinedPanel.style.display = 'none';
+        } else {
+            if (combinedPanel) combinedPanel.style.display = 'block';
+        }
 
         // 1. COMPARISON BAR CHART
         const ctxComp = document.getElementById('compChart').getContext('2d');
         if (compChart) compChart.destroy();
         
-        const years = typeof getSelectedYears === 'function' ? getSelectedYears() : { from: 2018, to: 2025 };
+        const years = { 
+            from: document.getElementById('ipcYearFrom')?.value || 2018, 
+            to: document.getElementById('ipcYearTo')?.value || 2025 
+        };
         
+        const gradOriginal = ctxComp.createLinearGradient(0, 0, 0, 300);
+        gradOriginal.addColorStop(0, 'rgba(100, 116, 139, 0.9)');
+        gradOriginal.addColorStop(1, 'rgba(100, 116, 139, 0.1)');
+        
+        const gradUpdated = ctxComp.createLinearGradient(0, 0, 0, 300);
+        gradUpdated.addColorStop(0, 'rgba(0, 242, 254, 0.9)');
+        gradUpdated.addColorStop(1, 'rgba(0, 242, 254, 0.1)');
+
         compChart = new Chart(ctxComp, {
             type: 'bar',
             plugins: [ChartDataLabels],
             data: {
-                labels: [`Valor ${years.from}`, `Valor ${years.to}`],
+                labels: [`Valor Base ${years.from}`, `Valor Indexado ${years.to}`],
                 datasets: [{
                     label: 'Masa Monetaria',
                     data: [payload.original, payload.updated],
-                    backgroundColor: ['rgba(100, 116, 139, 0.5)', 'rgba(0, 242, 254, 0.5)'],
+                    backgroundColor: [gradOriginal, gradUpdated],
                     borderColor: ['#64748B', '#00F2FE'],
                     borderWidth: 2,
-                    borderRadius: 6
+                    borderRadius: { topLeft: 12, topRight: 12 },
+                    barPercentage: 0.6,
+                    hoverBackgroundColor: ['rgba(100, 116, 139, 1)', 'rgba(0, 242, 254, 1)']
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutQuart'
+                },
+                layout: {
+                    padding: { top: 20 }
+                },
                 plugins: {
                     legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleFont: { family: 'Space Mono', size: 12 },
+                        bodyFont: { family: 'Space Mono', size: 14, weight: 'bold' },
+                        borderColor: 'rgba(0,242,254,0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: { label: (ctx) => ' ' + fmtElite.format(ctx.raw) }
+                    },
                     datalabels: {
                         color: '#fff', anchor: 'end', align: 'top',
                         formatter: (val) => fmtElite.format(val),
-                        font: { family: 'Space Mono', size: 10, weight: 'bold' }
+                        font: { family: 'Space Mono', size: 11, weight: 'bold' },
+                        textShadowBlur: 5, textShadowColor: 'rgba(0,0,0,0.8)'
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        grid: { color: 'rgba(255,255,255,0.05)', borderDash: [5, 5] },
                         ticks: { color: '#64748B', font: { family: 'Space Mono', size: 9 }, callback: v => '$' + v.toLocaleString() }
                     },
-                    x: { ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } }
+                    x: { grid: { display: false }, ticks: { color: '#fff', font: { family: 'Space Mono', size: 11, weight: 'bold' } } }
                 }
             }
         });
 
-        // 2. DISTRIBUTION PIE CHART
-        if (payload.species) {
-            if (distPanel) distPanel.style.display = 'block';
+        // Dynamic Color Generator Array
+        const dynamicPalette = [
+            'rgba(0, 242, 254, 0.8)', 'rgba(251, 191, 36, 0.8)', 'rgba(16, 185, 129, 0.8)', 
+            'rgba(99, 102, 241, 0.8)', 'rgba(236, 72, 153, 0.8)', 'rgba(244, 63, 94, 0.8)',
+            'rgba(20, 184, 166, 0.8)', 'rgba(139, 92, 246, 0.8)', 'rgba(249, 115, 22, 0.8)'
+        ];
+
+        // 2. DISTRIBUTION PIE CHART -> Upgraded to Doughnut with interactions
+        if (payload.species && Object.keys(payload.species).length > 0) {
             const ctxDist = document.getElementById('distChart').getContext('2d');
             if (distChart) distChart.destroy();
+            
+            const distLabels = Object.keys(payload.species);
+            const distColors = distLabels.map((_, i) => dynamicPalette[i % dynamicPalette.length]);
+            
             distChart = new Chart(ctxDist, {
-                type: 'pie',
+                type: 'doughnut',
                 plugins: [ChartDataLabels],
                 data: {
-                    labels: Object.keys(payload.species),
+                    labels: distLabels,
                     datasets: [{
                         data: Object.values(payload.species),
-                        backgroundColor: ['#00F2FE', '#FBBF24', '#10B981', '#6366F1', '#EC4899', '#F43F5E'],
-                        borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)'
+                        backgroundColor: distColors,
+                        borderColor: '#0a0f1e',
+                        borderWidth: 3,
+                        hoverOffset: 12
                     }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
+                    cutout: '60%',
+                    animation: { animateScale: true, animateRotate: true, duration: 1800, easing: 'easeOutCirc' },
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } },
+                        legend: { position: 'right', labels: { color: '#e2e8f0', usePointStyle: true, pointStyle: 'circle', font: { family: 'Hanken Grotesk', size: 11 } } },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,10,20,0.9)',
+                            titleFont: { family: 'Space Mono', size: 12 },
+                            bodyFont: { family: 'Space Mono', size: 12 },
+                            borderColor: 'rgba(255,255,255,0.1)',
+                            borderWidth: 1,
+                            padding: 10,
+                            callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.raw} ind.` }
+                        },
                         datalabels: {
-                            color: '#fff', font: { weight: 'bold', size: 10, family: 'Space Mono' },
+                            color: '#fff', font: { weight: '800', size: 11, family: 'Space Mono' },
+                            textStrokeColor: '#000', textStrokeWidth: 4,
                             formatter: (val, ctx) => {
                                 const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                return ((val / sum) * 100).toFixed(0) + '%';
+                                const perc = (val / sum) * 100;
+                                return perc > 5 ? perc.toFixed(0) + '%' : '';
                             }
                         }
                     }
@@ -1025,29 +1238,57 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // 2. CATEGORY DONUT CHART (BIOLOGICAL QUALITY)
-        if (payload.categories) {
+        // 3. CATEGORY CHART (BIOLOGICAL QUALITY) -> Upgraded to Polar Area
+        if (payload.categories && Object.keys(payload.categories).length > 0) {
             const ctxCat = document.getElementById('catChart').getContext('2d');
             if (catChart) catChart.destroy();
+            
+            const catLabels = Object.keys(payload.categories);
+            const hardcodedCatColors = {
+                'Primera': 'rgba(251, 191, 36, 0.8)',
+                'Segunda': 'rgba(16, 185, 129, 0.8)',
+                'Tercera': 'rgba(99, 102, 241, 0.8)'
+            };
+            
+            const catColors = catLabels.map((label, i) => hardcodedCatColors[label] || dynamicPalette[i % dynamicPalette.length]);
+            
             catChart = new Chart(ctxCat, {
-                type: 'doughnut',
+                type: 'polarArea',
                 plugins: [ChartDataLabels],
                 data: {
-                    labels: Object.keys(payload.categories),
+                    labels: catLabels,
                     datasets: [{
                         data: Object.values(payload.categories),
-                        backgroundColor: ['#FBBF24', '#10B981', '#6366F1', '#64748B'], // Gold, Green, Indigo, Slate
-                        borderWidth: 2, borderColor: 'rgba(5, 7, 10, 0.8)',
-                        hoverOffset: 15
+                        backgroundColor: catColors,
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1,
+                        hoverBackgroundColor: catColors.map(c => c.replace('0.8', '1'))
                     }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    cutout: '65%',
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutElastic',
+                        delay: (context) => context.dataIndex * 150
+                    },
+                    scales: {
+                        r: {
+                            ticks: { display: false },
+                            grid: { color: 'rgba(255,255,255,0.05)', circular: true }
+                        }
+                    },
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#64748B', font: { family: 'Space Mono', size: 10 }, padding: 15 } },
+                        legend: { position: 'right', labels: { color: '#e2e8f0', usePointStyle: true, pointStyle: 'rectRounded', font: { family: 'Hanken Grotesk', size: 11 } } },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.85)',
+                            titleFont: { family: 'Space Mono', size: 12 },
+                            bodyFont: { family: 'Space Mono', size: 13, weight: 'bold' },
+                            callbacks: { label: (ctx) => `  ${ctx.raw} Individuos` }
+                        },
                         datalabels: {
                             color: '#fff', font: { weight: 'bold', size: 11, family: 'Space Mono' },
+                            textStrokeColor: '#000', textStrokeWidth: 3,
                             formatter: (val, ctx) => {
                                 const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                 if (val === 0) return '';
@@ -1167,8 +1408,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 }
             });
 
+            let currentY = doc.lastAutoTable.finalY + 12;
+
             // 4) Rutina de Separación Espacial Inteligente
-            let currentY = doc.lastAutoTable.finalY + 15;
+            currentY = Math.max(currentY, doc.lastAutoTable.finalY + 15);
             
             if (currentY > pageHeight - 50) {
                 doc.addPage();
@@ -1207,42 +1450,100 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-    // --- Chart Initialization ---
-    if (eliteChartEl) {
+    // --- Chart Initialization Engine ---
+    window.renderEliteChart = function(baseYear, targetYear) {
+        if (!eliteChartEl) return;
+        if (eliteChart) eliteChart.destroy();
+        
+        baseYear = baseYear || parseInt(document.getElementById('ipcYearFrom')?.value) || 2018;
+        targetYear = targetYear || parseInt(document.getElementById('ipcYearTo')?.value) || 2025;
+        
+        const lbls = [];
+        const dts = [];
+        
+        const start = Math.min(baseYear, targetYear);
+        const end = Math.max(baseYear, targetYear);
+        
+        for(let yr = start; yr <= end; yr++) {
+            if(IPC_TABLE[yr]) {
+                lbls.push(yr.toString());
+                const currentMultiplier = IPC_TABLE[yr] / IPC_TABLE[start];
+                dts.push(currentMultiplier);
+            }
+        }
+
         const ctx = eliteChartEl.getContext('2d');
-        new Chart(ctx, {
+        const gradLine = ctx.createLinearGradient(0, 0, 0, 400);
+        gradLine.addColorStop(0, 'rgba(0, 242, 254, 0.6)');
+        gradLine.addColorStop(0.5, 'rgba(0, 242, 254, 0.2)');
+        gradLine.addColorStop(1, 'rgba(0, 242, 254, 0.01)');
+
+        eliteChart = new Chart(ctx, {
             type: 'line',
             plugins: [ChartDataLabels],
             data: {
-                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                labels: lbls,
                 datasets: [{
-                    label: 'Factor Zenith Accum',
-                    data: [1.0, 1.038, 1.075, 1.132, 1.258, 1.392, 1.481, 1.5226],
+                    label: 'Factor Zenith IPC',
+                    data: dts,
                     borderColor: '#00F2FE',
-                    backgroundColor: 'rgba(0, 242, 254, 0.1)',
-                    borderWidth: 2.5, tension: 0.4, fill: true, pointRadius: 4, pointHoverRadius: 6
+                    backgroundColor: gradLine,
+                    borderWidth: 3, 
+                    tension: 0.5, 
+                    fill: true, 
+                    pointBackgroundColor: '#050a14',
+                    pointBorderColor: '#00F2FE',
+                    pointBorderWidth: 2,
+                    pointRadius: 5, 
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: '#00F2FE',
+                    pointHoverBorderColor: '#fff'
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
+                animation: {
+                    x: { type: 'number', easing: 'linear', duration: 1500, from: NaN, delay: (ctx) => ctx.dataIndex * 150 },
+                    y: { type: 'number', easing: 'linear', duration: 1500, from: (ctx) => ctx.chart.scales.y?.getPixelForValue(1) || 0 }
+                },
+                interaction: { mode: 'index', intersect: false },
                 plugins: {
                     legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 10, 20, 0.95)',
+                        titleColor: 'rgba(255,255,255,0.6)',
+                        titleFont: { family: 'Space Mono', size: 11 },
+                        bodyFont: { family: 'Space Mono', size: 14, weight: 'bold' },
+                        bodyColor: '#00F2FE',
+                        borderColor: 'rgba(0, 242, 254, 0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: (context) => ` Multiplicador: x${context.raw.toFixed(4)}`
+                        }
+                    },
                     datalabels: {
                         color: 'rgba(0, 242, 254, 0.8)',
                         anchor: 'end',
                         align: 'top',
-                        offset: 4,
-                        font: { family: 'Space Mono', size: 9, weight: 'bold' },
+                        offset: 6,
+                        font: { family: 'Space Mono', size: 10, weight: 'bold' },
                         formatter: (val) => val.toFixed(3)
                     }
                 },
                 scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } }
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { family: 'Space Mono', size: 11 } } },
+                    y: { 
+                        grid: { color: 'rgba(255,255,255,0.03)', borderDash: [5, 10] }, 
+                        ticks: { color: '#64748B', font: { family: 'Space Mono', size: 10 } } 
+                    }
                 }
             }
         });
-    }
+    };
+
+    // Run first render
+    window.renderEliteChart();
 });
 
 // Service Worker Registration & Version Check

@@ -300,70 +300,75 @@
         const placeholderImg = "https://upload.wikimedia.org/wikipedia/commons/4/41/Tree_Silhouette.png";
 
         const modalHtml = `
-            <div id="traceModal" class="modal-overlay active" style="z-index:99999; display:flex; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,10,20,0.85); backdrop-filter:blur(15px); transition: 0.3s; padding: 1rem;">
-                <div class="glass-card" style="width:100%; max-width:680px; max-height: 95vh; overflow-y: auto; padding:0; border:1px solid rgba(0,242,254,0.3); animation:reveal 0.4s cubic-bezier(0.23, 1, 0.32, 1); display:flex; flex-direction:column; background: var(--bg-panel);">
-                    <div style="height:250px; flex-shrink:0; position:relative; overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center;">
-                        <img id="${imgId}" src="${placeholderImg}" style="width:100%; height:100%; object-fit:cover; opacity:0.3; transition: transform 2s ease, opacity 0.5s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                        <div id="${imgId}_spinner" style="position:absolute; color:var(--primary); font-family:'Space Mono'; font-size:0.8rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; animation:pulse 1.5s infinite alternate;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-                            <span>Analizando Base Botánica...</span>
+            <div id="traceModal" class="modal-overlay active" style="z-index:99999; display:flex; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle at center, rgba(0,10,25,0.8) 0%, rgba(0,0,0,0.95) 100%); backdrop-filter:blur(20px); transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1); padding: 1.5rem;">
+                <div class="glass-card" style="width:100%; max-width:720px; max-height: 90vh; overflow-y: auto; padding:0; border:1px solid rgba(0,242,254,0.2); border-radius:16px; box-shadow: 0 40px 100px -20px rgba(0,0,0,1), 0 0 40px -10px rgba(0,242,254,0.15); animation:reveal 0.6s cubic-bezier(0.23, 1, 0.32, 1); display:flex; flex-direction:column; background: var(--bg-panel);  scrollbar-width: thin; scrollbar-color: rgba(0,242,254,0.3) transparent;">
+                    <div style="height:280px; flex-shrink:0; position:relative; overflow:hidden; background:#050505; display:flex; align-items:center; justify-content:center;">
+                        <img id="${imgId}" src="${placeholderImg}" style="width:100%; height:100%; object-fit:cover; opacity:0.3; transition: transform 3s ease-out, opacity 0.8s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                        <div id="${imgId}_spinner" style="position:absolute; color:var(--primary); font-family:'Space Mono'; font-size:0.8rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem; animation:pulse 1.5s infinite alternate;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 3s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                            <span style="letter-spacing:1px; font-weight:600; text-shadow: 0 0 10px var(--primary);">ANALIZANDO RED BOTÁNICA...</span>
                         </div>
-                        <div style="position:absolute; inset:0; background:linear-gradient(to bottom, transparent, #0a0f1e);"></div>
-                        <div style="position:absolute; bottom:0; left:0; width:100%; padding:2rem;">
-                            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem;">
-                                <span style="background:var(--primary); color:#000; font-size:0.6rem; font-weight:900; padding:2px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:1px;">Experto en Valoración</span>
-                                <span style="color:rgba(255,255,255,0.5); font-size:0.6rem; font-family:'Space Mono';">EVIDENCIA TÉCNICA</span>
+                        <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(10,15,30,1) 0%, rgba(10,15,30,0.4) 50%, transparent 100%);"></div>
+                        <div style="position:absolute; bottom:0; left:0; width:100%; padding:2.5rem;">
+                            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem;">
+                                <span style="background:var(--primary); color:#000; font-size:0.65rem; font-weight:900; padding:4px 10px; border-radius:6px; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 0 15px rgba(0,242,254,0.4);">Alta Precisión</span>
+                                <span style="color:var(--text-dim); font-size:0.65rem; font-family:'Space Mono'; letter-spacing:1px; display:flex; align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> EVIDENCIA TÉCNICA</span>
                             </div>
-                            <h2 style="margin:0; font-size:2.4rem; color:#fff; font-weight:900; letter-spacing:-1.5px; line-height: 1;">${name}</h2>
-                            ${sci !== 'N/A' ? `<p style="margin:0; margin-top:0.3rem; color:var(--primary); font-style:italic; font-size:1.1rem; font-weight:600; opacity:0.9;">${sci}</p>` : ''}
+                            <h2 style="margin:0; font-size:2.8rem; color:#fff; font-weight:900; letter-spacing:-1px; line-height: 1; text-shadow: 0 5px 15px rgba(0,0,0,0.5);">${name}</h2>
+                            ${sci !== 'N/A' ? `<p style="margin:0; margin-top:0.4rem; color:var(--primary); font-style:italic; font-size:1.2rem; font-weight:500; opacity:0.9; text-shadow: 0 0 10px rgba(0,242,254,0.2);">${sci}</p>` : ''}
                         </div>
-                        <button onclick="document.getElementById('traceModal').remove()" style="position:absolute; top:20px; right:20px; border:none; background:rgba(255,255,255,0.1); color:#fff; border-radius:50%; width:36px; height:36px; cursor:pointer; backdrop-filter:blur(10px); transition:0.3s; display:flex; align-items:center; justify-content:center; z-index:10;" onmouseover="this.style.background='rgba(244,63,94,0.5)'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        <button onclick="document.getElementById('traceModal').remove()" style="position:absolute; top:24px; right:24px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.4); color:#fff; border-radius:50%; width:40px; height:40px; cursor:pointer; backdrop-filter:blur(10px); transition:all 0.3s cubic-bezier(0.23, 1, 0.32, 1); display:flex; align-items:center; justify-content:center; z-index:10;" onmouseover="this.style.background='rgba(244,63,94,0.8)'; this.style.transform='rotate(90deg) scale(1.1)'; this.style.borderColor='rgba(244,63,94,0.5)'" onmouseout="this.style.background='rgba(0,0,0,0.4)'; this.style.transform='rotate(0deg) scale(1)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                         </button>
                     </div>
-                    <div style="padding:2rem;">
-                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+                    <div style="padding:2.5rem; background:linear-gradient(180deg, rgba(10,15,30,1) 0%, var(--bg-panel) 100%);">
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem;">
                             <!-- Data Column -->
-                            <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:1.5rem; border:1px solid rgba(255,255,255,0.05);">
-                                <h3 style="font-size:0.75rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 1.66 3.58 3 8 3s8-1.34 8-3s-3.58-3-8-3s-8 1.34-8 3"/><path d="M4 10c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 14c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/></svg>
+                            <div style="background:rgba(255,255,255,0.02); border-radius:16px; padding:1.8rem; border:1px solid rgba(255,255,255,0.04); box-shadow: inset 0 0 20px rgba(255,255,255,0.01);">
+                                <h3 style="font-size:0.8rem; color:var(--primary); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.6rem; font-weight:800;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 1.66 3.58 3 8 3s8-1.34 8-3s-3.58-3-8-3s-8 1.34-8 3"/><path d="M4 10c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 14c0 1.66 3.58 3 8 3s8-1.34 8-3"/><path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/></svg>
                                     Cálculo Forense Detallado
                                 </h3>
-                                <div style="display:flex; flex-direction:column; gap:0.9rem;">
-                                    ${lines.map(l => {
+                                <div style="display:flex; flex-direction:column; gap:0.8rem;">
+                                    ${lines.map((l, index) => {
                                         const match = l.match(/^([^:]+):(.*)$/);
                                         if (!match) return `<div style="color:var(--text-dim); font-size:0.75rem;">${l}</div>`;
                                         const label = match[1].trim();
                                         const val = match[2].trim();
-                                        return `<div style="display:flex; justify-content:space-between; align-items:center; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom:0.5rem;">
-                                            <span style="font-size:0.65rem; color:rgba(255,255,255,0.4); text-transform:uppercase;">${label}</span>
-                                            <span style="font-size:0.9rem; color:#fff; font-weight:700; font-family:'Space Mono';">${val}</span>
+                                        // Highlight the final value
+                                        const isFinal = label.toLowerCase().includes('final');
+                                        const valStyle = isFinal 
+                                            ? `font-size:1.15rem; color:var(--primary); font-weight:900; font-family:'Space Mono'; text-shadow: 0 0 15px rgba(0,242,254,0.4);` 
+                                            : `font-size:0.95rem; color:#fff; font-weight:700; font-family:'Space Mono';`;
+                                        return `<div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 1rem; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom:0.7rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                                            <span style="font-size:0.65rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom: 2px;">${label}</span>
+                                            <span style="${valStyle}">${val}</span>
                                         </div>`;
                                     }).join('')}
                                 </div>
                             </div>
                             
                             <!-- Analysis Column -->
-                            <div style="background:rgba(0,242,254,0.02); border-radius:12px; padding:1.5rem; border:1px solid rgba(0,242,254,0.1); display:flex; flex-direction:column;">
-                                <h3 style="font-size:0.75rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                                    Validación de Especie
+                            <div style="background:rgba(0,242,254,0.02); border-radius:16px; padding:1.8rem; border:1px solid rgba(0,242,254,0.15); display:flex; flex-direction:column; box-shadow: 0 10px 30px rgba(0,242,254,0.05);">
+                                <h3 style="font-size:0.8rem; color:var(--primary); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.6rem; font-weight:800;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                    Validación Pericial
                                 </h3>
-                                <p style="font-size:0.8rem; color:rgba(255,255,255,0.7); line-height:1.6; margin:0; margin-bottom: 1.5rem; flex:1;">
-                                    Integridad biológica confirmada. La categoría <strong style="color:var(--primary);">${type}</strong> se ha cruzado con los costos de reposición oficiales y factores de indexación IPC actualizados.
+                                <p style="font-size:0.85rem; color:rgba(255,255,255,0.75); line-height:1.7; margin:0; margin-bottom: 2rem; flex:1;">
+                                    Integridad botánica verificada. La categoría <strong style="color:var(--primary); font-weight:800; padding:2px 6px; background:rgba(0,242,254,0.1); border-radius:4px; margin: 0 2px;">${type}</strong> se iteró con la tabla base y factores de indexación vigentes para garantizar trazabilidad matemática.
                                 </p>
-                                <a href="${catalogLink}" target="_blank" style="display:flex; align-items:center; justify-content:center; gap:0.6rem; text-decoration:none; padding:14px; border-radius:10px; background:linear-gradient(135deg, rgba(0,242,254,0.2) 0%, rgba(9,9,14,0.9) 100%); color:var(--primary); font-size:0.8rem; font-family:'Space Mono'; font-weight:800; border:1px solid rgba(0,242,254,0.5); box-shadow: 0 0 20px rgba(0,242,254,0.15); transition:all 0.4s var(--ease); text-transform:uppercase;" onmouseover="this.style.background='var(--primary)'; this.style.color='#000'; this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(0,242,254,0.1)'; this.style.color='var(--primary)'; this.style.transform='translateY(0)'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                                <a href="${catalogLink}" target="_blank" style="display:flex; align-items:center; justify-content:center; gap:0.8rem; text-decoration:none; padding:16px; border-radius:12px; background:var(--primary); color:#000; font-size:0.85rem; font-family:'Space Mono'; font-weight:800; border:none; box-shadow: 0 0 20px rgba(0,242,254,0.25), inset 0 -3px 0 rgba(0,0,0,0.2); transition:all 0.3s cubic-bezier(0.23, 1, 0.32, 1); text-transform:uppercase; letter-spacing:0.5px;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(0,242,254,0.4), inset 0 -3px 0 rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 20px rgba(0,242,254,0.25), inset 0 -3px 0 rgba(0,0,0,0.2)'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                                     Ver Catálogo Oficial
                                 </a>
                             </div>
                         </div>
                         
-                        <div style="margin-top:2rem; display:flex; flex-wrap:wrap; justify-content:flex-end; gap:1rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.05);">
-                            <button onclick="document.getElementById('traceModal').remove()" class="action-btn" style="padding:12px 28px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:10px; cursor:pointer; font-weight:700;">Cerrar Registro</button>
-                            <button onclick="window.print()" class="action-btn" style="padding:12px 28px; background:var(--primary); color:#000; font-weight:900; display:flex; align-items:center; gap:0.6rem; border:none; border-radius:10px; cursor:pointer; text-transform:uppercase; letter-spacing:0.5px;">
+                        <div style="margin-top:2.5rem; display:flex; flex-wrap:wrap; justify-content:flex-end; gap:1.2rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,0.06);">
+                            <button onclick="document.getElementById('traceModal').remove()" style="padding:14px 32px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:var(--text-dim); border-radius:12px; cursor:pointer; font-weight:700; transition: 0.3s; font-size:0.85rem; letter-spacing:0.5px;" onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='var(--text-dim)'">Cerrar</button>
+                            <button onclick="window.print()" style="padding:14px 32px; background:#fff; color:#000; font-weight:900; display:flex; align-items:center; gap:0.6rem; border:none; border-radius:12px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; transition: 0.3s; box-shadow: 0 4px 15px rgba(255,255,255,0.1);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(255,255,255,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255,255,255,0.1)'">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
-                                Imprimir Evidencia
+                                Imprimir Certificado
                             </button>
                         </div>
                     </div>

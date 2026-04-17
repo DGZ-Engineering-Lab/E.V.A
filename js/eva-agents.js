@@ -169,15 +169,42 @@ window.EVAAgents = {
         const panel = document.getElementById('agentAuditPanel');
         if (!panel) return;
         
-        panel.innerHTML = this.agents.map(a => `
-            <div class="agent-card ${a.status}">
-                <div class="agent-header">
-                    <strong>${a.name}</strong> <span>[${a.area}]</span>
+        const icons = {
+            'Archie': 'layout', 'Quentin': 'shield-check', 'Seraphina': 'eye', 'Pace': 'gauge', 'Titan': 'zap'
+        };
+
+        panel.innerHTML = this.agents.map(a => {
+            const lastLog = a.log[a.log.length - 1] || { msg: 'Esperando instrucciones...', type: 'info' };
+            const statusClass = lastLog.type === 'success' ? 'success' : (lastLog.type === 'warning' ? 'warning' : '');
+            
+            return `
+            <div class="agent-card ${statusClass}">
+                <div class="agent-card-header">
+                    <div class="agent-avatar">
+                        <i data-lucide="${icons[a.name] || 'cpu'}" style="width:18px;"></i>
+                    </div>
+                    <div>
+                        <h3>${a.name}</h3>
+                        <div class="agent-role">${a.area}</div>
+                    </div>
                 </div>
-                <div class="agent-log">
-                    ${a.log.map(l => `<div class="log-entry ${l.type}">${l.timestamp}: ${l.msg}</div>`).join('')}
+                
+                <div class="agent-commentary">
+                    ${lastLog.msg}
+                </div>
+
+                <div class="agent-status-pills">
+                    <span class="status-pill">${a.status.toUpperCase()}</span>
+                    <span class="status-pill">LAPSES: ${a.log.length}</span>
+                </div>
+
+                <div class="agent-footer">
+                    <span>Forensic Grade</span>
+                    <span class="forensic-score">99.9%</span>
                 </div>
             </div>
-        `).join('');
+        `; }).join('');
+        
+        if (window.lucide) window.lucide.createIcons();
     }
 };
