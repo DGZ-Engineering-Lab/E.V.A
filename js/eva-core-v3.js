@@ -589,22 +589,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const serverData = await response.json();
 
             if (serverData.version !== CURRENT_VERSION) {
-                console.log(`[E.V.A.] Update detected: ${CURRENT_VERSION} -> ${serverData.version}`);
+                const attempts = parseInt(localStorage.getItem('evaUpdateAttempts') || '0');
+                console.log(`[E.V.A.] Update detected: ${CURRENT_VERSION} -> ${serverData.version} (Attempt ${attempts + 1})`);
 
-                const updateMsg = `Sincronizando nueva versión (${serverData.version}). El sistema se reiniciará en 5 segundos...`;
-                const toast = EVA.toast(updateMsg, 'warning', 0); // Persistent toast
+                if (attempts >= 2) {
+                    console.error('[E.V.A.] Reload loop detected. Please clear cache or hard reload.');
+                    EVA.toast('⚠️ Fallo en actualización automática. Por favor presione Ctrl + F5 para forzar.', 'danger', 0);
+                    return;
+                }
 
-                // Force SW update
+                localStorage.setItem('evaUpdateAttempts', (attempts + 1).toString());
+                localStorage.setItem('evaInputData', sysInputArea.value); // Backup current input
+
+                // Force SW update if possible
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.getRegistration().then(reg => {
                         if (reg) reg.update();
                     });
                 }
 
-                setTimeout(() => {
-                    localStorage.setItem('evaInputData', sysInputArea.value); // Backup current input
-                    location.reload(true);
-                }, 5000);
+                EVA.toast(`Sincronizando nueva versión (${serverData.version})...`, 'warning', 3000);
+                setTimeout(() => location.reload(true), 2000);
+            } else {
+                localStorage.removeItem('evaUpdateAttempts');
             }
         } catch (err) {
             console.warn('[E.V.A.] Update check failed:', err);

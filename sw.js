@@ -6,13 +6,13 @@
  * where internet connectivity is unreliable.
  */
 
-const CACHE_NAME = 'eva-pro-v3.4.1-network-fix';
+const CACHE_NAME = 'eva-pro-v3.3.0-final';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './app.html',
     './manifest.json',
-    './version.json', // Añadido para seguimiento de red
+    './version.json',
     './assets/logo.png',
     './css/themes/dark.css',
     './css/themes/light.css',
@@ -29,7 +29,8 @@ const ASSETS_TO_CACHE = [
     './js/vendor/chart.min.js',
     './js/vendor/chartjs-plugin-datalabels.min.js',
     './js/vendor/jspdf.umd.min.js',
-    './js/vendor/html2canvas.min.js'
+    './js/vendor/html2canvas.min.js',
+    './js/vendor/xlsx.full.min.js'
 ];
 
 
