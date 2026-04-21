@@ -399,6 +399,7 @@
         { id: 'esp', label: 'Especie', class: 'col-esp', default: true },
         { id: 'sci', label: 'Científico', class: 'col-sci', default: true },
         { id: 'cat', label: 'Categoría', class: 'col-cat', default: true },
+        { id: 'qty', label: 'Cant.', class: 'col-qty', default: true },
         { id: 'ab', label: 'DAP', class: 'col-ab', default: true },
         { id: 'alt', label: 'Altura', class: 'col-alt', default: true },
         { id: 'b40', label: 'Base 40%', class: 'col-b40', default: true },

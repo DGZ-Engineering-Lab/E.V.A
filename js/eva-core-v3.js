@@ -25,10 +25,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const eliteChartEl = document.getElementById('eliteChart');
 
     // --- Shared Constants & State ---
-    const IPC_TABLE = {
+    const IPC_TABLE_DANE = {
         2010: 67.24,  2011: 69.75,  2012: 71.45,  2013: 72.84,  2014: 75.51,
         2015: 80.62,  2016: 85.25,  2017: 88.74,  2018: 100.00, 2019: 103.80,
         2020: 105.47, 2021: 111.40, 2022: 126.02, 2023: 137.71, 2024: 147.05, 2025: 152.26
+    };
+
+    // Dynamic IPC: merge DANE defaults with user overrides from localStorage
+    function getIpcTable() {
+        const saved = localStorage.getItem('evaIpcOverrides');
+        if (saved) {
+            try {
+                const overrides = JSON.parse(saved);
+                return { ...IPC_TABLE_DANE, ...overrides };
+            } catch(e) { /* ignore bad data */ }
+        }
+        return { ...IPC_TABLE_DANE };
+    }
+    let IPC_TABLE = getIpcTable();
+
+    // Biological validation ranges
+    const BIO_LIMITS = {
+        ab: { min: 3, max: 300, warnMin: 5, warnMax: 200 },
+        alt: { min: 0.5, max: 60, warnMin: 1, warnMax: 45 }
+    };
+    function bioValidate(ab, alt) {
+        const issues = [];
+        if (ab < BIO_LIMITS.ab.min || ab > BIO_LIMITS.ab.max)
+            issues.push({ type: 'err', msg: `DAP ${ab}cm fuera de rango` });
+        else if (ab < BIO_LIMITS.ab.warnMin || ab > BIO_LIMITS.ab.warnMax)
+            issues.push({ type: 'warn', msg: `DAP ${ab}cm atípico` });
+        if (alt < BIO_LIMITS.alt.min || alt > BIO_LIMITS.alt.max)
+            issues.push({ type: 'err', msg: `Altura ${alt}m fuera de rango` });
+        else if (alt < BIO_LIMITS.alt.warnMin || alt > BIO_LIMITS.alt.warnMax)
+            issues.push({ type: 'warn', msg: `Altura ${alt}m atípica` });
+        return issues;
+    }
+
+    // IPC Editor functions
+    window.openIpcEditor = function() {
+        const modal = document.getElementById('ipcEditorModal');
+        const grid = document.getElementById('ipcEditorGrid');
+        if (!modal || !grid) return;
+        const table = getIpcTable();
+        grid.innerHTML = Object.keys(table).sort().map(year => `
+            <label>
+                <strong>${year}</strong>
+                <input type="number" step="0.01" id="ipc_${year}" value="${table[year]}">
+            </label>
+        `).join('');
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+        if (window.lucide) lucide.createIcons();
+    };
+    window.closeIpcEditor = function() {
+        const modal = document.getElementById('ipcEditorModal');
+        if (modal) { modal.classList.remove('active'); modal.style.display = 'none'; }
+    };
+    window.saveIpcTable = function() {
+        const overrides = {};
+        const table = getIpcTable();
+        Object.keys(table).forEach(year => {
+            const input = document.getElementById(`ipc_${year}`);
+            if (input) {
+                const val = parseFloat(input.value);
+                if (!isNaN(val) && val !== IPC_TABLE_DANE[year]) overrides[year] = val;
+            }
+        });
+        localStorage.setItem('evaIpcOverrides', JSON.stringify(overrides));
+        IPC_TABLE = getIpcTable();
+        window.updateZenithFactor();
+        closeIpcEditor();
+        EVA.toast('✓ Tabla IPC actualizada — valores recalculados');
+    };
+    window.resetIpcTable = function() {
+        localStorage.removeItem('evaIpcOverrides');
+        IPC_TABLE = getIpcTable();
+        window.updateZenithFactor();
+        closeIpcEditor();
+        EVA.toast('✓ Tabla IPC restaurada a valores DANE originales');
     };
 
     window.updateZenithFactor = function() {
@@ -88,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fmtElite = new Intl.NumberFormat('es-CO', {
         style: 'currency', currency: 'COP', maximumFractionDigits: 0
     });
-    const CURRENT_VERSION = "3.1.0";
+    const CURRENT_VERSION = "3.3.0";
     let currentMode = 'ipc';
     let actParsedAvaluo = [];
     let compChart = null;
@@ -704,45 +779,69 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.exportTableToExcel = async function (ids, defaultFilename) {
-        let suggestedName = (defaultFilename || "Reporte_EVA") + "_" + new Date().toISOString().slice(0, 10) + ".xls";
-        
+        let suggestedName = (defaultFilename || "Reporte_EVA") + "_" + new Date().toISOString().slice(0, 10) + ".xlsx";
         let idArray = typeof ids === 'string' ? ids.split(',').map(s => s.trim()) : ids;
-        let combinedHTML = '';
 
-        idArray.forEach(id => {
-            const table = document.getElementById(id);
-            if (table) {
-                const cloneTable = table.cloneNode(true);
-                const originalSelects = table.querySelectorAll('select');
-                const clonedSelects = cloneTable.querySelectorAll('select');
-                for (let i = 0; i < originalSelects.length; i++) {
-                    clonedSelects[i].parentNode.innerText = originalSelects[i].value;
+        // Use SheetJS if available
+        if (window.XLSX) {
+            const wb = XLSX.utils.book_new();
+            idArray.forEach((id, idx) => {
+                const table = document.getElementById(id);
+                if (!table) return;
+
+                // Clone and clean: remove hidden columns, replace selects with text
+                const clone = table.cloneNode(true);
+                const origSelects = table.querySelectorAll('select');
+                const clonedSelects = clone.querySelectorAll('select');
+                for (let i = 0; i < origSelects.length; i++) {
+                    clonedSelects[i].parentNode.innerText = origSelects[i].value;
                 }
-
-                // Remove hidden columns from clone
-                cloneTable.querySelectorAll('th, td').forEach(cell => {
-                    if (window.getComputedStyle(cell).display === 'none') {
-                        cell.remove();
-                    }
+                clone.querySelectorAll('th, td').forEach(cell => {
+                    if (window.getComputedStyle(cell).display === 'none') cell.remove();
                 });
 
-                combinedHTML += `<table border="1">${cloneTable.innerHTML}</table><br>`;
-            }
-        });
+                const ws = XLSX.utils.table_to_sheet(clone, { raw: false });
 
-        const html = `
-            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head><meta charset="UTF-8">
-            <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${suggestedName}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
-            <style>td { mso-number-format:"\\@"; } .col-hidden { display: none; } </style>
-            </head>
-            <body>${combinedHTML}</body>
-            </html>
-        `;
+                // Auto-width columns
+                const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+                const colWidths = [];
+                for (let c = range.s.c; c <= range.e.c; c++) {
+                    let maxLen = 8;
+                    for (let r = range.s.r; r <= range.e.r; r++) {
+                        const cell = ws[XLSX.utils.encode_cell({r, c})];
+                        if (cell && cell.v) maxLen = Math.max(maxLen, String(cell.v).length);
+                    }
+                    colWidths.push({ wch: Math.min(maxLen + 2, 30) });
+                }
+                ws['!cols'] = colWidths;
 
-        const blob = new Blob([html], { type: "application/vnd.ms-excel" });
-        const ok = await smartSaveFile(blob, suggestedName, "Libro de Excel 97-2003", ".xls");
-        if (ok) EVA.toast('✓ Excel generado y guardado exitosamente');
+                const sheetName = idx === 0 ? 'Detalle' : 'Resumen';
+                XLSX.utils.book_append_sheet(wb, ws, sheetName);
+            });
+
+            const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const ok = await smartSaveFile(blob, suggestedName, "Libro de Excel", ".xlsx");
+            if (ok) EVA.toast('✓ Excel (.xlsx) generado exitosamente');
+        } else {
+            // Fallback to old HTML-based .xls export
+            suggestedName = suggestedName.replace('.xlsx', '.xls');
+            let combinedHTML = '';
+            idArray.forEach(id => {
+                const table = document.getElementById(id);
+                if (table) {
+                    const cloneTable = table.cloneNode(true);
+                    cloneTable.querySelectorAll('th, td').forEach(cell => {
+                        if (window.getComputedStyle(cell).display === 'none') cell.remove();
+                    });
+                    combinedHTML += `<table border="1">${cloneTable.innerHTML}</table><br>`;
+                }
+            });
+            const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>${combinedHTML}</body></html>`;
+            const blob = new Blob([html], { type: "application/vnd.ms-excel" });
+            const ok = await smartSaveFile(blob, suggestedName, "Libro de Excel 97-2003", ".xls");
+            if (ok) EVA.toast('✓ Excel generado (formato legado)');
+        }
     };
 
     async function executeZenith() {
@@ -879,14 +978,18 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderAvaluoBoard(showAlerts = false) {
         const tbody = document.getElementById('avaluoBody');
         const tbodySum = document.getElementById('avaluoSummaryBody');
-        tbody.innerHTML = ''; tbodySum.innerHTML = '';
+        if (!tbody || !tbodySum) return;
+        
+        tbody.innerHTML = ''; 
+        tbodySum.innerHTML = '';
 
         let count = 0, s40 = 0, s60 = 0, s70 = 0, s100 = 0;
         const unknownSpecies = [];
 
         for (const item of actParsedAvaluo) {
             try {
-                const { id, esp, scientific, ab, alt, isUnknown, typeNorm } = item;
+                const { id, esp, scientific, ab, alt, qty, isUnknown, typeNorm } = item;
+                const q = qty || 1;
                 const validType = typeNorm === 'Selección' ? 'Primera' : typeNorm;
 
                 const t = AVALUO_DB[validType] || AVALUO_DB.Tercera;
@@ -898,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeNorm === 'Selección') base = Math.round(base * 1.2);
 
                 const v40 = base, v60 = (base * 60) / 40, v70 = (base * 70) / 40, v100 = (base * 100) / 40;
-                s40 += v40; s60 += v60; s70 += v70; s100 += v100;
+                s40 += v40 * q; s60 += v60 * q; s70 += v70 * q; s100 += v100 * q;
 
                 const zf = getZenithFactor();
                 const u40 = Math.round(v40 * zf);
@@ -906,14 +1009,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const u70 = Math.round(v70 * zf);
                 const u100 = Math.round(v100 * zf);
 
-                if (isUnknown && showAlerts) unknownSpecies.push(esp);
+                if (isUnknown) unknownSpecies.push(esp);
 
-                const sel1 = typeNorm === 'Primera' ? 'selected' : '';
-                const sel2 = typeNorm === 'Segunda' ? 'selected' : '';
-                const sel3 = typeNorm === 'Tercera' ? 'selected' : '';
-                const selS = typeNorm === 'Selección' ? 'selected' : '';
+                // Biological validation
+                const bioIssues = bioValidate(ab, alt);
+                let bioHTML = '';
+                if (bioIssues.length > 0) {
+                    bioHTML = bioIssues.map(i => `<div class="bio-${i.type}">⚠ ${i.msg}</div>`).join('');
+                }
 
-                const catClass = typeNorm.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents for class
+                const catClass = typeNorm.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                 let catHTML = `<td class="col-cat">
                     <div class="badge-cat ${catClass}">
                         <i data-lucide="${typeNorm === 'Selección' ? 'award' : 'tag'}" style="width:10px;height:10px;"></i>
@@ -925,6 +1030,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `Especie: ${esp}\\n` +
                     `Nombre Científico: ${scientific || 'N/A'}\\n` +
                     `Categoría: ${typeNorm}\\n` +
+                    `Cantidad: ${q}\\n` +
                     `Diámetro (DAP): ${ab} cm\\n` +
                     `Altura: ${alt} m\\n` +
                     `Valor Base (40%): ${fmtElite.format(v40)}\\n` +
@@ -932,22 +1038,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     `Valor Final (100%): ${fmtElite.format(u100)}`;
 
                 const auditClass = auditRow({ ab: ab, h: alt }, 'avaluo');
-                const forensicId = await generateForensicHash(`${esp}-${ab}-${alt}`);
-
                 const row = document.createElement('tr');
                 if (auditClass) row.className = auditClass;
                 row.innerHTML = `
-                    <td class="col-esp" style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};">
+                    <td class="col-esp" style="font-weight:900; color:${isUnknown ? 'var(--warning)' : 'var(--text-main)'};"> 
                         <span class="trace-icon" onclick="showTrace(decodeURIComponent('${encodeURIComponent(traceMsg)}'))" title="Ver evidencia matemática" style="cursor:pointer; color:var(--primary); margin-right:5px;">
                             <i data-lucide="info" style="width:12px;height:12px;"></i>
                         </span>
-                        ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
+                        ${esp} ${isUnknown ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
+                        ${bioHTML}
                     </td>
                     <td class="col-sci" style="font-style:italic; font-size:0.75rem; color:var(--text-dim);">${scientific || '—'}</td>
                     ${catHTML}
-                    <td class="num col-ab">
-                        ${ab}
-                    </td>
+                    <td class="num col-qty" style="font-weight:700;">${q}</td>
+                    <td class="num col-ab">${ab}</td>
                     <td class="num col-alt">${alt}</td>
                     <td class="num col-b40">${fmtElite.format(Math.round(v40))}</td>
                     <td class="num col-b60">${fmtElite.format(Math.round(v60))}</td>
@@ -959,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="num upd col-v100">${fmtElite.format(u100)}</td>
                 `;
                 tbody.appendChild(row);
-                count++;
+                count += q;
             } catch (e) {
                 console.error("Error en fila de avalúo:", e);
             }
@@ -1085,8 +1189,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const typeNorm = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
 
+                const qty = p.length >= 4 ? parseInt(p[3]) || 1 : 1;
+
                 actParsedAvaluo.push({
-                    id: rowIdCounter++, esp, scientific, ab, alt, isUnknown, typeNorm
+                    id: rowIdCounter++, esp, scientific, ab, alt, qty, isUnknown, typeNorm
                 });
             }
         });

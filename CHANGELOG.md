@@ -5,6 +5,15 @@ All notable changes to **E.V.A.** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] — 2026-04-21
+
+### Added
+- **Editor de Tabla IPC**: Nueva interfaz modal para modificar valores del IPC (DANE) dinámicamente y guardarlos localmente. Permite indexar contra cualquier año base/destino personalizado.
+- **Soporte de Cantidades**: Se permite ingresar la cantidad de individuos en la entrada de datos (ej: `Especie | DAP | Altura | Cantidad`). El motor multiplica automáticamente los valores base e indexados.
+- **Bio-Validación Preventiva**: Algoritmo de detección de anomalías biológicas que resalta registros con dimensiones atípicas (DAP > 200cm o Altura > 45m) para prevenir errores de digitación.
+- **Exportación Excel Nativa (.xlsx)**: Integración de **SheetJS** para generar archivos Excel reales con celdas numéricas y anchos de columna automáticos.
+- **Columna de Cantidad**: Nueva columna visible en la tabla de detalle y selector de columnas.
+
 ## [3.2.0] — 2026-04-21
 
 ### Added
