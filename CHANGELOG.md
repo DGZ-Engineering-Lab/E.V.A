@@ -5,6 +5,17 @@ All notable changes to **E.V.A.** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] — 2026-04-21
+
+### Added
+- **Columnas Base vs IPC**: La tabla de detalle del avalúo forestal ahora muestra valores **base sin indexar** (Base 40%, 60%, 70%, 100%) junto a los **valores indexados por IPC** (IPC 40%, 60%, 70%, 100%) en columnas separadas.
+- **Selector de Columnas Ampliado**: El menú de visibilidad de columnas incluye las 8 columnas de valor con visibilidad configurable.
+- **Transparencia Pericial**: Los valores base ahora coinciden exactamente con las tablas de referencia oficial del IGAC/DANE, permitiendo auditoría directa contra los valores históricos.
+
+### Changed
+- Encabezados de tabla renombrados: `Val 40%` → `Base 40%` + `IPC 40%` para claridad pericial.
+- Tabla resumen mantiene la estructura original: Valor Base | Valor IPC Indexado | Incremento %.
+
 ## [3.1.0] — 2026-03-31
 
 ### Added

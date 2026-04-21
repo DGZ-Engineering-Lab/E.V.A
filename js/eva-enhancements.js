@@ -401,10 +401,14 @@
         { id: 'cat', label: 'Categoría', class: 'col-cat', default: true },
         { id: 'ab', label: 'DAP', class: 'col-ab', default: true },
         { id: 'alt', label: 'Altura', class: 'col-alt', default: true },
-        { id: 'v40', label: '$ 40%', class: 'col-v40', default: true },
-        { id: 'v60', label: '$ 60%', class: 'col-v60', default: false },
-        { id: 'v70', label: '$ 70%', class: 'col-v70', default: false },
-        { id: 'v100', label: '$ Final', class: 'col-v100', default: true }
+        { id: 'b40', label: 'Base 40%', class: 'col-b40', default: true },
+        { id: 'b60', label: 'Base 60%', class: 'col-b60', default: false },
+        { id: 'b70', label: 'Base 70%', class: 'col-b70', default: false },
+        { id: 'b100', label: 'Base 100%', class: 'col-b100', default: true },
+        { id: 'v40', label: 'IPC 40%', class: 'col-v40', default: true },
+        { id: 'v60', label: 'IPC 60%', class: 'col-v60', default: false },
+        { id: 'v70', label: 'IPC 70%', class: 'col-v70', default: false },
+        { id: 'v100', label: 'IPC 100%', class: 'col-v100', default: true }
     ];
 
     let styleEl = document.createElement('style');

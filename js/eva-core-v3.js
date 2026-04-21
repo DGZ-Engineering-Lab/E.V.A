@@ -951,9 +951,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${ab}
                     </td>
                     <td class="num col-alt">${alt}</td>
-                    <td class="num col-v40">${fmtElite.format(u40)}</td>
-                    <td class="num col-v60">${fmtElite.format(u60)}</td>
-                    <td class="num col-v70">${fmtElite.format(u70)}</td>
+                    <td class="num col-b40">${fmtElite.format(Math.round(v40))}</td>
+                    <td class="num col-b60">${fmtElite.format(Math.round(v60))}</td>
+                    <td class="num col-b70">${fmtElite.format(Math.round(v70))}</td>
+                    <td class="num col-b100">${fmtElite.format(Math.round(v100))}</td>
+                    <td class="num upd col-v40">${fmtElite.format(u40)}</td>
+                    <td class="num upd col-v60">${fmtElite.format(u60)}</td>
+                    <td class="num upd col-v70">${fmtElite.format(u70)}</td>
                     <td class="num upd col-v100">${fmtElite.format(u100)}</td>
                 `;
                 tbody.appendChild(row);
