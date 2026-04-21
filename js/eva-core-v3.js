@@ -789,7 +789,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i data-lucide="info" style="width:12px;height:12px;"></i>
                             </span>
                             #ZEN_${count.toString().padStart(3, '0')}${tag}
-                            <div style="font-size:0.5rem; color:var(--primary); opacity:0.6; font-family:Space Mono;">HASH: ${forensicId}</div>
                         </td>
                         <td class="num">${fmtElite.format(val)}</td>
                         <td class="num upd">${fmtElite.format(updated)}</td>
@@ -943,7 +942,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i data-lucide="info" style="width:12px;height:12px;"></i>
                         </span>
                         ${esp} ${isUnknown && showAlerts ? '<span style="font-size:0.65rem; opacity:0.7; display:block;">⚠ No encontrada</span>' : ''}
-                        <div style="font-size:0.5rem; color:var(--primary); opacity:0.6; font-family:Space Mono; margin-top:4px;">ID: ${forensicId}</div>
                     </td>
                     <td class="col-sci" style="font-style:italic; font-size:0.75rem; color:var(--text-dim);">${scientific || '—'}</td>
                     ${catHTML}
