@@ -98,7 +98,7 @@
     <!-- ════════════════════════════════════
          SIDEBAR NAVIGATION
          ════════════════════════════════════ -->
-    <nav class="sidebar-nav" role="navigation" aria-label="Navegación principal">
+    <nav class="sidebar-nav" aria-label="Navegación principal">
         <div class="nav-logo" title="E.V.A.">
             <img src="assets/logo.png" alt="Logo E.V.A.">
         </div>
@@ -112,7 +112,7 @@
             <i data-lucide="trees"></i>
         </div>
 
-        <div class="theme-selector" aria-label="Selector de tema visual">
+        <div class="theme-selector" role="group" aria-label="Selector de tema visual">
             <div class="theme-node dot-dark" onclick="setTheme('dark')" title="Tema Oscuro"></div>
             <div class="theme-node dot-light" onclick="setTheme('light')" title="Tema Claro"></div>
             <div class="theme-node dot-forest" onclick="setTheme('forest')" title="Tema Bosque"></div>
@@ -248,10 +248,10 @@
             </div>
 
             <!-- ── Main Stage (Left) ── -->
-            <section class="main-stage">
+            <div class="main-stage">
 
                 <!-- Tab: Input Terminal -->
-                <article id="tab-input" class="tab-content active" aria-labelledby="s1">
+                <div id="tab-input" class="tab-content active" role="tabpanel" aria-labelledby="s1">
                     <section class="glass-card input-card">
                         <div class="section-header" style="justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 0.6rem;">
@@ -287,10 +287,10 @@
                             </button>
                         </div>
                     </section>
-                </article>
+                </div>
 
                 <!-- Tab 2: Analytics (Focused on IPC & Forest Metrics) -->
-                <article id="tab-analytics" class="tab-content" aria-labelledby="s2">
+                <div id="tab-analytics" class="tab-content" role="tabpanel" aria-labelledby="s2">
                     <div class="analytics-grid">
 
 
@@ -373,10 +373,10 @@
                             </div>
                         </section>
                     </div>
-                </article>
+                </div>
 
                 <!-- Tab 3: Result Tables -->
-                <article id="tab-results" class="tab-content" aria-labelledby="s3">
+                <div id="tab-results" class="tab-content" role="tabpanel" aria-labelledby="s3">
                     <!-- IPC Results Matrix -->
                     <div id="resultsUI" class="results-wrapper" style="display: none;">
                         <section class="glass-card table-panel detailed-results collapsible-card" id="cardDetailedIPC">
@@ -553,15 +553,15 @@
                             </div>
                         </section>
                     </div> <!-- End Results Avaluo -->
-                </article>
+                </div>
 
-            </section> <!-- End Main Stage -->
+            </div> <!-- End Main Stage -->
 
             <!-- ── Side Panel (Right) ── -->
             <aside class="side-panel">
 
                 <!-- Outcome HUD: Total Value -->
-                <section class="glass-card outcome-card">
+                <div class="glass-card outcome-card">
                     <div class="outcome-label">💰 Valor Total Calculado</div>
                     <div class="outcome-value" id="sumFinal">$ 0</div>
                     <div class="outcome-meta">
@@ -575,7 +575,7 @@
                                 id="outcomePercent">+52.26%</span>
                         </div>
                     </div>
-                </section>
+                </div>
 
                 <!-- PDF Report Button -->
                 <button class="btn-pdf" id="pdfBtn" onclick="generatePremiumPDF()" style="display: none;">
@@ -590,7 +590,7 @@
                 </button>
 
                 <!-- Quick Metrics Grid -->
-                <section class="metrics-grid">
+                <div class="metrics-grid">
                     <div class="metric-mini has-tip">
                         <div class="metric-mini-label">Precisión Algorítmica</div>
                         <div class="metric-mini-val" style="color: var(--success);">99.8%</div>
@@ -608,7 +608,7 @@
                         <div class="tip-bubble">🤖 El motor detecta automáticamente el tipo de datos
                             ingresados.</div>
                     </div>
-                </section>
+                </div>
 
 
                 <!-- Session Project Persistence (EVA v5) -->
@@ -636,7 +636,7 @@
                             <span class="badge-tag"><i data-lucide="shield-check" style="width:10px;"></i> Validación
                                 Datos</span>
                             <label class="switch-zenith">
-                                <input type="checkbox" id="auditorMode" onchange="toggleAuditorMode()">
+                                <input type="checkbox" id="auditorMode" title="Modo Auditor" aria-label="Modo Auditor" onchange="toggleAuditorMode()">
                                 <span class="slider-zenith"></span>
                             </label>
                         </div>
@@ -648,7 +648,7 @@
                 </section>
 
                 <!-- Insight Helper -->
-                <section class="info-insight">
+                <div class="info-insight">
                     <i data-lucide="help-circle"></i>
                     <p>
                         Presione <br> <strong>Ctrl + P</strong> para generar el pdf optimizado.
@@ -659,7 +659,7 @@
                         2018). El Factor Zenith de <strong>1.5226</strong> representa la acumulación inflacionaria
                         consolidada hasta el primer trimestre de 2025.
                     </p>
-                </section>
+                </div>
 
             </aside><!-- End Side Panel -->
         </main> <!-- End Dashboard Main -->

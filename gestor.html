@@ -56,8 +56,8 @@
 
         .glass-panel {
             background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
         }
@@ -190,6 +190,7 @@
             background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, black 0%, transparent 80%);
             mask-image: radial-gradient(circle at 50% 50%, black 0%, transparent 80%);
             pointer-events: none;
         }
@@ -232,8 +233,8 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Simulación</p>
                     <p class="text-[9px] text-slate-600 font-mono">DRY_RUN_MODE</p>
                 </div>
-                <button id="dryRunToggle" class="w-12 h-6 rounded-full bg-slate-800 border border-white/10 relative transition-all duration-300">
-                    <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-all duration-300"></div>
+                <button id="dryRunToggle" title="Modo Simulación" aria-label="Modo Simulación" class="w-12 h-6 rounded-full bg-slate-800 border border-white/10 relative transition-all duration-300">
+                    <span class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-all duration-300"></span>
                 </button>
             </div>
             <div class="flex items-center gap-3 rounded-xl px-4 py-3 bg-emerald-500/5 border border-emerald-500/10">
@@ -301,7 +302,7 @@
                                 <button class="btn-ghost flex-1 py-3 text-[10px] font-bold uppercase tracking-widest rounded-lg flex items-center justify-center gap-2" onclick="app.importList('avisos')">
                                     <i data-lucide="file-up" class="w-4 h-4"></i> Importar Masivo
                                 </button>
-                                <button class="btn-ghost px-4 py-3 rounded-lg hover:text-red-400 group" onclick="app.clearList('avisos')">
+                                <button class="btn-ghost px-4 py-3 rounded-lg hover:text-red-400 group" title="Limpiar Lista" aria-label="Limpiar Lista" onclick="app.clearList('avisos')">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -346,7 +347,7 @@
                                 <button class="btn-eva flex-1 py-5 text-sm font-black flex items-center justify-center gap-3" onclick="app.createStructure()" id="btnCreate">
                                     <i data-lucide="zap" class="w-5 h-5"></i> EJECUTAR PROCESAMIENTO
                                 </button>
-                                <button class="btn-ghost px-6 py-5 rounded-xl border-red-500/20 text-red-400 opacity-50 hover:opacity-100 disabled:opacity-30" onclick="app.cancelOperation()" id="btnCancel" disabled>
+                                <button class="btn-ghost px-6 py-5 rounded-xl border-red-500/20 text-red-400 opacity-50 hover:opacity-100 disabled:opacity-30" title="Cancelar Operación" aria-label="Cancelar Operación" onclick="app.cancelOperation()" id="btnCancel" disabled>
                                     <i data-lucide="square" class="w-5 h-5"></i>
                                 </button>
                             </div>
@@ -366,8 +367,8 @@
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest block pl-1">Puerta de Origen (TORRE)</label>
                             <div class="flex gap-3">
-                                <input type="text" id="syncSrc" class="soft-input flex-1 px-4 py-3 text-xs" readonly>
-                                <button class="btn-ghost px-4 rounded-lg" onclick="app.selectSyncFolder('src')">
+                                <input type="text" id="syncSrc" title="Ruta Origen" aria-label="Ruta Origen" placeholder="Ruta origen" class="soft-input flex-1 px-4 py-3 text-xs" readonly>
+                                <button class="btn-ghost px-4 rounded-lg" title="Seleccionar Origen" aria-label="Seleccionar Origen" onclick="app.selectSyncFolder('src')">
                                     <i data-lucide="folder" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -375,8 +376,8 @@
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest block pl-1">Puerta de Destino (AVISO)</label>
                             <div class="flex gap-3">
-                                <input type="text" id="syncDst" class="soft-input flex-1 px-4 py-3 text-xs" readonly>
-                                <button class="btn-ghost px-4 rounded-lg" onclick="app.selectSyncFolder('dst')">
+                                <input type="text" id="syncDst" title="Ruta Destino" aria-label="Ruta Destino" placeholder="Ruta destino" class="soft-input flex-1 px-4 py-3 text-xs" readonly>
+                                <button class="btn-ghost px-4 rounded-lg" title="Seleccionar Destino" aria-label="Seleccionar Destino" onclick="app.selectSyncFolder('dst')">
                                     <i data-lucide="folder" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -406,15 +407,15 @@
                         <div class="space-y-3">
                             <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Almacén de Datos por Defecto</label>
                             <div class="flex gap-3">
-                                <input type="text" id="cfgRoot" class="soft-input flex-1 px-4 py-3 text-xs">
-                                <button class="btn-ghost px-4 rounded-lg" onclick="app.selectCfgFolder()">
+                                <input type="text" id="cfgRoot" title="Almacén de Datos" aria-label="Almacén de Datos" placeholder="Almacén de Datos" class="soft-input flex-1 px-4 py-3 text-xs">
+                                <button class="btn-ghost px-4 rounded-lg" title="Seleccionar Almacén" aria-label="Seleccionar Almacén" onclick="app.selectCfgFolder()">
                                     <i data-lucide="folder" class="w-4 h-4"></i>
                                 </button>
                             </div>
                         </div>
                         <div class="pt-8 border-t border-white/5 space-y-3">
                             <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Esquema de Subcarpetas</label>
-                            <textarea id="cfgSubs" class="soft-input w-full h-32 px-4 py-4 text-xs resize-none"></textarea>
+                            <textarea id="cfgSubs" title="Esquema Subcarpetas" aria-label="Esquema Subcarpetas" placeholder="Esquema Subcarpetas" class="soft-input w-full h-32 px-4 py-4 text-xs resize-none"></textarea>
                         </div>
                     </div>
                     <div class="mt-10 flex gap-4">
@@ -455,7 +456,7 @@
                 </div>
             </div>
             <div id="logConsole" class="flex-1 p-6 overflow-y-auto custom-scrollbar relative z-10 scroll-smooth">
-                <div class="text-slate-500 text-[10px] font-mono tracking-widest animate-pulse">> SISTEMA INICIALIZADO. ESPERANDO SECUENCIA...</div>
+                <div class="text-slate-500 text-[10px] font-mono tracking-widest animate-pulse">&gt; SISTEMA INICIALIZADO. ESPERANDO SECUENCIA...</div>
             </div>
         </footer>
     </main>
@@ -502,7 +503,7 @@
                 const dryBtn = document.getElementById('dryRunToggle');
                 dryBtn.addEventListener('click', () => {
                     this.state.dryRun = !this.state.dryRun;
-                    const dot = dryBtn.querySelector('div');
+                    const dot = dryBtn.querySelector('span');
                     if(this.state.dryRun) {
                         dot.style.transform = 'translateX(24px)';
                         dryBtn.style.backgroundColor = '#00F2FE';
