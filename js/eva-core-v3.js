@@ -25,11 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const eliteChartEl = document.getElementById('eliteChart');
 
     // --- Shared Constants & State ---
-    const IPC_TABLE_DANE = {
-        2010: 67.24,  2011: 69.75,  2012: 71.45,  2013: 72.84,  2014: 75.51,
-        2015: 80.62,  2016: 85.25,  2017: 88.74,  2018: 100.00, 2019: 103.80,
-        2020: 105.47, 2021: 111.40, 2022: 126.02, 2023: 137.71, 2024: 147.05, 2025: 152.26
-    };
+    // IPC_TABLE_DANE is now loaded from js/ipc-table.js
+
 
     // Dynamic IPC: merge DANE defaults with user overrides from localStorage
     function getIpcTable() {
@@ -45,10 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let IPC_TABLE = getIpcTable();
 
     // Biological validation ranges
-    const BIO_LIMITS = {
-        ab: { min: 3, max: 300, warnMin: 5, warnMax: 200 },
-        alt: { min: 0.5, max: 60, warnMin: 1, warnMax: 45 }
-    };
+    // BIO_LIMITS is now loaded from js/eva-config.js
+
     function bioValidate(ab, alt) {
         const issues = [];
         if (ab < BIO_LIMITS.ab.min || ab > BIO_LIMITS.ab.max)
@@ -163,7 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const fmtElite = new Intl.NumberFormat('es-CO', {
         style: 'currency', currency: 'COP', maximumFractionDigits: 0
     });
-    const CURRENT_VERSION = "3.3.0";
+    const CURRENT_VERSION = EVA_CONFIG.VERSION;
+
     let currentMode = 'ipc';
     let actParsedAvaluo = [];
     let compChart = null;

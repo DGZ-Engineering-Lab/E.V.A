@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Release-v2.5.2-00F2FE?style=for-the-badge&logo=github" alt="Latest Release" />
+  <img src="https://img.shields.io/badge/Release-v3.4.0-00F2FE?style=for-the-badge&logo=github" alt="Latest Release" />
   <img src="https://img.shields.io/badge/IPC_Factor-1.5226-FBBF24?style=for-the-badge&logo=databricks" alt="IPC Factor" />
   <img src="https://img.shields.io/badge/License-MIT-059669?style=for-the-badge" alt="License" />
   <img src="https://img.shields.io/badge/Deployment-Live-blue?style=for-the-badge&logo=github-pages" alt="Deployment" />

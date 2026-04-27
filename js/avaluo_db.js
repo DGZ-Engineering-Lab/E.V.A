@@ -1,4 +1,4 @@
-﻿const AVALUO_DB = {
+const AVALUO_DB = {
     "Species": [
         {
             "Name": "Abarco",
@@ -312,7 +312,7 @@
             "Type": "Selección"
         },
         {
-            "Name": "Cedrï¿½n",
+            "Name": "Cedrón",
             "Type": "Tercera"
         },
         {
@@ -352,7 +352,7 @@
             "Type": "Tercera"
         },
         {
-            "Name": "Ceiba tolï¿½a",
+            "Name": "Ceiba tolúa",
             "Type": "Primera"
         },
         {
@@ -361,7 +361,7 @@
             "Type": "Tercera"
         },
         {
-            "Name": "Ceï¿½babuya",
+            "Name": "Ceïbabuya",
             "Type": "Tercera"
         },
         {
@@ -371,7 +371,7 @@
         },
         {
             "Name": "Chachajo",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Chacho",
@@ -391,7 +391,7 @@
             "Type": "Tercera"
         },
         {
-            "Name": "Chancï¿½n",
+            "Name": "Chancón",
             "Type": "Tercera"
         },
         {
@@ -406,7 +406,7 @@
         {
             "Name": "Chaquiro",
             "Scientific": "Psychotria monsalveae",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Chicalï¿½",
@@ -512,7 +512,7 @@
         },
         {
             "Name": "Coco abarco",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Coco blanco",
@@ -565,7 +565,7 @@
         {
             "Name": "Comino",
             "Scientific": "Aniba perutilis",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Congo",
@@ -693,8 +693,8 @@
             "Type": "Tercera"
         },
         {
-            "Name": "ï¿½bano",
-            "Type": "Selecciï¿½n"
+            "Name": "Ébano",
+            "Type": "Selección"
         },
         {
             "Name": "Encenillo",
@@ -941,7 +941,7 @@
         },
         {
             "Name": "Guayacï¿½n.amil",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Guayacozanca",
@@ -1406,12 +1406,12 @@
         {
             "Name": "Nogal",
             "Scientific": "Juglans",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Nogal bogotano",
             "Scientific": "Juglans columbiensis",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Nogal cafetero",
@@ -1419,19 +1419,19 @@
             "Type": "Primera"
         },
         {
-            "Name": "Nuez del parï¿½",
-            "Type": "Selecciï¿½n"
+            "Name": "Nuez del Pará",
+            "Type": "Selección"
         },
         {
-            "Name": "ï¿½ipi ï¿½ipi",
+            "Name": "Ñipi Ñipi",
             "Type": "Tercera"
         },
         {
             "Name": "Ocobo",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
-            "Name": "Oguï¿½n",
+            "Name": "Oguín",
             "Type": "Tercera"
         },
         {
@@ -1518,7 +1518,7 @@
         },
         {
             "Name": "Palo brasil",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Palo cruz",
@@ -1544,7 +1544,7 @@
         },
         {
             "Name": "Palo de rosa",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Palo de vaca",
@@ -1562,7 +1562,7 @@
         {
             "Name": "Palo santo",
             "Scientific": "Browneopsis excelsa",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Palo seca",
@@ -1806,7 +1806,7 @@
         },
         {
             "Name": "Roble morado",
-            "Type": "Selecciï¿½n"
+            "Type": "Selección"
         },
         {
             "Name": "Roble rosado",

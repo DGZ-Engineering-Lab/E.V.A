@@ -447,10 +447,87 @@
         avaluoCols.forEach(c => window.toggleColumnVisibility(c.class, c.default));
     }
 
+    // ═══════════════════════════════════════════
+    //  5. ANALYTICS & CHARTS (renderEliteChart)
+    // ═══════════════════════════════════════════
+    let evaChart = null;
+
+    window.renderEliteChart = function (baseYear, targetYear) {
+        const ctx = document.getElementById('eliteChart');
+        if (!ctx || !window.Chart) return;
+
+        // Get table data safely
+        const table = typeof window.getIpcTable === 'function' ? window.getIpcTable() : (typeof IPC_TABLE_DANE !== 'undefined' ? IPC_TABLE_DANE : {});
+        const years = Object.keys(table).sort();
+        if (years.length === 0) return;
+        
+        const values = years.map(y => table[y]);
+
+        if (evaChart) evaChart.destroy();
+
+        const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(0, 242, 254, 0.2)');
+        gradient.addColorStop(1, 'rgba(0, 242, 254, 0)');
+
+        evaChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [{
+                    label: 'Índice IPC',
+                    data: values,
+                    borderColor: '#00f2fe',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#00f2fe',
+                    pointBorderColor: 'rgba(255,255,255,0.1)',
+                    pointRadius: (context) => {
+                        const year = years[context.dataIndex];
+                        return (year === baseYear || year === targetYear) ? 6 : 0;
+                    },
+                    pointHoverRadius: 8,
+                    fill: true,
+                    backgroundColor: gradient,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(10, 15, 30, 0.9)',
+                        titleColor: '#00f2fe',
+                        borderColor: 'rgba(0, 242, 254, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: (context) => `IPC: ${context.parsed.y.toFixed(2)}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.03)' },
+                        ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10 } }
+                    }
+                }
+            }
+        });
+    };
+
     // Initialize components on load
     document.addEventListener('DOMContentLoaded', () => {
         window.initColSelector();
-        if (typeof updateDynamicFactor === 'function') updateDynamicFactor();
+        // Trigger initial factor update if available
+        if (typeof window.updateZenithFactor === 'function') {
+            window.updateZenithFactor();
+        }
         console.log('[E.V.A. PRO] Enhancement Engine v2.1 (Stability Patch) READY');
     });
 
