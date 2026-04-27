@@ -1,32 +1,40 @@
 /**
- * E.V.A PRO Arctic Engineering (Light Theme)
+ * E.V.A PRO Arctic Engineering (Premium Animated Light Theme)
  * DGZ Engineering Lab © 2026
  */
 :root {
     --bg-obsidian: #F8FAFC;
-    --bg-panel: rgba(255, 255, 255, 0.95);
+    --bg-panel: rgba(255, 255, 255, 0.7);
     --primary: #0284C7;
-    --primary-glow: rgba(2, 132, 199, 0.15);
+    --primary-glow: rgba(2, 132, 199, 0.25);
     --primary-dim: rgba(2, 132, 199, 0.1);
     --primary-light: #0EA5E9;
     --secondary: #0C4A6E;
     --success: #059669;
     --warning: #B45309;
-    --accent: #4338CA;
-    --text-main: #020617;
-    --text-dim: #334155;
-    --border-glass: rgba(15, 23, 42, 0.1);
+    --accent: #6366F1;
+    --text-main: #0F172A;
+    --text-dim: #475569;
+    --border-glass: rgba(15, 23, 42, 0.12);
     --border: rgba(15, 23, 42, 0.12);
     --bg-main: #F8FAFC;
-    --glow: 0 4px 20px rgba(2, 132, 199, 0.15);
+    --glow: 0 8px 30px rgba(2, 132, 199, 0.2);
 }
 
 body {
     background-color: var(--bg-obsidian);
     background-image:
-        radial-gradient(circle at 10% 20%, rgba(2, 132, 199, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.06) 0%, transparent 40%);
+        radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.1) 0%, transparent 60%);
+    background-attachment: fixed;
     color: var(--text-main);
+    animation: lightPulse 15s ease-in-out infinite alternate;
+}
+
+@keyframes lightPulse {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
 }
 
 ::selection {
@@ -35,98 +43,144 @@ body {
 }
 
 header {
-    background: rgba(248, 250, 252, 0.92);
+    background: rgba(248, 250, 252, 0.75);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-glass);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 }
 
 .glass {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-glass);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(12px);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(240, 249, 255, 0.5) 100%);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.glass::before {
-    opacity: 0.15;
+.glass:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.12);
 }
 
 textarea {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.7);
     color: var(--primary);
     border: 1px solid rgba(15, 23, 42, 0.15);
+    transition: all 0.3s ease;
 }
 
 textarea::placeholder {
-    color: #94A3B8;
+    color: #64748B;
 }
 
 textarea:focus {
+    background: rgba(255, 255, 255, 0.95);
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+    transform: scale(1.01);
 }
 
 .sys-status {
-    background: rgba(248, 250, 252, 0.8);
+    background: rgba(248, 250, 252, 0.6);
     color: var(--text-dim);
     border: 1px solid var(--border-glass);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sys-status:hover {
-    background: rgba(2, 132, 199, 0.04);
+    background: rgba(2, 132, 199, 0.08);
     border-color: var(--primary);
     color: var(--primary);
+    transform: scale(1.05);
 }
 
 .sys-status.active-ipc {
-    background: rgba(2, 132, 199, 0.08);
+    background: rgba(2, 132, 199, 0.1);
     border-color: var(--primary);
     color: var(--primary);
-    box-shadow: 0 0 15px rgba(2, 132, 199, 0.12);
+    box-shadow: 0 0 20px rgba(2, 132, 199, 0.2);
+    animation: glowPulse 2s infinite alternate;
+}
+
+@keyframes glowPulse {
+    from { box-shadow: 0 0 10px rgba(2, 132, 199, 0.1); }
+    to { box-shadow: 0 0 25px rgba(2, 132, 199, 0.3); }
 }
 
 .sys-status.active-avaluo {
-    background: rgba(180, 83, 9, 0.08);
+    background: rgba(180, 83, 9, 0.1);
     border-color: var(--warning);
     color: var(--warning);
-    box-shadow: 0 0 15px rgba(180, 83, 9, 0.12);
+    box-shadow: 0 0 20px rgba(180, 83, 9, 0.2);
+    animation: warningPulse 2s infinite alternate;
+}
+
+@keyframes warningPulse {
+    from { box-shadow: 0 0 10px rgba(180, 83, 9, 0.1); }
+    to { box-shadow: 0 0 25px rgba(180, 83, 9, 0.3); }
 }
 
 th {
-    background: rgba(248, 250, 252, 0.9);
-    color: var(--text-dim);
-    border-bottom: 2px solid rgba(15, 23, 42, 0.1);
+    background: rgba(240, 249, 255, 0.9);
+    color: var(--primary);
+    border-bottom: 2px solid rgba(14, 165, 233, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tr {
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 tr:hover td {
-    background: rgba(2, 132, 199, 0.04);
+    background: rgba(14, 165, 233, 0.08);
 }
 
 .pct-badge {
-    background: rgba(2, 132, 199, 0.08);
-    border: 1px solid rgba(2, 132, 199, 0.2);
+    background: rgba(2, 132, 199, 0.1);
+    border: 1px solid rgba(2, 132, 199, 0.3);
+    color: var(--primary);
+    font-weight: 700;
 }
 
 .tech-note {
     background: rgba(2, 132, 199, 0.04);
     border-left-color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.tech-note:hover {
+    background: rgba(2, 132, 199, 0.08);
+    transform: translateX(5px);
 }
 
 .btn-zenith {
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-zenith:hover {
-    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
+    box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
+    transform: translateY(-2px);
 }
 
 .kpi-card {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    background: rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 }
 
 .kpi-card:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
 }
 
 .brand-name span {
@@ -134,50 +188,86 @@ tr:hover td {
 }
 
 .logo-box {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: var(--glow);
+    animation: rotateGradient 4s linear infinite;
+}
+
+@keyframes rotateGradient {
+    100% { filter: hue-rotate(360deg); }
 }
 
 /* Light theme sidebar adjustments */
 .sidebar-nav {
-    background: rgba(248, 250, 252, 0.95) !important;
+    background: rgba(248, 250, 252, 0.85) !important;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border-right-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+.nav-item {
+    transition: all 0.3s ease;
 }
 
 .nav-item:hover,
 .nav-item.active {
-    background: rgba(2, 132, 199, 0.08) !important;
+    background: rgba(2, 132, 199, 0.1) !important;
+    transform: scale(1.05);
 }
 
 /* Light theme glass cards */
 .glass-card {
-    background: rgba(255, 255, 255, 0.92) !important;
-    border-color: rgba(15, 23, 42, 0.08) !important;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.7) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.1) !important;
 }
 
 .glass-card::before {
-    opacity: 0.1;
+    opacity: 0.05;
 }
 
 /* Light theme input card */
 .input-card {
-    background: rgba(248, 250, 252, 0.95) !important;
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 2px solid rgba(14, 165, 233, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.input-card:focus-within {
     border-color: var(--primary) !important;
+    box-shadow: 0 0 20px rgba(2, 132, 199, 0.15) !important;
 }
 
 /* Light theme outcome card */
 .outcome-card {
-    background: linear-gradient(135deg, rgba(2, 132, 199, 0.04), rgba(14, 165, 233, 0.04)) !important;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(99, 102, 241, 0.1)) !important;
+    border: 1px solid rgba(14, 165, 233, 0.2) !important;
+    transition: all 0.4s ease;
+}
+
+.outcome-card:hover {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.15)) !important;
+    transform: scale(1.02);
 }
 
 /* Light theme table */
 .table-canvas {
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-color: rgba(15, 23, 42, 0.08) !important;
 }
 
 /* Light theme footer */
 .sys-log {
-    background: rgba(248, 250, 252, 0.92) !important;
+    background: rgba(248, 250, 252, 0.85) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-top-color: rgba(15, 23, 42, 0.08) !important;
 }
